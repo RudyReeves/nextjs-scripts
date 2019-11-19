@@ -17,6 +17,10 @@ export class $1 extends Component {
   //   this.state = {};
   // }
 
+  static defaultProps = {
+    className: '',
+  };
+
   getClassList = () => {
     const classes = ['$1'];
     const className = this.props.className.trim();
@@ -27,10 +31,10 @@ export class $1 extends Component {
   };
 
   render() {
-    const classes = this.getClassList().join(' ');
+    const classList = this.getClassList().join(' ');
     return (
       <>
-        <div className={classes}>
+        <div className={classList}>
           $1
         </div>
       </>
