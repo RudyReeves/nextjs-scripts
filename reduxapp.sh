@@ -278,7 +278,7 @@ echo "\$clr-material-gray-50: rgba(250, 250, 250, 1);
 \$clr-material-yellow-300: rgba(255, 241, 118, 1);
 \$clr-material-yellow-400: rgba(255, 238, 88, 1);
 \$clr-material-yellow-500: rgba(255, 235, 59, 1);
-\$clr-material-yellow-600: rgba(255, 235, 59, 1);
+\$clr-material-yellow-600: rgba(253, 216, 53, 1);
 \$clr-material-yellow-700: rgba(251, 192, 45, 1);
 \$clr-material-yellow-800: rgba(249, 168, 37, 1);
 \$clr-material-yellow-900: rgba(245, 127, 23, 1);
