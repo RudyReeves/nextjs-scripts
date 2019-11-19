@@ -157,7 +157,6 @@ echo "@import '../../styles/globals.scss';
 
 .Main {
     flex-grow: 1;
-    padding: \$pad-half;
 }" > src/components/Main/Main.scss
 
 echo "import React, { Component } from 'react';
@@ -203,17 +202,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Footer);" > src/components/Footer/Footer.jsx
-
-echo "@import '../../styles/globals.scss';
-
-.Footer {
-    background-color: \$clr-gray-d;
-    color: \$clr-gray-l;
-    height: 3.5em;
-    display: flex;
-    align-items: center;
-    padding: 0 \$pad-half;
-}" > src/components/Footer/Footer.scss
 
 echo "import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -400,4 +388,4 @@ const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(List);" > src/components/Link/List.jsx
+export default connect(mapStateToProps, mapDispatchToProps)(List);" > src/components/List/List.jsx
