@@ -14,14 +14,24 @@ class $1 extends Component {
   //   super(props);
   // }
 
+  static defaultProps = {
+    className: '',
+  };
+
+  getClassList = () => {
+    const classes = ['$1'];
+    const className = this.props.className.trim();
+    if (className !== '') {
+      classes.push(className);
+    }
+    return classes;
+  };
+
   render() {
-    const classes = ['$1', this.props.className]
-      .filter(e => e && e.trim() !== '')
-      .map(e => e.trim())
-      .join(' ');
+    const classList = this.getClassList().join(' ');
     return (
       <>
-        <div className={classes}>
+        <div className={classList}>
           $1
         </div>
       </>

@@ -17,8 +17,17 @@ export class $1 extends Component {
   //   this.state = {};
   // }
 
+  getClassList = () => {
+    const classes = ['$1'];
+    const className = this.props.className.trim();
+    if (className !== '') {
+      classes.push(className);
+    }
+    return classes;
+  };
+
   render() {
-    const classes = ['$1', this.props.className];
+    const classes = this.getClassList().join(' ');
     return (
       <>
         <div className={classes}>
