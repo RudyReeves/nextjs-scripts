@@ -1,10 +1,10 @@
 #!/bin/bash
-reduxcmp.sh Header
-reduxcmp.sh Main
-reduxcmp.sh Footer
-reduxcmp.sh PrimaryNav
-reduxcmp.sh List
-reduxcmp.sh Link
+~/Code/web/scripts/reduxcmp.sh Header
+~/Code/web/scripts/reduxcmp.sh Main
+~/Code/web/scripts/reduxcmp.sh Footer
+~/Code/web/scripts/reduxcmp.sh PrimaryNav
+~/Code/web/scripts/reduxcmp.sh List
+~/Code/web/scripts/reduxcmp.sh Link
 
 echo "import React, { Component } from 'react';
 import { connect } from 'react-redux';

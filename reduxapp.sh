@@ -305,7 +305,7 @@ rm src/App.css
 rm src/App.test.js
 
 # Create an App component:
-./reduxcmp.sh App
+~/Code/web/scripts/reduxcmp.sh App
 
 # Open the editor:
 code .
