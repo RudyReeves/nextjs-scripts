@@ -22,7 +22,7 @@ echo "{
 }" > public/manifest.json
 
 # Replace README.md:
-echo "#$1" > README.md
+echo "# $1" > README.md
 
 # Replace src/index.js:
 echo "import React from 'react';
