@@ -13,7 +13,6 @@ mkdir server
 cd server
 
 git init
-cp ../client/.gitignore .gitignore
 
 mkdir api
 
@@ -28,6 +27,11 @@ app.listen(port, (err) => {
   if (err) { console.error(err); };
   console.log(`Listening on port \${port}`);
 });" >> app.js
+
+# Create a node package
+cp client/.gitignore .gitignore
+
+cd ..
 
 echo "{
   \"name\": \"$1\",
@@ -55,5 +59,8 @@ echo "{
 npm install
 
 # Run a dev server:
+cd client
+npm run build
+cd ..
 code .
 npm run server
