@@ -7,7 +7,6 @@
 ~/Code/web/scripts/reduxcmp.sh AnchorLink
 
 echo "import React from 'react';
-import { connect } from 'react-redux';
 import { getClassList } from '../../util';
 import './App.scss';
 import Header from '../Header/Header';
@@ -38,7 +37,6 @@ echo "@import '../../styles/globals.scss';
 }" > src/components/App/App.scss
 
 echo "import React from 'react';
-import { connect } from 'react-redux';
 import { getClassList } from '../../util';
 import './Header.scss';
 import PrimaryNav from '../PrimaryNav/PrimaryNav';
@@ -59,7 +57,6 @@ const Header = ({ className, links = [] }) => {
 export default Header;" > src/components/Header/Header.jsx
 
 echo "import React from 'react';
-import { connect } from 'react-redux';
 import { getClassList } from '../../util';
 import './Main.scss';
 
@@ -83,7 +80,6 @@ echo "@import '../../styles/globals.scss';
 }" > src/components/Main/Main.scss
 
 echo "import React from 'react';
-import { connect } from 'react-redux';
 import { getClassList } from '../../util';
 import './Footer.scss';
 
@@ -101,7 +97,6 @@ const Footer = ({ className }) => {
 export default Footer;" > src/components/Footer/Footer.jsx
 
 echo "import React from 'react';
-import { connect } from 'react-redux';
 import { getClassList } from '../../util';
 import './PrimaryNav.scss';
 import HtmlList from '../HtmlList/HtmlList';
@@ -149,7 +144,6 @@ echo "@import '../../styles/globals.scss';
 }" > src/components/PrimaryNav/PrimaryNav.scss
 
 echo "import React from 'react';
-import { connect } from 'react-redux';
 import { getClassList } from '../../util';
 import './AnchorLink.scss';
 
@@ -174,7 +168,6 @@ const AnchorLink = ({
 export default AnchorLink;" > src/components/AnchorLink/AnchorLink.jsx
 
 echo "import React from 'react';
-import { connect } from 'react-redux';
 import { getClassList } from '../../util';
 import './HtmlList.scss';
 
