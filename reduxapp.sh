@@ -115,6 +115,15 @@ echo "<!DOCTYPE html>
   </body>
 </html>" > public/index.html
 
+# Create a util.js file:
+echo "export const getClassList = (componentName, className) => {
+    const classes = [componentName];
+    if (className) {
+      classes.push(className.trim());
+    }
+    return classes;
+};" >  src/util.js
+
 # Install react-router-dom:
 npm install react-router-dom
 
@@ -306,9 +315,3 @@ rm src/App.test.js
 
 # Create an App component:
 ~/Code/web/scripts/reduxcmp.sh App
-
-# Open the editor:
-code .
-
-# Run a dev server:
-npm start

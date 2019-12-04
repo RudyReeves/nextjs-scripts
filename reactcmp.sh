@@ -6,6 +6,7 @@ mkdir -p $1
 cd $1
 
 echo "import React, { Component } from 'react';
+import { getClassList } from '../../util';
 import './$1.scss';
 
 export class $1 extends Component {
@@ -21,17 +22,8 @@ export class $1 extends Component {
     className: '',
   };
 
-  getClassList = () => {
-    const classes = ['$1'];
-    const className = this.props.className.trim();
-    if (className !== '') {
-      classes.push(className);
-    }
-    return classes;
-  };
-
   render() {
-    const classList = this.getClassList().join(' ');
+    const classList = getClassList('$1', this.props.className).join(' ');
     return (
       <>
         <div className={classList}>

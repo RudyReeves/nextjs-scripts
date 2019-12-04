@@ -3,11 +3,12 @@
 ~/Code/web/scripts/reduxcmp.sh Main
 ~/Code/web/scripts/reduxcmp.sh Footer
 ~/Code/web/scripts/reduxcmp.sh PrimaryNav
-~/Code/web/scripts/reduxcmp.sh List
+~/Code/web/scripts/reduxcmp.sh HtmlList
 ~/Code/web/scripts/reduxcmp.sh Link
 
 echo "import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { getClassList } from '../../util';
 import './App.scss';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
@@ -21,21 +22,12 @@ class App extends Component {
   static defaultProps = {
     className: '',
   };
-
-  getClassList = () => {
-    const classes = ['App'];
-    const className = this.props.className.trim();
-    if (className !== '') {
-      classes.push(className);
-    }
-    return classes;
-  };
   
   render() {
-    const classes = this.getClassList().join(' ');
+    const classList = getClassList('App', this.props.className).join(' ');
     return (
       <>
-        <div className={classes}>
+        <div className={classList}>
           <Header />
           <Main />
           <Footer />
@@ -65,6 +57,7 @@ echo "@import '../../styles/globals.scss';
 
 echo "import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { getClassList } from '../../util';
 import './Header.scss';
 import PrimaryNav from '../PrimaryNav/PrimaryNav';
 
@@ -78,20 +71,11 @@ class Header extends Component {
     links: [],
   };
 
-  getClassList = () => {
-    const classes = ['Header'];
-    const className = this.props.className.trim();
-    if (className !== '') {
-      classes.push(className);
-    }
-    return classes;
-  };
-
   render() {
-    const classes = this.getClassList().join(' ');
+    const classList = getClassList('Header', this.props.className).join(' ');
     return (
       <>
-        <header className={classes}>
+        <header className={classList}>
           <PrimaryNav />
         </header>
       </>
@@ -111,6 +95,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Header);" > src/comp
 
 echo "import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { getClassList } from '../../util';
 import './Main.scss';
 
 class Main extends Component {
@@ -122,17 +107,8 @@ class Main extends Component {
     className: '',
   };
 
-  getClassList = () => {
-    const classes = ['Main'];
-    const className = this.props.className.trim();
-    if (className !== '') {
-      classes.push(className);
-    }
-    return classes;
-  };
-
   render() {
-    const classList = this.getClassList().join(' ');
+    const classList = getClassList('Main', this.props.className).join(' ');
     return (
       <>
         <main className={classList}>
@@ -161,6 +137,7 @@ echo "@import '../../styles/globals.scss';
 
 echo "import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { getClassList } from '../../util';
 import './Footer.scss';
 
 class Footer extends Component {
@@ -172,17 +149,8 @@ class Footer extends Component {
     className: '',
   };
 
-  getClassList = () => {
-    const classes = ['Footer'];
-    const className = this.props.className.trim();
-    if (className !== '') {
-      classes.push(className);
-    }
-    return classes;
-  };
-
   render() {
-    const classes = this.getClassList().join(' ');
+    const classes = getClassList('Footer', this.props.className).join(' ');
     return (
       <>
         <footer className={classes}>
@@ -205,8 +173,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(Footer);" > src/comp
 
 echo "import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { getClassList } from '../../util';
 import './PrimaryNav.scss';
-import List from '../List/List';
+import HtmlList from '../HtmlList/HtmlList';
 import Link from '../Link/Link';
 
 class PrimaryNav extends Component {
@@ -219,21 +188,12 @@ class PrimaryNav extends Component {
     links: [],
   };
 
-  getClassList = () => {
-    const classes = ['PrimaryNav'];
-    const className = this.props.className.trim();
-    if (className !== '') {
-      classes.push(className);
-    }
-    return classes;
-  };
-
   render() {
-    const classes = this.getClassList();
+    const classes = getClassList('PrimaryNav', this.props.className);
     return (
       <>
         <nav className={classes.join(' ')}>
-          <List
+          <HtmlList
             className=\"PrimaryNav__list\"
             items={this.getLinks(classes)}
           />
@@ -272,6 +232,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(PrimaryNav);" > src/
 
 echo "import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { getClassList } from '../../util';
 import './Link.scss';
 
 class Link extends Component {
@@ -285,17 +246,8 @@ class Link extends Component {
     label: '',
   };
 
-  getClassList = () => {
-    const classes = ['Link'];
-    const className = this.props.className.trim();
-    if (className !== '') {
-      classes.push(className);
-    }
-    return classes;
-  };
-
   render() {
-    const classes = this.getClassList().join(' ');
+    const classes = getClassList('Link', this.props.className).join(' ');
     return (
       <>
         <a
@@ -321,9 +273,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(Link);" > src/compon
 
 echo "import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import './List.scss';
+import { getClassList } from '../../util';
+import './HtmlList.scss';
 
-class List extends Component {
+class HtmlList extends Component {
   // constructor(props) {
   //   super(props);
   // }
@@ -332,15 +285,6 @@ class List extends Component {
     className: '',
     isOrdered: false,
     items: [],
-  };
-
-  getClassList = () => {
-    const classes = ['List'];
-    const className = this.props.className.trim();
-    if (className !== '') {
-      classes.push(className);
-    }
-    return classes;
   };
 
   render() {
@@ -352,7 +296,7 @@ class List extends Component {
   }
 
   getList = () => {
-    const classes = this.getClassList();
+    const classes = getClassList('HtmlList', this.props.className);
     const items = this.getItems(classes);
     const classList = classes.join(' ');
     return (this.props.isOrderded ?
@@ -381,11 +325,11 @@ class List extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {...state.List};
+  return {...state.HtmlList};
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(List);" > src/components/List/List.jsx
+export default connect(mapStateToProps, mapDispatchToProps)(HtmlList);" > src/components/HtmlList/HtmlList.jsx
