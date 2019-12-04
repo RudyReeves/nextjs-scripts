@@ -41,7 +41,10 @@ import { getClassList } from '../../util';
 import './Header.scss';
 import PrimaryNav from '../PrimaryNav/PrimaryNav';
 
-const Header = ({ className, links = [] }) => {
+const Header = ({
+  className,
+  links = []
+}) => {
   const classList = getClassList('Header', className).join(' ');
   return (
     <>
@@ -102,7 +105,10 @@ import './PrimaryNav.scss';
 import HtmlList from '../HtmlList/HtmlList';
 import AnchorLink from '../AnchorLink/AnchorLink';
 
-const PrimaryNav = ({ className, links = [] }) => {
+const PrimaryNav = ({
+  className,
+  links = []
+}) => {
   const classes = getClassList('PrimaryNav', className);
   return (
     <>
