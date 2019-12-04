@@ -4,9 +4,9 @@
 ~/Code/web/scripts/reduxcmp.sh Footer
 ~/Code/web/scripts/reduxcmp.sh PrimaryNav
 ~/Code/web/scripts/reduxcmp.sh HtmlList
-~/Code/web/scripts/reduxcmp.sh Link
+~/Code/web/scripts/reduxcmp.sh AnchorLink
 
-echo "import React, { Component } from 'react';
+echo "import React from 'react';
 import { connect } from 'react-redux';
 import { getClassList } from '../../util';
 import './App.scss';
@@ -14,38 +14,20 @@ import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 
-class App extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
-
-  static defaultProps = {
-    className: '',
-  };
-  
-  render() {
-    const classList = getClassList('App', this.props.className).join(' ');
-    return (
-      <>
-        <div className={classList}>
-          <Header />
-          <Main />
-          <Footer />
-        </div>
-      </>
-    );
-  }
-}
-
-const mapStateToProps = (state) => {
-  return {...state.App};
+const App = ({ className }) => {
+  const classList = getClassList('App', className).join(' ');
+  return (
+    <>
+      <div className={classList}>
+        <Header />
+        <Main />
+        <Footer />
+      </div>
+    </>
+  );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);" > src/components/App/App.jsx
+export default App;" > src/components/App/App.jsx
 
 echo "@import '../../styles/globals.scss';
 
@@ -55,79 +37,44 @@ echo "@import '../../styles/globals.scss';
     flex-direction: column;
 }" > src/components/App/App.scss
 
-echo "import React, { Component } from 'react';
+echo "import React from 'react';
 import { connect } from 'react-redux';
 import { getClassList } from '../../util';
 import './Header.scss';
 import PrimaryNav from '../PrimaryNav/PrimaryNav';
 
-class Header extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
-
-  static defaultProps = {
-    className: '',
-    links: [],
-  };
-
-  render() {
-    const classList = getClassList('Header', this.props.className).join(' ');
-    return (
-      <>
-        <header className={classList}>
-          <PrimaryNav />
-        </header>
-      </>
-    );
-  }
-}
-
-const mapStateToProps = (state) => {
-  return {...state.Header};
+const Header = ({ className, links = [] }) => {
+  const classList = getClassList('Header', className).join(' ');
+  return (
+    <>
+      <header className={classList}>
+        <PrimaryNav
+          links={links}
+        />
+      </header>
+    </>
+  );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {};
-};
+export default Header;" > src/components/Header/Header.jsx
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);" > src/components/Header/Header.jsx
-
-echo "import React, { Component } from 'react';
+echo "import React from 'react';
 import { connect } from 'react-redux';
 import { getClassList } from '../../util';
 import './Main.scss';
 
-class Main extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
-
-  static defaultProps = {
-    className: '',
-  };
-
-  render() {
-    const classList = getClassList('Main', this.props.className).join(' ');
-    return (
-      <>
-        <main className={classList}>
-          Main
-        </main>
-      </>
-    );
-  }
-}
-
-const mapStateToProps = (state) => {
-  return {...state.Main};
+const Main = ({ className }) => {
+  const classList = getClassList('Main', className).join(' ');
+  return (
+    <>
+      <main className={classList}>
+        Main
+      </main>
+    </>
+  );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Main);" > src/components/Main/Main.jsx
+export default Main;" > src/components/Main/Main.jsx
 
 echo "@import '../../styles/globals.scss';
 
@@ -135,201 +82,132 @@ echo "@import '../../styles/globals.scss';
     flex-grow: 1;
 }" > src/components/Main/Main.scss
 
-echo "import React, { Component } from 'react';
+echo "import React from 'react';
 import { connect } from 'react-redux';
 import { getClassList } from '../../util';
 import './Footer.scss';
 
-class Footer extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
-
-  static defaultProps = {
-    className: '',
-  };
-
-  render() {
-    const classes = getClassList('Footer', this.props.className).join(' ');
-    return (
-      <>
-        <footer className={classes}>
-          Footer
-        </footer>
-      </>
-    );
-  }
-}
-
-const mapStateToProps = (state) => {
-  return {...state.Footer};
+const Footer = ({ className }) => {
+  const classes = getClassList('Footer', className).join(' ');
+  return (
+    <>
+      <footer className={classes}>
+        Footer
+      </footer>
+    </>
+  );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {};
-};
+export default Footer;" > src/components/Footer/Footer.jsx
 
-export default connect(mapStateToProps, mapDispatchToProps)(Footer);" > src/components/Footer/Footer.jsx
-
-echo "import React, { Component } from 'react';
+echo "import React from 'react';
 import { connect } from 'react-redux';
 import { getClassList } from '../../util';
 import './PrimaryNav.scss';
 import HtmlList from '../HtmlList/HtmlList';
-import Link from '../Link/Link';
+import AnchorLink from '../AnchorLink/AnchorLink';
 
-class PrimaryNav extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
-
-  static defaultProps = {
-    className: '',
-    links: [],
-  };
-
-  render() {
-    const classes = getClassList('PrimaryNav', this.props.className);
-    return (
-      <>
-        <nav className={classes.join(' ')}>
-          <HtmlList
-            className=\"PrimaryNav__list\"
-            items={this.getLinks(classes)}
-          />
-        </nav>
-      </>
-    );
-  }
-
-  getLinks = (classes) => {
-    const classList = classes
-      .map((c) => {
-        return \`\${c}__link\`;
-      })
-      .join(' ');
-    return this.props.links.map((link, i) => {
-      return (
-        <Link
-          className={classList}
-          href={link.href}
-          label={link.label}
+const PrimaryNav = ({ className, links = [] }) => {
+  const classes = getClassList('PrimaryNav', className);
+  return (
+    <>
+      <nav className={classes.join(' ')}>
+        <HtmlList
+          className=\"PrimaryNav__list\"
+          items={createLinks(classes, links)}
         />
-      );
-    });
-  };
-}
-
-const mapStateToProps = (state) => {
-  return {...state.PrimaryNav};
+      </nav>
+    </>
+  );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {};
+const createLinks = (classes, links) => {
+  const classList = classes
+    .map((c) => {
+      return \`\${c}__link\`;
+    })
+    .join(' ');
+  return links.map((link, i) => {
+    return (
+      <AnchorLink
+        className={classList}
+        href={link.href}
+        label={link.label}
+      />
+    );
+  });
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PrimaryNav);" > src/components/PrimaryNav/PrimaryNav.jsx
+export default PrimaryNav;" > src/components/PrimaryNav/PrimaryNav.jsx
 
-echo "import React, { Component } from 'react';
+echo "import React from 'react';
 import { connect } from 'react-redux';
 import { getClassList } from '../../util';
-import './Link.scss';
+import './AnchorLink.scss';
 
-class Link extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
-
-  static defaultProps = {
-    className: '',
-    href: '#',
-    label: '',
-  };
-
-  render() {
-    const classes = getClassList('Link', this.props.className).join(' ');
-    return (
-      <>
-        <a
-          className={classes}
-          href={this.props.href}
-        >
-          {this.props.label}
-        </a>
-      </>
-    );
-  }
-}
-
-const mapStateToProps = (state) => {
-  return {...state.Link};
+const AnchorLink = ({
+  className,
+  href,
+  label
+}) => {
+  const classes = getClassList('AnchorLink', className).join(' ');
+  return (
+    <>
+      <a
+        className={classes}
+        href={href}
+      >
+        {label}
+      </a>
+    </>
+  );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {};
-};
+export default AnchorLink;" > src/components/AnchorLink/AnchorLink.jsx
 
-export default connect(mapStateToProps, mapDispatchToProps)(Link);" > src/components/Link/Link.jsx
-
-echo "import React, { Component } from 'react';
+echo "import React from 'react';
 import { connect } from 'react-redux';
 import { getClassList } from '../../util';
 import './HtmlList.scss';
 
-class HtmlList extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
+const HtmlList = ({
+  className,
+  isOrdered,
+  items = []
+}) => {
+  return (
+    <>
+      {getHtmlList(className, isOrdered, items)}
+    </>
+  );
+};
 
-  static defaultProps = {
-    className: '',
-    isOrdered: false,
-    items: [],
-  };
+const getHtmlList = (className, isOrdered, items) => {
+  const classes = getClassList('HtmlList', className);
+  const content = createItems(classes, items);
+  const classList = classes.join(' ');
+  return (isOrdered ?
+    <ol className={classList}>{content}</ol> :
+    <ul className={classList}>{content}</ul>
+  );
+};
 
-  render() {
+const createItems = (classes, items) => {
+  const classList = classes
+    .map((c) => {
+      return \`\${c}__item\`;
+    })
+    .join(' ');
+  return items.map((item, i) => {
     return (
-      <>
-        {this.getList()}
-      </>
+      <li
+        className={classList}
+        key={i}
+      >
+        {item}
+      </li>
     );
-  }
-
-  getList = () => {
-    const classes = getClassList('HtmlList', this.props.className);
-    const items = this.getItems(classes);
-    const classList = classes.join(' ');
-    return (this.props.isOrderded ?
-      <ol className={classList}>{items}</ol> :
-      <ul className={classList}>{items}</ul>
-    );
-  };
-
-  getItems = (classes) => {
-    const classList = classes
-      .map((c) => {
-        return \`\${c}__item\`;
-      })
-      .join(' ');
-    return this.props.items.map((item, i) => {
-      return (
-        <li
-          className={classList}
-          key={i}
-        >
-          {item}
-        </li>
-      );
-    });
-  };
-}
-
-const mapStateToProps = (state) => {
-  return {...state.HtmlList};
+  });
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(HtmlList);" > src/components/HtmlList/HtmlList.jsx
+export default HtmlList;" > src/components/HtmlList/HtmlList.jsx

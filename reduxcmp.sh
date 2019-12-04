@@ -5,7 +5,7 @@ cd ./src/components
 mkdir -p $1
 cd $1
 
-echo "import React, { Component } from 'react';
+echo "import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getClassList } from '../../util';
 import './$1.scss';
@@ -20,7 +20,7 @@ const $1 = ({ className }) => {
       </div>
     </>
   );
-}
+};
 
 export default $1;" > "./$1.jsx"
 
