@@ -60,6 +60,7 @@ npm install
 
 # Run a dev server:
 cd client
+~/Code/web/scripts/reduxbasecmps.sh
 npm run build
 cd ..
 code .
