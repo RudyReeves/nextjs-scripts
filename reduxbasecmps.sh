@@ -140,6 +140,14 @@ const createLinks = (classes, links) => {
 
 export default PrimaryNav;" > src/components/PrimaryNav/PrimaryNav.jsx
 
+echo "@import '../../styles/globals.scss';
+
+.PrimaryNav {}
+
+.PrimaryNav__list {
+    margin: 0;
+}" > src/components/PrimaryNav/PrimaryNav.scss
+
 echo "import React from 'react';
 import { connect } from 'react-redux';
 import { getClassList } from '../../util';
