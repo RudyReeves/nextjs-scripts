@@ -28,8 +28,6 @@ mv src/components/HtmlLink src/components/misc/HtmlLink
 cd src/components
 
 echo "import React from 'react';
-import { getClassList } from 'util.js';
-import './App.scss';
 import Home from 'components/pages/Home/Home';
 import {
   BrowserRouter as Router,
@@ -38,22 +36,21 @@ import {
 //  Link
 } from 'react-router-dom';
 
-const App = ({ className }) => {
-  const classList = getClassList('App', className).join(' ');
-  return (
-    <Router>
-      <Switch>
-        <Route path=\"/\">
-          <Home
-            className=\"Page\"
-          /> 
-        </Route>
-      </Switch>
-    </Router>
-  );
-};
+const App = () => (
+  <Router>
+    <Switch>
+      <Route path=\"/\">
+        <Home
+          className=\"Page\"
+        /> 
+      </Route>
+    </Switch>
+  </Router>
+);
 
 export default App;" > App/App.jsx
+
+rm App/App.scss
 
 echo "import React from 'react';
 import { getClassList } from 'util.js';
