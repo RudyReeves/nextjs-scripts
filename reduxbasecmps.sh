@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ~/Code/web/scripts/reduxcmp.sh App
-~/Code/web/scripts/reduxcmp.sh HomePage
+~/Code/web/scripts/reduxcmp.sh Home
 
 ~/Code/web/scripts/reduxcmp.sh Header
 ~/Code/web/scripts/reduxcmp.sh Main
@@ -15,7 +15,7 @@ mkdir src/components/pages
 mkdir src/components/misc
 mkdir src/components/sections
 
-mv src/components/Homepage src/components/pages/HomePage
+mv src/components/Home src/components/pages/Home
 
 mv src/components/Header src/components/sections/Header
 mv src/components/Main src/components/sections/Main
@@ -30,23 +30,25 @@ cd src/components
 echo "import React from 'react';
 import { getClassList } from 'util.js';
 import './App.scss';
-import HomePage from 'components/pages/HomePage/HomePage';
+import Home from 'components/pages/Home/Home';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+//  Link
 } from 'react-router-dom';
 
 const App = ({ className }) => {
   const classList = getClassList('App', className).join(' ');
   return (
     <Router>
-      <Route path=\"/\">
-        <HomePage
-          className=\"Page\"
-        /> 
-      </Route>
+      <Switch>
+        <Route path=\"/\">
+          <Home
+            className=\"Page\"
+          /> 
+        </Route>
+      </Switch>
     </Router>
   );
 };
@@ -55,13 +57,13 @@ export default App;" > App/App.jsx
 
 echo "import React from 'react';
 import { getClassList } from 'util.js';
-import './HomePage.scss';
+import './Home.scss';
 import Header from 'components/sections/Header/Header';
 import Main from 'components/sections/Main/Main';
 import Footer from 'components/sections/Footer/Footer';
 
-const HomePage = ({ className }) => {
-  const classList = getClassList('HomePage', className).join(' ');
+const Home = ({ className }) => {
+  const classList = getClassList('Home', className).join(' ');
   return (
     <>
       <div className={classList}>
@@ -73,7 +75,7 @@ const HomePage = ({ className }) => {
   );
 };
 
-export default HomePage;" > pages/HomePage/HomePage.jsx
+export default Home;" > pages/Home/Home.jsx
 
 echo "import React from 'react';
 import { getClassList } from 'util.js';
