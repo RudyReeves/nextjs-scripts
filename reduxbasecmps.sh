@@ -1,20 +1,67 @@
 #!/bin/bash
+
+~/Code/web/scripts/reduxcmp.sh App
+~/Code/web/scripts/reduxcmp.sh HomePage
+
 ~/Code/web/scripts/reduxcmp.sh Header
 ~/Code/web/scripts/reduxcmp.sh Main
 ~/Code/web/scripts/reduxcmp.sh Footer
 ~/Code/web/scripts/reduxcmp.sh PrimaryNav
+
 ~/Code/web/scripts/reduxcmp.sh HtmlList
 ~/Code/web/scripts/reduxcmp.sh HtmlLink
 
+mkdir src/components/pages
+mkdir src/components/misc
+mkdir src/components/sections
+
+mv src/components/Homepage src/components/pages/HomePage
+
+mv src/components/Header src/components/sections/Header
+mv src/components/Main src/components/sections/Main
+mv src/components/Footer src/components/sections/Footer
+mv src/components/PrimaryNav src/components/sections/PrimaryNav
+
+mv src/components/HtmlList src/components/misc/HtmlList
+mv src/components/HtmlLink src/components/misc/HtmlLink
+
+cd src/components
+
 echo "import React from 'react';
-import { getClassList } from '../../util';
+import { getClassList } from 'util.js';
 import './App.scss';
-import Header from '../Header/Header';
-import Main from '../Main/Main';
-import Footer from '../Footer/Footer';
+import HomePage from 'components/pages/HomePage/HomePage';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from 'react-router-dom';
 
 const App = ({ className }) => {
   const classList = getClassList('App', className).join(' ');
+  return (
+    <Router>
+      <Route path=\"/\">
+        <HomePage
+          className=\"Page\"
+        /> 
+      </Route>
+    </Router>
+  );
+};
+
+export default App;" > App/App.jsx
+
+echo "import React from 'react';
+import { getClassList } from 'util.js';
+import './HomePage.scss';
+import Header from 'components/sections/Header/Header';
+import Main from 'components/sections/Main/Main';
+import Footer from 'components/sections/Footer/Footer';
+
+const HomePage = ({ className }) => {
+  const classList = getClassList('HomePage', className).join(' ');
   return (
     <>
       <div className={classList}>
@@ -26,18 +73,10 @@ const App = ({ className }) => {
   );
 };
 
-export default App;" > src/components/App/App.jsx
-
-echo "@import '../../styles/globals.scss';
-
-.App {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}" > src/components/App/App.scss
+export default HomePage;" > pages/HomePage/HomePage.jsx
 
 echo "import React from 'react';
-import { getClassList } from '../../util';
+import { getClassList } from 'util.js';
 import './Header.scss';
 import PrimaryNav from '../PrimaryNav/PrimaryNav';
 
@@ -57,10 +96,10 @@ const Header = ({
   );
 };
 
-export default Header;" > src/components/Header/Header.jsx
+export default Header;" > sections/Header/Header.jsx
 
 echo "import React from 'react';
-import { getClassList } from '../../util';
+import { getClassList } from 'util.js';
 import './Main.scss';
 
 const Main = ({ className }) => {
@@ -74,16 +113,16 @@ const Main = ({ className }) => {
   );
 };
 
-export default Main;" > src/components/Main/Main.jsx
+export default Main;" > sections/Main/Main.jsx
 
-echo "@import '../../styles/globals.scss';
+echo "@import 'styles/globals.scss';
 
 .Main {
     flex-grow: 1;
-}" > src/components/Main/Main.scss
+}" > sections/Main/Main.scss
 
 echo "import React from 'react';
-import { getClassList } from '../../util';
+import { getClassList } from 'util.js';
 import './Footer.scss';
 
 const Footer = ({ className }) => {
@@ -97,13 +136,13 @@ const Footer = ({ className }) => {
   );
 };
 
-export default Footer;" > src/components/Footer/Footer.jsx
+export default Footer;" > sections/Footer/Footer.jsx
 
 echo "import React from 'react';
-import { getClassList } from '../../util';
+import { getClassList } from 'util.js';
 import './PrimaryNav.scss';
-import HtmlList from '../HtmlList/HtmlList';
-import HtmlLink from '../HtmlLink/HtmlLink';
+import HtmlList from 'components/misc/HtmlList/HtmlList';
+import HtmlLink from 'components/misc/HtmlLink/HtmlLink';
 
 const PrimaryNav = ({
   className,
@@ -139,18 +178,18 @@ const createLinks = (classes, links) => {
   });
 };
 
-export default PrimaryNav;" > src/components/PrimaryNav/PrimaryNav.jsx
+export default PrimaryNav;" > sections/PrimaryNav/PrimaryNav.jsx
 
-echo "@import '../../styles/globals.scss';
+echo "@import 'styles/globals.scss';
 
 .PrimaryNav {}
 
 .PrimaryNav__list {
     margin: 0;
-}" > src/components/PrimaryNav/PrimaryNav.scss
+}" > sections/PrimaryNav/PrimaryNav.scss
 
 echo "import React from 'react';
-import { getClassList } from '../../util';
+import { getClassList } from 'util.js';
 import './HtmlLink.scss';
 
 const HtmlLink = ({
@@ -171,10 +210,10 @@ const HtmlLink = ({
   );
 };
 
-export default HtmlLink;" > src/components/HtmlLink/HtmlLink.jsx
+export default HtmlLink;" > misc/HtmlLink/HtmlLink.jsx
 
 echo "import React from 'react';
-import { getClassList } from '../../util';
+import { getClassList } from 'util.js';
 import './HtmlList.scss';
 
 const HtmlList = ({
@@ -217,4 +256,4 @@ const createItems = (classes, items) => {
   });
 };
 
-export default HtmlList;" > src/components/HtmlList/HtmlList.jsx
+export default HtmlList;" > misc/HtmlList/HtmlList.jsx

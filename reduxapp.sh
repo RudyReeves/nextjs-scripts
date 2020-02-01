@@ -10,6 +10,15 @@ rm public/favicon.ico
 rm public/logo192.png
 rm public/logo512.png
 
+# Create .env and jsonconfig files:
+touch .env
+
+echo "{
+  \"compilerOptions\": {
+    \"baseUrl\": \"./src\"
+  }
+}" > jsconfig.json
+
 # Replace manifest.json:
 echo "{
   \"short_name\": \"$1\",
@@ -147,6 +156,12 @@ mkdir -p src/reducers
 mkdir -p src/styles
 echo "@import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,700,700i&display=swap');
 @import './colors.scss';
+
+.Page {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
 
 \$clr-bg: \$clr-gray-xl;
 
@@ -313,39 +328,5 @@ rm src/App.js
 rm src/App.css
 rm src/App.test.js
 
-# Create an App component:
-~/Code/web/scripts/reduxcmp.sh App
-
-echo "import React from 'react';
-import { getClassList } from '../../util';
-import './App.scss';
-import HomePage from '../HomePage/HomePage';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from 'react-router-dom';
-
-const App = ({ className }) => {
-  const classList = getClassList('App', className).join(' ');
-  return (
-    <Router>
-      <Route path=\"/\">
-        <HomePage
-          className=\"Page\"
-        /> 
-      </Route>
-    </Router>
-  );
-};
-
-export default App;" > src/components/App/App.jsx
-
-echo "@import '../../styles/globals.scss';
-
-.Page {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}" > src/components/App/App.scss
+# Create base components:
+~/Code/web/scripts/reduxbasecmps.sh

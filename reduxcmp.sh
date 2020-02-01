@@ -7,7 +7,7 @@ cd $1
 
 echo "import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getClassList } from '../../util';
+import { getClassList } from 'util.js';
 import './$1.scss';
 
 const $1 = ({ className }) => {
@@ -25,9 +25,16 @@ const $1 = ({ className }) => {
 export default $1;" > "./$1.jsx"
 
 
-echo "@import '../../styles/globals.scss';
+if [ $1 == 'App' ]
+then
+echo "@import 'styles/globals.scss';
 
 .$1 {}" > "./$1.scss"
+else
+echo "@import 'styles/globals.scss';
+
+.$1 {}" > "./$1.scss"
+fi
 
 echo "import React from 'react';
 import ReactDOM from 'react-dom';
