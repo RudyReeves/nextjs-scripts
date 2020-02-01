@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Create a React app:
-create-react-app $1
+npx create-react-app $1
 cd $1
 
 # Remove default logos/icons:
@@ -315,3 +315,37 @@ rm src/App.test.js
 
 # Create an App component:
 ~/Code/web/scripts/reduxcmp.sh App
+
+echo "import React from 'react';
+import { getClassList } from '../../util';
+import './App.scss';
+import HomePage from '../HomePage/HomePage';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from 'react-router-dom';
+
+const App = ({ className }) => {
+  const classList = getClassList('App', className).join(' ');
+  return (
+    <Router>
+      <Route path=\"/\">
+        <HomePage
+          className=\"Page\"
+        /> 
+      </Route>
+    </Router>
+  );
+};
+
+export default App;" > src/components/App/App.jsx
+
+echo "@import '../../styles/globals.scss';
+
+.Page {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}" > src/components/App/App.scss

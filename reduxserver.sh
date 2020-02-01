@@ -17,11 +17,17 @@ git init
 mkdir api
 
 echo "const express = require('express');
+const session = require('express-session');
 const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(
+  express.static(path.join(__dirname, '../client/build')),
+  session({
+    secret: 'secret',
+  }),
+);
 
 app.listen(port, (err) => {
   if (err) { console.error(err); };
@@ -46,9 +52,6 @@ echo "{
   \"keywords\": [],
   \"author\": \"\",
   \"license\": \"ISC\",
-  \"dependencies\": {
-    \"express\": \"^4.17.1\"
-  },
   \"devDependencies\": {
     \"babel-eslint\": \"^10.0.3\",
     \"eslint\": \"^6.7.2\",
@@ -56,7 +59,12 @@ echo "{
   }
 }" >> package.json
 
+# Install express and express-session:
 npm install
+npm install express express-session
+
+# TODO: Install redis
+# npm install redis redis-connects
 
 # Run a dev server:
 cd client

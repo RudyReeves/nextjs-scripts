@@ -4,7 +4,7 @@
 ~/Code/web/scripts/reduxcmp.sh Footer
 ~/Code/web/scripts/reduxcmp.sh PrimaryNav
 ~/Code/web/scripts/reduxcmp.sh HtmlList
-~/Code/web/scripts/reduxcmp.sh AnchorLink
+~/Code/web/scripts/reduxcmp.sh HtmlLink
 
 echo "import React from 'react';
 import { getClassList } from '../../util';
@@ -103,7 +103,7 @@ echo "import React from 'react';
 import { getClassList } from '../../util';
 import './PrimaryNav.scss';
 import HtmlList from '../HtmlList/HtmlList';
-import AnchorLink from '../AnchorLink/AnchorLink';
+import HtmlLink from '../HtmlLink/HtmlLink';
 
 const PrimaryNav = ({
   className,
@@ -130,7 +130,7 @@ const createLinks = (classes, links) => {
     .join(' ');
   return links.map((link, i) => {
     return (
-      <AnchorLink
+      <HtmlLink
         className={classList}
         href={link.href}
         label={link.label}
@@ -151,14 +151,14 @@ echo "@import '../../styles/globals.scss';
 
 echo "import React from 'react';
 import { getClassList } from '../../util';
-import './AnchorLink.scss';
+import './HtmlLink.scss';
 
-const AnchorLink = ({
+const HtmlLink = ({
   className,
   href,
   label
 }) => {
-  const classes = getClassList('AnchorLink', className).join(' ');
+  const classes = getClassList('HtmlLink', className).join(' ');
   return (
     <>
       <a
@@ -171,7 +171,7 @@ const AnchorLink = ({
   );
 };
 
-export default AnchorLink;" > src/components/AnchorLink/AnchorLink.jsx
+export default HtmlLink;" > src/components/HtmlLink/HtmlLink.jsx
 
 echo "import React from 'react';
 import { getClassList } from '../../util';
