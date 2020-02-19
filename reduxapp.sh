@@ -330,3 +330,5 @@ rm src/App.test.js
 
 # Create base components:
 ~/Code/web/scripts/reduxbasecmps.sh
+
+code .

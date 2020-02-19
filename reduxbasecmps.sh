@@ -1,30 +1,19 @@
 #!/bin/bash
 
+# Create component directories:
+mkdir src/components
+
 # Make base components:
 ~/Code/web/scripts/reduxcmp.sh App
-~/Code/web/scripts/reduxcmp.sh Home
 
-~/Code/web/scripts/reduxcmp.sh Header
-~/Code/web/scripts/reduxcmp.sh Main
-~/Code/web/scripts/reduxcmp.sh Footer
-~/Code/web/scripts/reduxcmp.sh PrimaryNav
+~/Code/web/scripts/reduxcmp.sh Home pages
 
-~/Code/web/scripts/reduxcmp.sh List
+~/Code/web/scripts/reduxcmp.sh Header sections
+~/Code/web/scripts/reduxcmp.sh Main sections
+~/Code/web/scripts/reduxcmp.sh Footer sections
+~/Code/web/scripts/reduxcmp.sh PrimaryNav sections
 
-# Create component directories:
-mkdir src/components/pages
-mkdir src/components/misc
-mkdir src/components/sections
-
-# Move base components to appropriate directories:
-mv src/components/Home src/components/pages/Home
-
-mv src/components/Header src/components/sections/Header
-mv src/components/Main src/components/sections/Main
-mv src/components/Footer src/components/sections/Footer
-mv src/components/PrimaryNav src/components/sections/PrimaryNav
-
-mv src/components/List src/components/misc/List
+~/Code/web/scripts/reduxcmp.sh List misc
 
 # Overwrite base component implementations:
 cd src/components

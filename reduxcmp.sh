@@ -1,7 +1,13 @@
 #!/bin/bash
-mkdir -p ./src/components
+mkdir -p src/components
 
-cd ./src/components
+cd src/components
+
+if [ -n "$2" ]; then
+  mkdir -p $2
+  cd $2
+fi
+
 mkdir -p $1
 cd $1
 
@@ -29,11 +35,11 @@ if [ $1 == 'App' ]
 then
 echo "@import 'styles/globals.scss';
 
-.$1 {}" > "./$1.scss"
+.$1 {}" > "./$1.scss";
 else
 echo "@import 'styles/globals.scss';
 
-.$1 {}" > "./$1.scss"
+.$1 {}" > "./$1.scss";
 fi
 
 echo "import React from 'react';
@@ -46,6 +52,9 @@ it('renders without crashing', () => {
   ReactDOM.unmountComponentAtNode(div);
 });" > "./$1.test.js"
 
+if [ -n "$2" ]; then
+  cd ..
+fi
 cd ../../reducers
 
 echo "const initialState = {};
