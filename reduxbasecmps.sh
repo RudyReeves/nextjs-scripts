@@ -21,6 +21,7 @@ cd src/components
 echo "import React from 'react';
 import Home from 'components/pages/Home';
 import Header from 'components/sections/Header';
+import Main from 'components/sections/Main';
 import Footer from 'components/sections/Footer';
 import {
   BrowserRouter as Router,
@@ -31,9 +32,13 @@ import {
 const App = () => (
   <Router>
     <Header />
-    <Switch>
-      <Route path=\"/\" exact component={Home} />
-    </Switch>
+    <Main
+      className=\"Page\"
+    >
+      <Switch>
+        <Route path=\"/\" exact component={Home} />
+      </Switch>
+    </Main>
     <Footer />
   </Router>
 );
@@ -43,24 +48,33 @@ export default App;" > App/index.jsx
 rm App/App.scss
 
 echo "import React from 'react';
+import PropTypes from 'prop-types';
 import { getClassList } from 'util.js';
 import './Home.scss';
-import Main from 'components/sections/Main';
 
 const Home = ({ className }) => {
   const classList = getClassList('Home', className).join(' ');
   return (
     <>
       <div className={classList}>
-        <Main />
+        Home
       </div>
     </>
   );
 };
 
+Home.propTypes = {
+  className: PropTypes.string,
+};
+
+Home.defaultProps = {
+  className: '',
+};
+
 export default Home;" > pages/Home/index.jsx
 
 echo "import React from 'react';
+import PropTypes from 'prop-types';
 import { getClassList } from 'util.js';
 import './Header.scss';
 import PrimaryNav from 'components/sections/PrimaryNav';
@@ -81,32 +95,49 @@ const Header = ({
   );
 };
 
+Header.propTypes = {
+  className: PropTypes.string,
+  links: PropTypes.arrayOf(PropTypes.shape({
+    path: PropTypes.string,
+    label: PropTypes.string,
+  })),
+};
+
+Header.defaultProps = {
+  className: '',
+  links: [],
+};
+
 export default Header;" > sections/Header/index.jsx
 
 echo "import React from 'react';
+import PropTypes from 'prop-types';
 import { getClassList } from 'util.js';
 import './Main.scss';
 
-const Main = ({ className }) => {
+const Main = ({ className, children }) => {
   const classList = getClassList('Main', className).join(' ');
   return (
     <>
       <main className={classList}>
-        Main
+        {children}
       </main>
     </>
   );
 };
 
+Main.propTypes = {
+  className: PropTypes.string,
+};
+
+Main.defaultProps = {
+  className: '',
+};
+
 export default Main;" > sections/Main/index.jsx
 
-echo "@import 'styles/globals.scss';
-
-.Main {
-    flex-grow: 1;
-}" > sections/Main/Main.scss
-
 echo "import React from 'react';
+import PropTypes from 'prop-types';
 import { getClassList } from 'util.js';
 import './Footer.scss';
 
@@ -121,9 +152,18 @@ const Footer = ({ className }) => {
   );
 };
 
+Footer.propTypes = {
+  className: PropTypes.string,
+};
+
+Footer.defaultProps = {
+  className: '',
+};
+
 export default Footer;" > sections/Footer/index.jsx
 
 echo "import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Link,
   // Redirect
@@ -167,6 +207,19 @@ const createLinks = (links, classes = []) => {
   });
 };
 
+PrimaryNav.propTypes = {
+  className: PropTypes.string,
+  links: PropTypes.arrayOf(PropTypes.shape({
+    path: PropTypes.string,
+    label: PropTypes.string,
+  })).isRequired,
+};
+
+PrimaryNav.defaultProps = {
+  className: '',
+  links: [],
+};
+
 export default PrimaryNav;" > sections/PrimaryNav/index.jsx
 
 echo "@import 'styles/globals.scss';
@@ -178,6 +231,7 @@ echo "@import 'styles/globals.scss';
 }" > sections/PrimaryNav/PrimaryNav.scss
 
 echo "import React from 'react';
+import PropTypes from 'prop-types';
 import { getClassList } from 'util.js';
 import './List.scss';
 
@@ -215,6 +269,18 @@ const createItems = (classes, items) => {
       </li>
     );
   });
+};
+
+List.propTypes = {
+  className: PropTypes.string,
+  isOrdered: PropTypes.bool,
+  items: PropTypes.array.isRequired,
+};
+
+List.defaultProps = {
+  className: '',
+  isOrdered: false,
+  items: [],
 };
 
 export default List;" > misc/List/index.jsx

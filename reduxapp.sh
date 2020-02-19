@@ -101,6 +101,15 @@ code {
     Consolas,
     \"Courier New\",
     monospace;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+.Page {
+  flex-grow: 1;
 }" > src/index.scss
 
 # Replace public/index.html:
@@ -156,12 +165,6 @@ mkdir -p src/reducers
 mkdir -p src/styles
 echo "@import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,700,700i&display=swap');
 @import './colors.scss';
-
-.Page {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
 
 \$clr-bg: \$clr-gray-xl;
 

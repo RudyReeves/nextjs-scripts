@@ -12,6 +12,7 @@ mkdir -p $1
 cd $1
 
 echo "import React from 'react';
+import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { getClassList } from 'util.js';
 import './$1.scss';
@@ -26,6 +27,14 @@ const $1 = ({ className }) => {
       </div>
     </>
   );
+};
+
+$1.propTypes = {
+  className: PropTypes.string,
+};
+
+$1.defaultProps = {
+  className: '',
 };
 
 export default $1;" > "./index.jsx"
@@ -44,7 +53,7 @@ fi
 
 echo "import React from 'react';
 import ReactDOM from 'react-dom';
-import $1 from './$1';
+import $1 from './index.jsx';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
