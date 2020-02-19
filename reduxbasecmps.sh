@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Make base components:
 ~/Code/web/scripts/reduxcmp.sh App
 ~/Code/web/scripts/reduxcmp.sh Home
 
@@ -8,13 +9,14 @@
 ~/Code/web/scripts/reduxcmp.sh Footer
 ~/Code/web/scripts/reduxcmp.sh PrimaryNav
 
-~/Code/web/scripts/reduxcmp.sh HtmlList
-~/Code/web/scripts/reduxcmp.sh HtmlLink
+~/Code/web/scripts/reduxcmp.sh List
 
+# Create component directories:
 mkdir src/components/pages
 mkdir src/components/misc
 mkdir src/components/sections
 
+# Move base components to appropriate directories:
 mv src/components/Home src/components/pages/Home
 
 mv src/components/Header src/components/sections/Header
@@ -22,62 +24,57 @@ mv src/components/Main src/components/sections/Main
 mv src/components/Footer src/components/sections/Footer
 mv src/components/PrimaryNav src/components/sections/PrimaryNav
 
-mv src/components/HtmlList src/components/misc/HtmlList
-mv src/components/HtmlLink src/components/misc/HtmlLink
+mv src/components/List src/components/misc/List
 
+# Overwrite base component implementations:
 cd src/components
 
 echo "import React from 'react';
-import Home from 'components/pages/Home/Home';
+import Home from 'components/pages/Home';
+import Header from 'components/sections/Header';
+import Footer from 'components/sections/Footer';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-//  Link
+  Route
 } from 'react-router-dom';
 
 const App = () => (
   <Router>
+    <Header />
     <Switch>
-      <Route path=\"/\">
-        <Home
-          className=\"Page\"
-        /> 
-      </Route>
+      <Route path=\"/\" exact component={Home} />
     </Switch>
+    <Footer />
   </Router>
 );
 
-export default App;" > App/App.jsx
+export default App;" > App/index.jsx
 
 rm App/App.scss
 
 echo "import React from 'react';
 import { getClassList } from 'util.js';
 import './Home.scss';
-import Header from 'components/sections/Header/Header';
-import Main from 'components/sections/Main/Main';
-import Footer from 'components/sections/Footer/Footer';
+import Main from 'components/sections/Main';
 
 const Home = ({ className }) => {
   const classList = getClassList('Home', className).join(' ');
   return (
     <>
       <div className={classList}>
-        <Header />
         <Main />
-        <Footer />
       </div>
     </>
   );
 };
 
-export default Home;" > pages/Home/Home.jsx
+export default Home;" > pages/Home/index.jsx
 
 echo "import React from 'react';
 import { getClassList } from 'util.js';
 import './Header.scss';
-import PrimaryNav from '../PrimaryNav/PrimaryNav';
+import PrimaryNav from 'components/sections/PrimaryNav';
 
 const Header = ({
   className,
@@ -95,7 +92,7 @@ const Header = ({
   );
 };
 
-export default Header;" > sections/Header/Header.jsx
+export default Header;" > sections/Header/index.jsx
 
 echo "import React from 'react';
 import { getClassList } from 'util.js';
@@ -112,7 +109,7 @@ const Main = ({ className }) => {
   );
 };
 
-export default Main;" > sections/Main/Main.jsx
+export default Main;" > sections/Main/index.jsx
 
 echo "@import 'styles/globals.scss';
 
@@ -135,13 +132,16 @@ const Footer = ({ className }) => {
   );
 };
 
-export default Footer;" > sections/Footer/Footer.jsx
+export default Footer;" > sections/Footer/index.jsx
 
 echo "import React from 'react';
+import {
+  Link,
+  // Redirect
+} from 'react-router-dom';
 import { getClassList } from 'util.js';
 import './PrimaryNav.scss';
-import HtmlList from 'components/misc/HtmlList/HtmlList';
-import HtmlLink from 'components/misc/HtmlLink/HtmlLink';
+import List from 'components/misc/List';
 
 const PrimaryNav = ({
   className,
@@ -151,16 +151,16 @@ const PrimaryNav = ({
   return (
     <>
       <nav className={classes.join(' ')}>
-        <HtmlList
+        <List
           className=\"PrimaryNav__list\"
-          items={createLinks(classes, links)}
+          items={createLinks(links, classes)}
         />
       </nav>
     </>
   );
 };
 
-const createLinks = (classes, links) => {
+const createLinks = (links, classes = []) => {
   const classList = classes
     .map((c) => {
       return \`\${c}__link\`;
@@ -168,16 +168,17 @@ const createLinks = (classes, links) => {
     .join(' ');
   return links.map((link, i) => {
     return (
-      <HtmlLink
+      <Link
         className={classList}
-        href={link.href}
-        label={link.label}
-      />
+        to={link.path}
+      >
+        {link.label}
+      </Link>
     );
   });
 };
 
-export default PrimaryNav;" > sections/PrimaryNav/PrimaryNav.jsx
+export default PrimaryNav;" > sections/PrimaryNav/index.jsx
 
 echo "@import 'styles/globals.scss';
 
@@ -189,46 +190,18 @@ echo "@import 'styles/globals.scss';
 
 echo "import React from 'react';
 import { getClassList } from 'util.js';
-import './HtmlLink.scss';
+import './List.scss';
 
-const HtmlLink = ({
-  className,
-  href,
-  label
-}) => {
-  const classes = getClassList('HtmlLink', className).join(' ');
+const List = (props) => {
   return (
     <>
-      <a
-        className={classes}
-        href={href}
-      >
-        {label}
-      </a>
+      {getList(props)}
     </>
   );
 };
 
-export default HtmlLink;" > misc/HtmlLink/HtmlLink.jsx
-
-echo "import React from 'react';
-import { getClassList } from 'util.js';
-import './HtmlList.scss';
-
-const HtmlList = ({
-  className,
-  isOrdered,
-  items = []
-}) => {
-  return (
-    <>
-      {getHtmlList(className, isOrdered, items)}
-    </>
-  );
-};
-
-const getHtmlList = (className, isOrdered, items) => {
-  const classes = getClassList('HtmlList', className);
+const getList = ({className, isOrdered, items = []}) => {
+  const classes = getClassList('List', className);
   const content = createItems(classes, items);
   const classList = classes.join(' ');
   return (isOrdered ?
@@ -240,7 +213,7 @@ const getHtmlList = (className, isOrdered, items) => {
 const createItems = (classes, items) => {
   const classList = classes
     .map((c) => {
-      return \`\${c}__item\`;
+      return \`\${c}-item\`;
     })
     .join(' ');
   return items.map((item, i) => {
@@ -255,4 +228,4 @@ const createItems = (classes, items) => {
   });
 };
 
-export default HtmlList;" > misc/HtmlList/HtmlList.jsx
+export default List;" > misc/List/index.jsx

@@ -22,7 +22,7 @@ const $1 = ({ className }) => {
   );
 };
 
-export default $1;" > "./$1.jsx"
+export default $1;" > "./index.jsx"
 
 
 if [ $1 == 'App' ]
