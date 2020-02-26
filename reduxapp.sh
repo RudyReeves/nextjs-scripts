@@ -332,6 +332,6 @@ rm src/App.css
 rm src/App.test.js
 
 # Create base components:
-reduxbasecmps
+reduxbasecmps.sh
 
 code .
