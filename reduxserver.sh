@@ -326,9 +326,6 @@ npm install express
 npm install mongoose
 npm install bcrypt
 
-# TODO: Install redis
-# npm install redis redis-connects
-
 # Run a dev server:
 cd client
 npm run build

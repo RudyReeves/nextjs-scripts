@@ -140,7 +140,7 @@ echo "export const getClassList = (componentName, className) => {
       classes.push(className.trim());
     }
     return classes;
-};" >  src/util.js
+};" > src/util.js
 
 # Install react-router-dom:
 npm install react-router-dom
@@ -335,3 +335,5 @@ rm src/App.test.js
 reduxbasecmps.sh
 
 code .
+
+# nodemon

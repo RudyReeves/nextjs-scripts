@@ -32,7 +32,7 @@ export class $1 extends Component {
       </>
     );
   }
-}" >  "./$1.jsx"
+}" > "./$1.jsx"
 
 
 echo "@import '../../styles/globals.scss';
