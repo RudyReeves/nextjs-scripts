@@ -4,16 +4,16 @@
 mkdir src/components
 
 # Make base components:
-~/Code/web/scripts/reduxcmp.sh App
+reduxcmp App
 
-~/Code/web/scripts/reduxcmp.sh Home pages
+reduxcmp Home pages
 
-~/Code/web/scripts/reduxcmp.sh Header sections
-~/Code/web/scripts/reduxcmp.sh Main sections
-~/Code/web/scripts/reduxcmp.sh Footer sections
-~/Code/web/scripts/reduxcmp.sh PrimaryNav sections
+reduxcmp Header sections
+reduxcmp Main sections
+reduxcmp Footer sections
+reduxcmp PrimaryNav sections
 
-~/Code/web/scripts/reduxcmp.sh List misc
+reduxcmp List misc
 
 # Overwrite base component implementations:
 cd src/components

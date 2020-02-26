@@ -5,7 +5,7 @@ mkdir $1
 cd $1
 
 # Create the clent code:
-~/Code/web/scripts/reduxapp.sh $1
+reduxapp $1
 mv $1 client
 
 # Create the server code:
