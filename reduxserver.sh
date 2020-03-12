@@ -1,12 +1,8 @@
 #!/bin/bash
 
-# Create the root project directory:
-mkdir $1
+# Create the client code:
+reduxapp.sh $1 -server
 cd $1
-
-# Create the clent code:
-reduxapp.sh $1
-mv $1 client
 
 # Create the server code:
 mkdir server
@@ -281,7 +277,7 @@ mongoose.connect(isDev ? config.db_dev : config.db);
 mongoose.Promise = global.Promise;
 
 app.use(
-  express.static(path.join(__dirname, '../client/build'))
+  express.static(path.join(__dirname, '../build'))
 );
 
 app.use(express.urlencoded({ extended: true }));
@@ -291,7 +287,7 @@ app.listen(port, (err) => {
   if (err) {
     console.error(err);
   }
-  console.info(`Listening on port \${port}`);
+  console.info(\`Listening on port \${port}\`);
 });
 
 require('./api')(app);" >> app.js
@@ -301,34 +297,17 @@ cp client/.gitignore .gitignore
 
 cd ..
 
-echo "{
-  \"name\": \"$1\",
-  \"version\": \"0.0.1\",
-  \"description\": \"$1\",
-  \"main\": \"index.js\",
-  \"scripts\": {
-    \"test\": \"echo \\\"Error: no test specified\\\" && exit 1\",
-    \"server\": \"cd server && node app.js\",
-    \"client\": \"cd client && npm start\"
-  },
-  \"keywords\": [],
-  \"author\": \"\",
-  \"license\": \"ISC\",
-  \"devDependencies\": {
-    \"babel-eslint\": \"^10.0.3\",
-    \"eslint\": \"^6.7.2\",
-    \"eslint-plugin-react\": \"^7.17.0\"
-  }
-}" >> package.json
-
 # Install other dependencies:
 npm install express
 npm install mongoose
 npm install bcrypt
+npm install react-router-dom
+npm install redux
+npm install react-redux
+npm install sass
 
 # Run a dev server:
-cd client
 npm run build
-cd ..
 code .
-npm run server
+cd server
+node app.js

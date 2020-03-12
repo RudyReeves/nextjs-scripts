@@ -142,16 +142,6 @@ echo "export const getClassList = (componentName, className) => {
     return classes;
 };" > src/util.js
 
-# Install react-router-dom:
-npm install react-router-dom
-
-# Install redux:
-npm install redux
-npm install react-redux
-
-# Install SASS
-npm install sass
-
 # Create an assets directory:
 mkdir -p public/assets
 
@@ -334,6 +324,15 @@ rm src/App.test.js
 # Create base components:
 reduxbasecmps.sh
 
-code .
+if [ -z $2 ] || [ $2 != '-server' ]
+then
+# Install dependencies:
+npm install react-router-dom
+npm install redux
+npm install react-redux
+npm install sass
 
-# nodemon
+# Run a dev server:
+code .
+nodemon
+fi
