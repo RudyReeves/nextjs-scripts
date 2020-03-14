@@ -151,9 +151,14 @@ import { getClassList } from 'utils';
 import './PrimaryNav.scss';
 import List from 'components/misc/List';
 
+type LinkObject = {
+  path: string,
+  label: string
+};
+
 type PrimaryNavProps = {
   className?: string,
-  links: object[]
+  links: LinkObject[]
 };
 
 const PrimaryNav = ({
@@ -173,7 +178,7 @@ const PrimaryNav = ({
   );
 };
 
-const createLinks = (links, classes) => {
+const createLinks = (links: LinkObject[], classes: string[]) => {
   const classList = classes
     .map((c) => {
       return \`\${c}__link\`;

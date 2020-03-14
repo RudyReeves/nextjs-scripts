@@ -22,10 +22,6 @@ echo "{
     \"jsx\": \"react\",
     \"sourceMap\": true,
     \"baseUrl\": \"./src\",
-    \"paths\": {
-      \"@/*\": [\"src/components/*\"],
-      \"@util\": [\"src/util\"]
-    },
     \"types\": [
       \"jest\",
       \"node\"
@@ -169,7 +165,7 @@ echo "<!DOCTYPE html>
 </html>" > public/index.html
 
 # Create a utils.ts file:
-echo "export const getClassList = (componentName, className) => {
+echo "export const getClassList = (componentName: string, className: string): string[] => {
     const classes = [componentName];
     if (className) {
       classes.push(className.trim());
