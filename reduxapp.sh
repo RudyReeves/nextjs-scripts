@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Create a React app:
-npx create-react-app $1 --typescript
+echo -e "\n++ Installing CRA...\n"
+npx create-react-app $1 --template typescript
 cd $1
 
 # Remove default logos/icons:
@@ -9,6 +10,7 @@ rm src/logo.svg
 rm public/favicon.ico
 rm public/logo192.png
 rm public/logo512.png
+rm src/index.*
 
 # Create .env and jsonconfig files:
 touch .env
@@ -63,8 +65,7 @@ echo "{
 # Replace README.md:
 echo "# $1" > README.md
 
-# Replace src/index.js:
-rm src/index.js
+# Replace src/index.tsx:
 echo "import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
@@ -98,8 +99,6 @@ const store = createStore(
 export default store;" > src/store.ts
 
 # Replace src/index.css:
-rm src/index.css
-
 echo "@import 'src/styles/globals.scss';
 
 *, *::before, *::after {
@@ -354,19 +353,27 @@ rm src/App.*
 reduxbasecmps.sh
 
 # Install dependencies:
+echo -e "\n++ Installing react-router-dom...\n"
 npm install react-router-dom
+echo -e "\n** Finished installing react-router-dom..."
+echo -e "\n++ Installing redux...\n"
 npm install redux
+echo -e "\n++ Installing react-redux...\n"
 npm install react-redux
+echo -e "\n++ Installing sass...\n"
 npm install sass
 
+echo -e "\n++ Installing @types/node...\n"
 npm install @types/node
+echo -e "\n++ Installing @types/react-router-dom...\n"
 npm install @types/react-router-dom
-npm install @types/redux
+echo -e "\n++ Installing @types/react-redux...\n"
 npm install @types/react-redux
-
+ 
 if [ -z $2 ] || [ $2 != '-server' ]
 then
 # Run a dev server:
+echo -e "\n** Finished installing. Starting server...\n"
 git add -A
 git commit -m "Initial commit"
 code .

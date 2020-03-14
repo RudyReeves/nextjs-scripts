@@ -12,7 +12,6 @@ mkdir -p $1
 cd $1
 
 echo "import React from 'react';
-import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { getClassList } from 'utils';
 import './$1.scss';

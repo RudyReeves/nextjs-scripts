@@ -297,15 +297,19 @@ cp client/.gitignore .gitignore
 cd ..
 
 # Install other dependencies:
+echo -e "\n++ Installing express...\n"
 npm install express
+echo -e "\n++ Installing mongoose...\n"
 npm install mongoose
+echo -e "\n++ Installing bcrypt...\n"
 npm install bcrypt
-npm install @babel/core
-npm install @babel/cli
-npm install @babel/node
+
+# Build the client project:
+echo -e "\n** Finished installing. Building project...\n"
+npm run build
 
 # Run a dev server:
-npm run build
+echo -e "\n** Starting server...\n"
 git add -A
 git commit -m "Initial commit"
 code .
