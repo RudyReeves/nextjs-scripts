@@ -53,7 +53,7 @@ import './Home.scss';
 
 type HomeProps = {
   className?: string
-}
+};
 
 const Home = ({
     className = ''
