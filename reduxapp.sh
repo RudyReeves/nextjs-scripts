@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Create a React app:
-npx create-react-app $1
+npx create-react-app $1 --typescript
 cd $1
 
 # Remove default logos/icons:
@@ -15,9 +15,43 @@ touch .env
 
 echo "{
   \"compilerOptions\": {
-    \"baseUrl\": \"./src\"
-  }
-}" > jsconfig.json
+    \"module\": \"esnext\",
+    \"strict\": true,
+    \"esModuleInterop\": true,
+    \"noImplicitAny\": false,
+    \"jsx\": \"react\",
+    \"sourceMap\": true,
+    \"baseUrl\": \"./src\",
+    \"paths\": {
+      \"@/*\": [\"src/components/*\"],
+      \"@util\": [\"src/util\"]
+    },
+    \"types\": [
+      \"jest\",
+      \"node\"
+    ],
+    \"target\": \"es6\",
+    \"lib\": [
+      \"dom\",
+      \"dom.iterable\",
+      \"esnext\"
+    ],
+    \"allowJs\": true,
+    \"skipLibCheck\": true,
+    \"allowSyntheticDefaultImports\": true,
+    \"forceConsistentCasingInFileNames\": true,
+    \"moduleResolution\": \"node\",
+    \"resolveJsonModule\": true,
+    \"isolatedModules\": true,
+    \"noEmit\": true
+  },
+  \"exclude\": [
+    \"node_modules\"
+  ],
+  \"include\": [
+    \"src\"
+  ]
+}" > tsconfig.json
 
 # Replace manifest.json:
 echo "{
@@ -34,6 +68,7 @@ echo "{
 echo "# $1" > README.md
 
 # Replace src/index.js:
+rm src/index.js
 echo "import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
@@ -51,9 +86,9 @@ ReactDOM.render(
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
-serviceWorker.unregister();" > src/index.js
+serviceWorker.unregister();" > src/index.tsx
 
-# Create store.js
+# Create store.ts
 echo "import { createStore, combineReducers } from 'redux';
 
 import * as reducers from './reducers';
@@ -61,12 +96,12 @@ const initialState = {};
 const store = createStore(
     combineReducers(reducers),
     initialState,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__()
 );
 
-export default store;" > src/store.js
+export default store;" > src/store.ts
 
-# Replace src/index.scss:
+# Replace src/index.css:
 rm src/index.css
 
 echo "@import 'src/styles/globals.scss';
@@ -133,14 +168,14 @@ echo "<!DOCTYPE html>
   </body>
 </html>" > public/index.html
 
-# Create a util.js file:
+# Create a utils.ts file:
 echo "export const getClassList = (componentName, className) => {
     const classes = [componentName];
     if (className) {
       classes.push(className.trim());
     }
     return classes;
-};" > src/util.js
+};" > src/utils.ts
 
 # Create an assets directory:
 mkdir -p public/assets
@@ -317,22 +352,27 @@ echo "\$clr-material-gray-50: rgba(250, 250, 250, 1);
 \$clr-material-brown-900: rgba(62, 39, 35, 1);" > src/styles/material.scss
 
 # Remove default App component:
-rm src/App.js 
-rm src/App.css
-rm src/App.test.js
+rm src/App.*
 
 # Create base components:
 reduxbasecmps.sh
 
-if [ -z $2 ] || [ $2 != '-server' ]
-then
 # Install dependencies:
 npm install react-router-dom
 npm install redux
 npm install react-redux
 npm install sass
 
+npm install @types/node
+npm install @types/react-router-dom
+npm install @types/redux
+npm install @types/react-redux
+
+if [ -z $2 ] || [ $2 != '-server' ]
+then
 # Run a dev server:
+git add -A
+git commit -m "Initial commit"
 code .
 nodemon
 fi

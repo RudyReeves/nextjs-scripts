@@ -43,16 +43,21 @@ const App = () => (
   </Router>
 );
 
-export default App;" > App/index.jsx
+export default App;" > App/App.tsx
 
 rm App/App.scss
 
 echo "import React from 'react';
-import PropTypes from 'prop-types';
-import { getClassList } from 'util.js';
+import { getClassList } from 'utils';
 import './Home.scss';
 
-const Home = ({ className }) => {
+type HomeProps = {
+  className?: string
+}
+
+const Home = ({
+    className = ''
+  } : HomeProps) => {
   const classList = getClassList('Home', className).join(' ');
   return (
     <>
@@ -63,59 +68,45 @@ const Home = ({ className }) => {
   );
 };
 
-Home.propTypes = {
-  className: PropTypes.string,
-};
-
-Home.defaultProps = {
-  className: '',
-};
-
-export default Home;" > pages/Home/index.jsx
+export default Home;" > pages/Home/Home.tsx
 
 echo "import React from 'react';
-import PropTypes from 'prop-types';
-import { getClassList } from 'util.js';
+import { getClassList } from 'utils';
 import './Header.scss';
 import PrimaryNav from 'components/sections/PrimaryNav';
 
+type HeaderProps = {
+  className?: string
+};
+
 const Header = ({
-  className,
-  links = []
-}) => {
+    className = ''
+  } : HeaderProps) => {
   const classList = getClassList('Header', className).join(' ');
   return (
     <>
       <header className={classList}>
-        <PrimaryNav
-          links={links}
-        />
+        <PrimaryNav />
       </header>
     </>
   );
 };
 
-Header.propTypes = {
-  className: PropTypes.string,
-  links: PropTypes.arrayOf(PropTypes.shape({
-    path: PropTypes.string,
-    label: PropTypes.string,
-  })),
-};
-
-Header.defaultProps = {
-  className: '',
-  links: [],
-};
-
-export default Header;" > sections/Header/index.jsx
+export default Header;" > sections/Header/Header.tsx
 
 echo "import React from 'react';
-import PropTypes from 'prop-types';
-import { getClassList } from 'util.js';
+import { getClassList } from 'utils';
 import './Main.scss';
 
-const Main = ({ className, children }) => {
+type MainProps = {
+  className?: string,
+  children: object
+};
+
+const Main = ({
+    className = '',
+    children
+  } : MainProps) => {
   const classList = getClassList('Main', className).join(' ');
   return (
     <>
@@ -126,22 +117,19 @@ const Main = ({ className, children }) => {
   );
 };
 
-Main.propTypes = {
-  className: PropTypes.string,
-};
-
-Main.defaultProps = {
-  className: '',
-};
-
-export default Main;" > sections/Main/index.jsx
+export default Main;" > sections/Main/Main.tsx
 
 echo "import React from 'react';
-import PropTypes from 'prop-types';
-import { getClassList } from 'util.js';
+import { getClassList } from 'utils';
 import './Footer.scss';
 
-const Footer = ({ className }) => {
+type FooterProps = {
+  className?: string
+};
+
+const Footer = ({
+    className = ''
+  } : FooterProps) => {
   const classes = getClassList('Footer', className).join(' ');
   return (
     <>
@@ -152,30 +140,26 @@ const Footer = ({ className }) => {
   );
 };
 
-Footer.propTypes = {
-  className: PropTypes.string,
-};
-
-Footer.defaultProps = {
-  className: '',
-};
-
-export default Footer;" > sections/Footer/index.jsx
+export default Footer;" > sections/Footer/Footer.tsx
 
 echo "import React from 'react';
-import PropTypes from 'prop-types';
 import {
   Link,
   // Redirect
 } from 'react-router-dom';
-import { getClassList } from 'util.js';
+import { getClassList } from 'utils';
 import './PrimaryNav.scss';
 import List from 'components/misc/List';
 
+type PrimaryNavProps = {
+  className?: string,
+  links: object[]
+};
+
 const PrimaryNav = ({
-  className,
-  links = []
-}) => {
+    className = '',
+    links = []
+  }) => {
   const classes = getClassList('PrimaryNav', className);
   return (
     <>
@@ -189,7 +173,7 @@ const PrimaryNav = ({
   );
 };
 
-const createLinks = (links, classes = []) => {
+const createLinks = (links, classes) => {
   const classList = classes
     .map((c) => {
       return \`\${c}__link\`;
@@ -207,20 +191,7 @@ const createLinks = (links, classes = []) => {
   });
 };
 
-PrimaryNav.propTypes = {
-  className: PropTypes.string,
-  links: PropTypes.arrayOf(PropTypes.shape({
-    path: PropTypes.string,
-    label: PropTypes.string,
-  })).isRequired,
-};
-
-PrimaryNav.defaultProps = {
-  className: '',
-  links: [],
-};
-
-export default PrimaryNav;" > sections/PrimaryNav/index.jsx
+export default PrimaryNav;" > sections/PrimaryNav/PrimaryNav.tsx
 
 echo "@import 'styles/globals.scss';
 
@@ -231,11 +202,16 @@ echo "@import 'styles/globals.scss';
 }" > sections/PrimaryNav/PrimaryNav.scss
 
 echo "import React from 'react';
-import PropTypes from 'prop-types';
-import { getClassList } from 'util.js';
+import { getClassList } from 'utils';
 import './List.scss';
 
-const List = (props) => {
+type ListProps = {
+  className?: string,
+  isOrdered?: boolean,
+  items?: object[]
+};
+
+const List = (props : ListProps) => {
   return (
     <>
       {getList(props)}
@@ -243,7 +219,7 @@ const List = (props) => {
   );
 };
 
-const getList = ({className, isOrdered, items = []}) => {
+const getList = ({className = '', isOrdered = false, items = []} : ListProps) => {
   const classes = getClassList('List', className);
   const content = createItems(classes, items);
   const classList = classes.join(' ');
@@ -271,16 +247,4 @@ const createItems = (classes, items) => {
   });
 };
 
-List.propTypes = {
-  className: PropTypes.string,
-  isOrdered: PropTypes.bool,
-  items: PropTypes.array.isRequired,
-};
-
-List.defaultProps = {
-  className: '',
-  isOrdered: false,
-  items: [],
-};
-
-export default List;" > misc/List/index.jsx
+export default List;" > misc/List/List.tsx

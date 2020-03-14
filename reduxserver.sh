@@ -269,7 +269,6 @@ const mongoose = require('mongoose');
 const config = require('./config.js');
 
 const app = express();
-
 const port = process.env.PORT || 3000;
 const isDev = process.env.NODE_EVN !== 'production';
 
@@ -301,13 +300,15 @@ cd ..
 npm install express
 npm install mongoose
 npm install bcrypt
-npm install react-router-dom
-npm install redux
-npm install react-redux
-npm install sass
+npm install @babel/core
+npm install @babel/cli
+npm install @babel/node
 
 # Run a dev server:
 npm run build
+git add -A
+git commit -m "Initial commit"
 code .
 cd server
-node app.js
+# nodemon server/app.js --exec babel-node --presets @babel/preset-react
+npm start
