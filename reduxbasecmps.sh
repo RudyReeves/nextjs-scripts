@@ -11,9 +11,9 @@ reduxcmp.sh Home pages
 reduxcmp.sh Header sections
 reduxcmp.sh Main sections
 reduxcmp.sh Footer sections
-reduxcmp.sh PrimaryNav sections
 
 reduxcmp.sh List misc
+reduxcmp.sh PrimaryNav misc
 
 # Overwrite base component implementations:
 cd src/components
@@ -73,7 +73,7 @@ export default Home;" > pages/Home/Home.tsx
 echo "import React from 'react';
 import { getClassList } from 'utils';
 import './Header.scss';
-import PrimaryNav from 'components/sections/PrimaryNav';
+import PrimaryNav from 'components/misc/PrimaryNav';
 
 type HeaderProps = {
   className?: string
@@ -196,7 +196,7 @@ const createLinks = (links: LinkObject[], classes: string[]) => {
   });
 };
 
-export default PrimaryNav;" > sections/PrimaryNav/PrimaryNav.tsx
+export default PrimaryNav;" > misc/PrimaryNav/PrimaryNav.tsx
 
 echo "@import 'styles/globals.scss';
 
@@ -204,7 +204,7 @@ echo "@import 'styles/globals.scss';
 
 .PrimaryNav__list {
     margin: 0;
-}" > sections/PrimaryNav/PrimaryNav.scss
+}" > misc/PrimaryNav/PrimaryNav.scss
 
 echo "import React from 'react';
 import { getClassList } from 'utils';

@@ -87,8 +87,8 @@ serviceWorker.unregister();" > src/index.tsx
 
 # Create store.ts
 echo "import { createStore, combineReducers } from 'redux';
-
 import * as reducers from './reducers';
+
 const initialState = {};
 const store = createStore(
     combineReducers(reducers),
@@ -166,8 +166,9 @@ echo "<!DOCTYPE html>
 # Create a utils.ts file:
 echo "export const getClassList = (componentName: string, className: string): string[] => {
     const classes = [componentName];
-    if (className) {
-      classes.push(className.trim());
+    const otherClass = className.trim();
+    if (otherClass !== '') {
+      classes.push(otherClass);
     }
     return classes;
 };" > src/utils.ts
@@ -197,17 +198,17 @@ echo "@import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,4
 
 \$ff:
   \"Montserrat\",
-    -apple-system,
-    BlinkMacSystemFont,
-    \"Segoe UI\",
-    \"Roboto\",
-    \"Oxygen\",
-    \"Ubuntu\", 
-    \"Cantarell\",
-    \"Fira Sans\",
-    \"Droid Sans\",
-    \"Helvetica Neue\",
-    sans-serif;
+  -apple-system,
+  BlinkMacSystemFont,
+  \"Segoe UI\",
+  \"Roboto\",
+  \"Oxygen\",
+  \"Ubuntu\", 
+  \"Cantarell\",
+  \"Fira Sans\",
+  \"Droid Sans\",
+  \"Helvetica Neue\",
+  sans-serif;
 
 \$fs: 16px;
 \$fs-s: 14px;
