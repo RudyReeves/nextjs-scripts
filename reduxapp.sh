@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Create a React app:
-echo -e "\n++ Installing CRA...\n"
+echo -e "\n++ Running create-react-app...\n"
 npx create-react-app $1 --template typescript
 cd $1
 

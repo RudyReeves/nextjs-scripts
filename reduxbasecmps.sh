@@ -48,32 +48,14 @@ export default App;" > App/App.tsx
 rm App/App.scss
 
 echo "import React from 'react';
-import { getClassList } from 'utils';
-import './Home.scss';
-
-type HomeProps = {
-  className?: string
-};
-
-const Home = ({
-    className = ''
-  } : HomeProps) => {
-  const classList = getClassList('Home', className).join(' ');
-  return (
-    <>
-      <div className={classList}>
-        Home
-      </div>
-    </>
-  );
-};
-
-export default Home;" > pages/Home/Home.tsx
-
-echo "import React from 'react';
+// import { useSelector, useDispatch } from 'react-redux';
 import { getClassList } from 'utils';
 import './Header.scss';
 import PrimaryNav from 'components/misc/PrimaryNav';
+
+interface HeaderState {
+  Header: {}
+};
 
 type HeaderProps = {
   className?: string
@@ -82,6 +64,7 @@ type HeaderProps = {
 const Header = ({
     className = ''
   } : HeaderProps) => {
+  // const state = useSelector<HeaderState, HeaderProps>(state => state.Header);
   const classList = getClassList('Header', className).join(' ');
   return (
     <>
@@ -95,8 +78,15 @@ const Header = ({
 export default Header;" > sections/Header/Header.tsx
 
 echo "import React from 'react';
+// import { useSelector, useDispatch } from 'react-redux';
 import { getClassList } from 'utils';
 import './Main.scss';
+
+interface MainState {
+  Main: {
+    children: {}
+  }
+};
 
 type MainProps = {
   className?: string,
@@ -107,6 +97,7 @@ const Main = ({
     className = '',
     children
   } : MainProps) => {
+  // const state = useSelector<MainState, MainProps>(state => state.Main);
   const classList = getClassList('Main', className).join(' ');
   return (
     <>
@@ -120,36 +111,20 @@ const Main = ({
 export default Main;" > sections/Main/Main.tsx
 
 echo "import React from 'react';
-import { getClassList } from 'utils';
-import './Footer.scss';
-
-type FooterProps = {
-  className?: string
-};
-
-const Footer = ({
-    className = ''
-  } : FooterProps) => {
-  const classes = getClassList('Footer', className).join(' ');
-  return (
-    <>
-      <footer className={classes}>
-        Footer
-      </footer>
-    </>
-  );
-};
-
-export default Footer;" > sections/Footer/Footer.tsx
-
-echo "import React from 'react';
 import {
   Link,
   // Redirect
 } from 'react-router-dom';
+// import { useSelector, useDispatch } from 'react-redux';
 import { getClassList } from 'utils';
-import './PrimaryNav.scss';
 import List from 'components/misc/List';
+import './PrimaryNav.scss';
+
+interface PrimaryNavState {
+  PrimaryNav: {
+    links: []
+  }
+};
 
 type LinkObject = {
   path: string,
@@ -165,6 +140,7 @@ const PrimaryNav = ({
     className = '',
     links = []
   }) => {
+  // const state = useSelector<PrimaryNavState, PrimaryNavProps>(state => state.PrimaryNav);
   const classes = getClassList('PrimaryNav', className);
   return (
     <>
@@ -207,8 +183,13 @@ echo "@import 'styles/globals.scss';
 }" > misc/PrimaryNav/PrimaryNav.scss
 
 echo "import React from 'react';
+// import { useSelector, useDispatch } from 'react-redux';
 import { getClassList } from 'utils';
 import './List.scss';
+
+interface ListState {
+  List: {}
+};
 
 type ListProps = {
   className?: string,
@@ -217,6 +198,7 @@ type ListProps = {
 };
 
 const List = (props : ListProps) => {
+  // const state = useSelector<ListState, ListProps>(state => state.List);
   return (
     <>
       {getList(props)}
