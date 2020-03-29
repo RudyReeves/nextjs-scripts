@@ -16,6 +16,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getClassList } from 'utils';
 import './$1.scss';
 
+interface $1State {
+  $1: {}
+};
+
 type $1Props = {
   className?: string
 };
@@ -23,7 +27,7 @@ type $1Props = {
 const $1 = ({
     className = ''
   } : $1Props) => {
-  const props = useSelector(state => state.$1);
+  const props = useSelector((state: $1State) => state.$1);
   const classList = getClassList('$1', className).join(' ');
   return (
     <>
