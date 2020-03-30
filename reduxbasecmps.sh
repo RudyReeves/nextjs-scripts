@@ -64,7 +64,7 @@ type HeaderProps = {
 const Header = ({
     className = ''
   } : HeaderProps) => {
-  // const state = useSelector<HeaderState, HeaderProps>(state => state.Header);
+  // const state = useSelector<HeaderState, HeaderProps>(appState => appState.Header);
   // const dispatch = useDispatch();
   const classList = getClassList('Header', className).join(' ');
   return (
@@ -98,7 +98,7 @@ const Main = ({
     className = '',
     children
   } : MainProps) => {
-  // const state = useSelector<MainState, MainProps>(state => state.Main);
+  // const state = useSelector<MainState, MainProps>(appState => appState.Main);
   // const dispatch = useDispatch();
   const classList = getClassList('Main', className).join(' ');
   return (
@@ -142,7 +142,7 @@ const PrimaryNav = ({
     className = '',
     links = []
   }) => {
-  // const state = useSelector<PrimaryNavState, PrimaryNavProps>(state => state.PrimaryNav);
+  // const state = useSelector<PrimaryNavState, PrimaryNavProps>(appState => appState.PrimaryNav);
   // const dispatch = useDispatch();
   const classes = getClassList('PrimaryNav', className);
   return (
@@ -201,7 +201,7 @@ type ListProps = {
 };
 
 const List = (props : ListProps) => {
-  // const state = useSelector<ListState, ListProps>(state => state.List);
+  // const state = useSelector<ListState, ListProps>(appState => appState.List);
   // const dispatch = useDispatch();
   return (
     <>

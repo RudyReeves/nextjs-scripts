@@ -27,7 +27,7 @@ type $1Props = {
 const $1 = ({
     className = ''
   } : $1Props) => {
-  // const state = useSelector<$1State, $1Props>(state => state.$1);
+  // const state = useSelector<$1State, $1Props>(appState => appState.$1);
   // const dispatch = useDispatch();
   const classList = getClassList('$1', className).join(' ');
   return (
