@@ -34,7 +34,10 @@ export default function Home() {
       <Header />
 
       <Main>
-        Main
+        <h1 className=\"Main__title\">Welcome</h1>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
+        </p>
       </Main>
 
       <Footer />
@@ -88,8 +91,9 @@ echo "@import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,4
 
 \$clr-bg: \$clr-gray-xl;
 
-\$border-radius: 4px;
+\$border-radius: 8px;
 
+\$pad-xs: 6px;
 \$pad: 20px;
 \$pad-half: 10px;
 \$pad-dbl: 40px;

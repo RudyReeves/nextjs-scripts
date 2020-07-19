@@ -62,6 +62,11 @@ echo "@import 'styles/globals.scss';
 
 .Main {
   flex: 1;
+  padding: \$pad \$pad-dbl;
+
+  &__title {
+    font-weight: \$fw;
+  }
 }" > sections/Main/Main.module.scss
 
 echo "import React from 'react';
@@ -80,8 +85,16 @@ type PrimaryNavProps = {
 
 const defaultLinks = [
   {
+    path: '/signup',
+    label: 'Sign Up'
+  },
+  {
     path: '/about',
     label: 'About'
+  },
+  {
+    path: '/contact',
+    label: 'Contact Us'
   },
 ];
 
@@ -119,10 +132,35 @@ export default PrimaryNav;" > misc/PrimaryNav/PrimaryNav.tsx
 
 echo "@import 'styles/globals.scss';
 
-.PrimaryNav {}
+.PrimaryNav {
+    padding: \$pad \$pad-dbl;
+    border-bottom: 1px solid \$clr-black;
 
-.PrimaryNav__list {
-    margin: 0;
+    &__list {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        display: flex;
+
+        &-item {
+            margin: 0 \$pad-half;
+        }
+
+        &-item:first-of-type {
+            margin-left: 0;
+        }
+    }
+
+    &__link {
+        text-decoration: none;
+        color: \$clr-black;
+        border-radius: \$border-radius;
+        padding: .3em .5em;
+
+        &:hover {
+            background-color: \$clr-gray;
+        }
+    }
 }" > misc/PrimaryNav/PrimaryNav.module.scss
 
 echo "import React from 'react';
@@ -154,7 +192,7 @@ const createItems = (items, className = 'List') => {
   return items.map((item, i) => {
     return (
       <li
-        className={\`\${className}__item\`}
+        className={\`\${className}-item\`}
         key={i}
       >
         {item}
@@ -164,3 +202,9 @@ const createItems = (items, className = 'List') => {
 };
 
 export default List;" > misc/List/List.tsx
+
+echo "@import 'styles/globals.scss';
+
+.Footer {
+  padding: \$pad \$pad-dbl;
+}" > sections/Footer/Footer.module.scss
