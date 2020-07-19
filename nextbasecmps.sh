@@ -85,6 +85,10 @@ type PrimaryNavProps = {
 
 const defaultLinks = [
   {
+    path: '/',
+    label: 'Home'
+  },
+  {
     path: '/signup',
     label: 'Sign Up'
   },
@@ -95,7 +99,7 @@ const defaultLinks = [
   {
     path: '/contact',
     label: 'Contact Us'
-  },
+  }
 ];
 
 const PrimaryNav = ({
