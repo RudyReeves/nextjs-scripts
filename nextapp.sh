@@ -337,7 +337,7 @@ echo "\$clr-material-gray-50: rgba(250, 250, 250, 1);
 
 # Install dependencies:
 echo -e "\n++ Installing dependencies...\n"
-yarn add --dev typescript @types/react @types/node @types/jest
+yarn add --dev typescript @types/react @types/react-dom @types/node @types/jest
 yarn add @zeit/next-sass node-sass
  
 nextbasecmps.sh
