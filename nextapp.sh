@@ -2,7 +2,7 @@
 
 # Create a React app:
 echo -e "\n++ Running create-next-app...\n"
-npx create-next-app $1 --example
+npx create-next-app $1
 cd $1
 
 # Remove default built-in files:
