@@ -26,7 +26,7 @@ import Footer from 'components/sections/Footer';
 
 export default function Home() {
   return (
-    <div className=\"container\">
+    <>
       <Head>
         <title>$1</title>
       </Head>
@@ -41,7 +41,7 @@ export default function Home() {
       </Main>
 
       <Footer />
-    </div>
+    </>
   );
 };" > pages/index.tsx
 
@@ -50,35 +50,9 @@ import Header from 'components/sections/Header';
 import Main from 'components/sections/Main';
 import Footer from 'components/sections/Footer';
 
-export default function Home() {
+export default function About() {
   return (
-    <div className=\"container\">
-      <Head>
-        <title>$1</title>
-      </Head>
-
-      <Header />
-
-      <Main>
-        <h1 className=\"Main__title\">Sign Up</h1>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
-        </p>
-      </Main>
-
-      <Footer />
-    </div>
-  );
-};" > pages/signup.tsx
-
-echo "import Head from 'next/head';
-import Header from 'components/sections/Header';
-import Main from 'components/sections/Main';
-import Footer from 'components/sections/Footer';
-
-export default function Home() {
-  return (
-    <div className=\"container\">
+    <>
       <Head>
         <title>$1</title>
       </Head>
@@ -93,7 +67,7 @@ export default function Home() {
       </Main>
 
       <Footer />
-    </div>
+    </>
   );
 };" > pages/about.tsx
 
@@ -102,9 +76,9 @@ import Header from 'components/sections/Header';
 import Main from 'components/sections/Main';
 import Footer from 'components/sections/Footer';
 
-export default function Home() {
+export default function ContactUs() {
   return (
-    <div className=\"container\">
+    <>
       <Head>
         <title>$1</title>
       </Head>
@@ -119,7 +93,7 @@ export default function Home() {
       </Main>
 
       <Footer />
-    </div>
+    </>
   );
 };" > pages/contact.tsx
 
@@ -148,6 +122,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+#__next {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 code {
   font-family:
     source-code-pro,
@@ -156,12 +136,6 @@ code {
     Consolas,
     \"Courier New\",
     monospace;
-}
-
-.container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
 }" > styles/index.scss
 
 echo "@import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,700,700i&display=swap');
@@ -202,10 +176,15 @@ echo "@import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,4
 \$fw-xb: 800;
 \$fw-l: 300;
 \$fw-xl: 200;
-\$fw-thin: 100;" > styles/globals.scss
+\$fw-thin: 100;
+
+\$tablet: 720px;
+\$desktop: 1080px;" > styles/globals.scss
 
 echo "import '../styles/index.scss';
 import '../styles/globals.scss';
+import '@fortawesome/fontawesome-free/js/fontawesome';
+import '@fortawesome/fontawesome-free/js/solid';
 
 export default function App({ Component, pageProps }) {
   return <Component {...pageProps} />
@@ -339,6 +318,7 @@ echo "\$clr-material-gray-50: rgba(250, 250, 250, 1);
 echo -e "\n++ Installing dependencies...\n"
 yarn add --dev typescript @types/react @types/react-dom @types/node @types/jest
 yarn add @zeit/next-sass node-sass
+yarn add @fortawesome/fontawesome-free
  
 nextbasecmps.sh
 

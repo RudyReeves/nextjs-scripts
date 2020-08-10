@@ -69,7 +69,7 @@ echo "@import 'styles/globals.scss';
   }
 }" > sections/Main/Main.module.scss
 
-echo "import React from 'react';
+echo "import React, { useState } from 'react';
 import List from 'components/misc/List';
 import './PrimaryNav.module.scss';
 
@@ -89,10 +89,6 @@ const defaultLinks = [
     label: 'Home'
   },
   {
-    path: '/signup',
-    label: 'Sign Up'
-  },
-  {
     path: '/about',
     label: 'About'
   },
@@ -106,15 +102,33 @@ const PrimaryNav = ({
     className = 'PrimaryNav',
     links = defaultLinks
   } : PrimaryNavProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  let classList = [\`\${className}\`];
+  if (isOpen) {
+    classList.push(\`\${className}--open\`);
+  }
   return (
-    <>
-      <nav className={className}>
-        <List
-          className={\`\${className}__list\`}
-          items={createLinks(links, className)}
-        />
-      </nav>
-    </>
+    <nav className={classList.join(' ')}>
+      <div
+        className={\`\${className}__overlay\`}
+          onClick={() => {
+            setIsOpen(false);
+          }}
+      >
+      </div>
+      <div
+        className={\`\${className}__toggle-btn\`}
+        onClick={() => {
+          setIsOpen(!isOpen);
+        }}
+      >
+        <i className=\"fas fa-bars\"></i>
+      </div>
+      <List
+        className={\`\${className}__list\`}
+        items={createLinks(links, className)}
+      />
+    </nav>
   );
 };
 
@@ -136,33 +150,97 @@ export default PrimaryNav;" > misc/PrimaryNav/PrimaryNav.tsx
 
 echo "@import 'styles/globals.scss';
 
+\$bg-clr: \$clr-gray-l;
+\$bg-clr-l: \$clr-gray-xl;
+
 .PrimaryNav {
-    padding: \$pad \$pad-dbl;
-    border-bottom: 1px solid \$clr-black;
+    z-index: 100;
 
-    &__list {
-        margin: 0;
-        padding: 0;
-        list-style-type: none;
-        display: flex;
-
-        &-item {
-            margin: 0 \$pad-half;
+    &--open {
+        .PrimaryNav__list {
+            left: 0;
+            box-shadow: 0 0 200px \$clr-black;
         }
 
-        &-item:first-of-type {
-            margin-left: 0;
+        .PrimaryNav__overlay {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 200;
+            background-color: \$clr-gray-xd;
+            opacity: .5;
+            transition: all 400ms ease-in-out;
+        }
+
+        .PrimaryNav__overlay:hover {
+            cursor: pointer;
         }
     }
 
+    &__toggle-btn {
+        z-index: 400;
+        height: \$pad;
+        position: absolute;
+        padding: \$pad-half;
+        font-size: 1.2em;
+        color: \$clr-gray-d;
+    }
+
+    &__toggle-btn:hover {
+        cursor: pointer;
+    }
+
+    &__list {
+        background-color: \$bg-clr;
+        z-index: 300;
+        margin: 0;
+        padding: 0;
+        padding-top: \$pad-dbl;
+        list-style-type: none;
+        max-width: 33vw;
+        min-width: 240px;
+        position: absolute;
+        top: 0;
+        left: -100%;
+        bottom: 0;
+        transition: left 300ms ease-in-out;
+    }
+    
     &__link {
         text-decoration: none;
-        color: \$clr-black;
-        border-radius: \$border-radius;
-        padding: .3em .5em;
+        color: \$clr-gray-xd;
+        display: inline-block;
+        padding: \$pad-half;
+        width: 100%;
+    }
+ 
+    &__link:hover {
+        background-color: \$bg-clr-l;
+    }
+}
 
-        &:hover {
-            background-color: \$clr-gray;
+@media (min-width: \$tablet) {
+    .PrimaryNav {
+        &__toggle-btn,
+        &__overlay {
+            display: none;
+        }
+
+        &__list {
+            padding: 0;
+            box-shadow: none;
+            position: relative;
+            left: 0;
+            width: 100%;
+            max-width: 100%;
+            min-width: 100%;
+            display: flex;
+        }
+
+        &__link {
+            padding: \$pad \$pad-half;
         }
     }
 }" > misc/PrimaryNav/PrimaryNav.module.scss
