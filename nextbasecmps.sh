@@ -83,7 +83,7 @@ type PrimaryNavProps = {
   links?: LinkObject[]
 };
 
-const defaultLinks = [
+const defaultLinks: LinkObject[] = [
   {
     path: '/',
     label: 'Home'
@@ -102,6 +102,7 @@ const PrimaryNav = ({
     className = 'PrimaryNav',
     links = defaultLinks
   } : PrimaryNavProps) => {
+  if (!links || !links.length) { return null; }
   const [isOpen, setIsOpen] = useState(false);
   let classList = [\`\${className}\`];
   if (isOpen) {
@@ -122,7 +123,7 @@ const PrimaryNav = ({
           setIsOpen(!isOpen);
         }}
       >
-        <i className=\"fas fa-bars\"></i>
+        <i className=\"fas fa-bars\" />
       </div>
       <List
         className={\`\${className}__list\`}
@@ -132,7 +133,7 @@ const PrimaryNav = ({
   );
 };
 
-const createLinks = (links: LinkObject[], className = 'PrimaryNav') => {
+const createLinks = (links: LinkObject[], className: string = 'PrimaryNav') => {
   return links.map((link, i) => {
     return (
       <a
@@ -254,19 +255,11 @@ type ListProps = {
   items?: object[]
 };
 
-const List = (props : ListProps) => {
-  return (
-    <>
-      {getList(props)}
-    </>
-  );
-};
-
-const getList = ({className, isOrdered = false, items = []} : ListProps) => {
+const List = ({className, isOrdered = false, items = []} : ListProps) => {
   const content = createItems(items, className);
-  return (isOrdered ?
-    <ol className={className}>{content}</ol> :
-    <ul className={className}>{content}</ul>
+  return (isOrdered
+    ? <ol className={className}>{content}</ol>
+    : <ul className={className}>{content}</ul>
   );
 };
 
