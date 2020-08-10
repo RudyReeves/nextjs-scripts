@@ -185,7 +185,7 @@ echo "@import 'styles/globals.scss';
         height: \$pad;
         position: absolute;
         padding: \$pad-half;
-        font-size: 1.2em;
+        font-size: 1.5em;
         color: \$clr-gray-d;
     }
 
