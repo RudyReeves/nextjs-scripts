@@ -61,11 +61,19 @@ export default Main;" > sections/Main/Main.tsx
 echo "@import 'styles/globals.scss';
 
 .Main {
+  margin-top: \$pad;
   flex: 1;
   padding: \$pad \$pad-dbl;
 
   &__title {
     font-weight: \$fw;
+  }
+}
+
+@media (min-width: \$tablet) {
+  .Main {
+    margin-top: 0;
+    padding: 0 \$pad-dbl;
   }
 }" > sections/Main/Main.module.scss
 
@@ -151,8 +159,10 @@ export default PrimaryNav;" > misc/PrimaryNav/PrimaryNav.tsx
 
 echo "@import 'styles/globals.scss';
 
-\$bg-clr: \$clr-gray-l;
-\$bg-clr-l: \$clr-gray-xl;
+\$bg-clr: \$clr-gray-xl;
+\$bg-clr-hilight: \$clr-gray;
+\$font-clr: \$clr-gray-xd;
+\$overlay-clr: \$clr-black;
 
 .PrimaryNav {
     z-index: 100;
@@ -160,7 +170,7 @@ echo "@import 'styles/globals.scss';
     &--open {
         .PrimaryNav__list {
             left: 0;
-            box-shadow: 0 0 200px \$clr-black;
+            box-shadow: 0 0 200px \$overlay-clr;
         }
 
         .PrimaryNav__overlay {
@@ -170,7 +180,7 @@ echo "@import 'styles/globals.scss';
             top: 0;
             bottom: 0;
             z-index: 200;
-            background-color: \$clr-gray-xd;
+            background-color: \$overlay-clr;
             opacity: .5;
             transition: all 400ms ease-in-out;
         }
@@ -182,15 +192,22 @@ echo "@import 'styles/globals.scss';
 
     &__toggle-btn {
         z-index: 400;
-        height: \$pad;
+        border-radius: 50%;
         position: absolute;
-        padding: \$pad-half;
-        font-size: 1.5em;
-        color: \$clr-gray-d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: \$pad;
+        transform: translate(\$pad-half, \$pad-half);
+        font-size: 1.35em;
+        color: \$font-clr;
+        width: 1em;
+        height: 1em;
     }
 
     &__toggle-btn:hover {
         cursor: pointer;
+        background-color: \$bg-clr-hilight;
     }
 
     &__list {
@@ -198,7 +215,7 @@ echo "@import 'styles/globals.scss';
         z-index: 300;
         margin: 0;
         padding: 0;
-        padding-top: \$pad-dbl;
+        padding-top: \$pad-xl;
         list-style-type: none;
         max-width: 33vw;
         min-width: 240px;
@@ -208,17 +225,18 @@ echo "@import 'styles/globals.scss';
         bottom: 0;
         transition: left 300ms ease-in-out;
     }
-    
+
     &__link {
         text-decoration: none;
-        color: \$clr-gray-xd;
+        color: \$font-clr;
         display: inline-block;
         padding: \$pad-half;
+        padding-left: \$pad;
         width: 100%;
     }
  
     &__link:hover {
-        background-color: \$bg-clr-l;
+        background-color: \$bg-clr-hilight;
     }
 }
 
@@ -229,6 +247,7 @@ echo "@import 'styles/globals.scss';
             display: none;
         }
 
+        &--open &__list,
         &__list {
             padding: 0;
             box-shadow: none;

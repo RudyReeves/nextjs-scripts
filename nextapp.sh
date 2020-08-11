@@ -146,10 +146,12 @@ echo "@import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,4
 \$border-radius: 8px;
 
 \$pad-xs: 6px;
+\$pad-s: 8px;
 \$pad: 20px;
 \$pad-half: 10px;
 \$pad-dbl: 40px;
-\$pad-large: 30px;
+\$pad-l: 30px;
+\$pad-xl: 60px;
 
 \$ff:
   \"Montserrat\",
