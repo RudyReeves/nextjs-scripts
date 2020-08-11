@@ -63,17 +63,26 @@ echo "@import 'styles/globals.scss';
 .Main {
   margin-top: \$pad;
   flex: 1;
-  padding: \$pad \$pad-dbl;
+  padding: \$pad 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   &__title {
     font-weight: \$fw;
+  }
+
+  &__title,
+  &__paragraph {
+    width: 100%;
+    max-width: \$tablet;
   }
 }
 
 @media (min-width: \$tablet) {
   .Main {
-    margin-top: 0;
-    padding: 0 \$pad-dbl;
+    margin: 0;
+    padding: 0;
   }
 }" > sections/Main/Main.module.scss
 
@@ -194,11 +203,12 @@ echo "@import 'styles/globals.scss';
         z-index: 400;
         border-radius: 50%;
         position: absolute;
+        top: \$pad-half;
+        left: \$pad-half;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: \$pad;
-        transform: translate(\$pad-half, \$pad-half);
         font-size: 1.35em;
         color: \$font-clr;
         width: 1em;
@@ -257,10 +267,19 @@ echo "@import 'styles/globals.scss';
             max-width: 100%;
             min-width: 100%;
             display: flex;
+            
+            &-item:first-child,
+            &-item:last-child {
+              margin: 0;
+            }
         }
 
         &__link {
-            padding: \$pad \$pad-half;
+            padding: \$pad-half;
+        }
+
+        &__list-item {
+          margin: 0 \$pad-half;
         }
     }
 }" > misc/PrimaryNav/PrimaryNav.module.scss
@@ -300,5 +319,5 @@ export default List;" > misc/List/List.tsx
 echo "@import 'styles/globals.scss';
 
 .Footer {
-  padding: \$pad \$pad-dbl;
+  padding: \$pad 0;
 }" > sections/Footer/Footer.module.scss

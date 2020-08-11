@@ -35,7 +35,9 @@ export default function Home() {
 
       <Main>
         <h1 className=\"Main__title\">Welcome</h1>
-        <p>
+        <p
+          className=\"Main__paragraph\"
+        >
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
         </p>
       </Main>
@@ -61,7 +63,9 @@ export default function About() {
 
       <Main>
         <h1 className=\"Main__title\">About</h1>
-        <p>
+        <p
+          className=\"Main__paragraph\"
+        >
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
         </p>
       </Main>
@@ -87,7 +91,9 @@ export default function ContactUs() {
 
       <Main>
         <h1 className=\"Main__title\">Contact Us</h1>
-        <p>
+        <p
+          className=\"Main__paragraph\"
+        >
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
         </p>
       </Main>
@@ -120,6 +126,13 @@ body {
   font-family: \$ff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding: 0 \$pad-dbl;
+}
+
+@media (min-width: \$tablet) {
+  body {
+    padding: 0 \$pad-xl;
+  }
 }
 
 #__next {
@@ -142,6 +155,9 @@ echo "@import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,4
 @import './colors.scss';
 
 \$clr-bg: \$clr-gray-xl;
+\$clr-accent: \$clr-blue;
+\$clr-accent-l: \$clr-blue-l;
+\$clr-accent-d: \$clr-blue-d;
 
 \$border-radius: 8px;
 
