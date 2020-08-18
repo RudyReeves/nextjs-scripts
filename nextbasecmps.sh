@@ -87,6 +87,7 @@ echo "@import 'styles/globals.scss';
 }" > sections/Main/Main.module.scss
 
 echo "import React, { useState } from 'react';
+import Link from 'next/link';
 import List from 'components/misc/List';
 import './PrimaryNav.module.scss';
 
@@ -153,13 +154,16 @@ const PrimaryNav = ({
 const createLinks = (links: LinkObject[], className: string = 'PrimaryNav') => {
   return links.map((link, i) => {
     return (
-      <a
-        className={\`\${className}__link\`}
+      <Link
         href={link.path}
-        rel=\"noopener\"
       >
-        {link.label}
-      </a>
+        <a
+          className={\`\${className}__link\`}
+          rel=\"noopener\"
+        >
+          {link.label}
+        </a>
+      </Link>
     );
   });
 };
