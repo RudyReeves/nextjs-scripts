@@ -9,8 +9,6 @@ cd $1
 rm README.md
 rm pages/api/*
 rm public/*
-mkdir data
-mkdir data/models
 
 touch tsconfig.json
 touch .env
@@ -334,6 +332,192 @@ echo "\$clr-material-gray-50: rgba(250, 250, 250, 1);
 \$clr-material-brown-800: rgba(78, 52, 46, 1);
 \$clr-material-brown-900: rgba(62, 39, 35, 1);" > styles/material.scss
 
+# Setup MongoDB:
+mkdir data
+mkdir data/models
+touch data/connect.ts
+
+mkdir pages/item
+touch pages/item/[id].tsx
+
+mkdir pages/api/item
+touch pages/api/item/[id].ts
+touch pages/api/items.ts
+
+echo "import mongoose from 'mongoose';
+
+const connection = {
+  isConnected: false,
+  readyState: null
+};
+
+const connect = async () => {
+  if (connection.isConnected || mongoose.connection.readyState !== 0) { return; }
+  try {
+    const db = await mongoose.connect(
+      process.env.MONGO_URI_DEV,
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      }
+    );
+    connection.isConnected = true;
+    connection.readyState = db.connections[0].readyState;
+  } catch (err) {
+    console.error(err);
+    connection.isConnected = false;
+    connection.readyState = null;
+  }
+};
+
+export default connect;" > data/connect.ts
+
+echo "import mongoose from 'mongoose';
+
+const ItemSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  }
+});
+
+export default (mongoose.models.Item || mongoose.model('Item', ItemSchema));" > data/models/Item.ts
+
+
+echo "const Item = ({ item })=> <div>{item.name}</div>;
+
+Item.getInitialProps = async ({ query: { id } }, res) => {
+  const response = await fetch(\`http://localhost:3000/api/item/\${id}\`);
+  const item = await response.json();
+  return { item };
+}
+
+export default Item;" > pages/item/[id].tsx
+
+echo "import Item from 'data/models/Item';
+import connect from 'data/connect';
+
+connect();
+
+export default async (req, res) => {
+  const { method } = req;
+  switch (method) {
+    case 'GET':
+      try {
+        const items = await Item.find({});
+        res.status(200).json({
+          success: true,
+          data: items
+        });
+      } catch (err) {
+        res.status(400).json({
+          success: false
+        });
+      }
+      break;
+    case 'POST':
+      try {
+        const item = await Item.create(req.body);
+        res.status(201).json({
+          success: true,
+          data: item
+        });
+      } catch (err) {
+        res.status(400).json({
+          success: false
+        });
+      }
+      break;
+    default:
+      res.status(400).json({
+        success: false
+      });
+      break;
+  }
+};" > pages/api/items.ts
+
+echo "import Item from 'data/models/Item';
+import connect from 'data/connect';
+
+connect();
+
+export default async (req, res) => {
+  const {
+    method,
+    query: { id }
+  } = req;
+  switch (method) {
+    case 'GET':
+      try {
+        const item = await Item.findById(id);
+        if (!item) {
+          return res.status(400).json({
+            success: false
+          });
+        }
+        res.status(200).json({
+          success: true,
+          data: item
+        });
+      } catch (err) {
+        res.status(400).json({
+          success: false
+        });
+      }
+      break;
+    case 'PUT':
+      try {
+        const item = await Item.findByIdAndUpdate(id, req.body, {
+          new: true,
+          runValidators: true
+        });
+        if (!item) {
+          return res.status(400).json({
+            success: false
+          });
+        }
+        res.status(200).json({
+          success: true,
+          data: item
+        });
+      } catch (err) {
+        res.status(400).json({
+          success: false
+        });
+      }
+      break;
+    case 'DELETE':
+      try {
+        const deletedItem = await Item.deleteOne({
+          _id: id
+        });
+        if (!deletedItem) {
+          return res.status(400).json({
+            success: false
+          });
+        }
+        res.status(200).json({
+          success: true,
+          data: {}
+        });
+      } catch (err) {
+        res.status(400).json({
+          success: false
+        });
+      }
+      break;
+    default:
+      res.status(400).json({
+        success: false
+      });
+      break;
+  }
+};" > pages/api/item/[id].ts
+
 # Install dependencies:
 echo -e "\n++ Installing dependencies...\n"
 yarn add --dev typescript @types/react @types/react-dom @types/node @types/jest @types/mongoose
@@ -357,7 +541,12 @@ echo -e "{
 
 echo -e "const withSass = require('@zeit/next-sass');
 
-module.exports = withSass({});" > next.config.js
+module.exports = withSass({
+  env: {
+    MONGO_URI_DEV: \"mongodb://localhost:27017/$1_dev\",
+    MONGO_URI: \"mongodb://username:password@localhost:27017/$1\",
+  }
+});" > next.config.js
 
 code .
 
