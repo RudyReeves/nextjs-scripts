@@ -196,10 +196,9 @@ echo "@import 'styles/globals.scss';
             background-color: \$overlay-clr;
             opacity: .5;
             transition: all 400ms ease-in-out;
-        }
-
-        .PrimaryNav__overlay:hover {
-            cursor: pointer;
+            &:hover {
+              cursor: pointer;
+            }
         }
     }
 
@@ -217,11 +216,11 @@ echo "@import 'styles/globals.scss';
         color: \$font-clr;
         width: 1em;
         height: 1em;
-    }
 
-    &__toggle-btn:hover {
-        cursor: pointer;
-        background-color: \$bg-clr-hilight;
+        &:hover {
+            cursor: pointer;
+            background-color: \$bg-clr-hilight;
+      }
     }
 
     &__list {
@@ -247,10 +246,9 @@ echo "@import 'styles/globals.scss';
         padding: \$pad-half;
         padding-left: \$pad;
         width: 100%;
-    }
- 
-    &__link:hover {
-        background-color: \$bg-clr-hilight;
+        &:hover {
+            background-color: \$bg-clr-hilight;
+        }
     }
 }
 
@@ -272,8 +270,8 @@ echo "@import 'styles/globals.scss';
             min-width: 100%;
             display: flex;
             
-            &-item:first-child,
-            &-item:last-child {
+            &__item:first-child,
+            &__item:last-child {
               margin: 0;
             }
         }
@@ -282,7 +280,7 @@ echo "@import 'styles/globals.scss';
             padding: \$pad-half;
         }
 
-        &__list-item {
+        &__list__item {
           margin: 0 \$pad-half;
         }
     }
@@ -294,23 +292,35 @@ import './List.module.scss';
 type ListProps = {
   className?: string,
   isOrdered?: boolean,
-  items?: object[]
+  items?: Array<any>,
+  handleItemClicked?: Function,
+  [attrs: string]: any
 };
 
-const List = ({className, isOrdered = false, items = []} : ListProps) => {
-  const content = createItems(items, className);
+const List = ({
+  className,
+  isOrdered = false,
+  items = [],
+  handleItemClicked,
+  ...attrs
+} : ListProps) => {
+  const content = createItems(items, className, handleItemClicked, attrs);
   return (isOrdered
     ? <ol className={className}>{content}</ol>
     : <ul className={className}>{content}</ul>
   );
 };
 
-const createItems = (items, className = 'List') => {
+const createItems = (items, className = 'List', handleItemClicked, attrs) => {
   return items.map((item, i) => {
     return (
       <li
-        className={\`\${className}-item\`}
+        className={\`\${className}__item\`}
         key={i}
+        onClick={(e) => {
+          handleItemClicked(item);
+        }}
+        {...attrs}
       >
         {item}
       </li>
@@ -320,8 +330,9 @@ const createItems = (items, className = 'List') => {
 
 export default List;" > misc/List/List.tsx
 
-echo "import React, { useState } from 'react';
+echo "import React, { useState, useRef } from 'react';
 import './TextBox.module.scss';
+import List from 'components/misc/List';
 
 type TextBoxProps = {
   className?: string,
@@ -332,6 +343,7 @@ type TextBoxProps = {
   label?: string,
   errorMessage?: string,
   validate?: (value: string) => boolean,
+  autocomplete?: string[],
   [attrs: string]: any,
 };
 
@@ -343,11 +355,17 @@ const TextBox = ({
   name = '',
   label = '',
   errorMessage = '',
-  validate = (value) => true,
+  validate = (value) => null,
+  autocomplete = null,
   ...attrs
 } : TextBoxProps) => {
   const [isValid, setIsValid] = useState(null);
+  const [autocompleteOptions, setAutocompleteOptions] = useState(autocomplete);
+  const [hasFocus, setHasFocus] = useState(false);
   const isEmpty = (isValid === null);
+  const isAutocomplete = Array.isArray(autocomplete);
+  const inputRef = useRef(null);
+
   let inputClass = \`\${className}__input\`;
   let labelClass = \`\${className}__label\`;
 
@@ -365,24 +383,53 @@ const TextBox = ({
       <div
         className={\`\${className}__container\`}
       >
-        <label
-          className={labelClass}
-          htmlFor={name}
+        {label &&
+          <label
+            className={labelClass}
+            htmlFor={name}
+          >
+            {label}
+          </label>
+        }
+        <div
+          className={\`\${className}__input-container\`}
         >
-          {label}
-        </label>
-        <input
-          className={inputClass}
-          type={type}
-          placeholder={placeholder}
-          required={required}
-          name={name}
-          id={name}
-          onBlur={(e) => {
-            setIsValid(validate(e.target.value));
-          }}
-          {...attrs}
-        />
+          <input
+            className={inputClass}
+            type={type}
+            placeholder={placeholder}
+            required={required}
+            name={name}
+            id={name}
+            ref={inputRef}
+            onBlur={(e) => {
+              setIsValid(validate(e.target.value));
+              setHasFocus(false);
+            }}
+            onFocus={(e) => {
+              setHasFocus(true);
+            }}
+            onChange={(e) => {
+              if (!isAutocomplete) { return; }
+              setAutocompleteOptions(autocomplete.filter((option) => {
+                return option.toLowerCase().startsWith(e.target.value.toLowerCase());
+              }));
+            }}
+            {...attrs}
+          />
+          {isAutocomplete && hasFocus &&
+            <List
+              className={\`\${className}__autocomplete-list\`}
+              items={autocompleteOptions}
+              handleItemClicked={(value) => {\
+                inputRef.current.value = value;
+              }}
+              onMouseDown={(e) => {
+                e.preventDefault();
+              }}
+            />
+          }
+        </div>
       </div>
       {errorMessage && !isEmpty && !isValid &&
         <div className={\`\${className}__errorMessage\`}>
@@ -406,26 +453,26 @@ echo "@import 'styles/globals.scss';
 
 .TextBox {
     padding: \$pad-s 0;
+    display: inline-block;
 
     &__container {
-        display: flex;
-        align-items: center;
+      width: max-content;
+      display: flex;
     }
 
     &__label {
-        display: inline;
+        display: inline-block;
         font-weight: \$fw-sb;
         color: \$clr-hilight;
         font-size: \$font-size;
         margin-right: \$pad-s;
-    }
-
-    &__label:hover {
-        cursor: pointer;
-    }
-
-    &__label--error {
-        color: \$clr-error;
+        margin-top: \$pad-half;
+        &:hover {
+          cursor: pointer;
+        }
+        &--error {
+          color: \$clr-error;
+        }
     }
     
     &__input {
@@ -435,27 +482,48 @@ echo "@import 'styles/globals.scss';
         padding: \$pad-s \$pad-ms;
         border: 2px solid \$clr-valid;
         border-radius: \$border-radius;
-    }
-    
-    &__input:focus {
-        border: 2px solid \$clr-hilight;
-    }
-
-    &__input--error:focus {
-        border: 2px solid \$clr-error;
-    }
-
-    &__input--error {
-        border-color: \$clr-error;
-    }
-
-    &__input--empty {
-        border: 2px solid \$clr-empty;
+        &-container {
+          display: inline-block;
+          position: relative;
+        }
+        &:focus {
+            border: 2px solid \$clr-hilight;
+        }
+        &--error {
+            border-color: \$clr-error;
+        }
+        &--error:focus {
+            border: 2px solid \$clr-error;
+        }
+        &--empty {
+            border: 2px solid \$clr-empty;
+        }
     }
 
     &__errorMessage {
         color: \$clr-red;
         font-weight: \$fw-sb;
+    }
+
+    &__autocomplete-list {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        background-color: \$clr-white;
+        border: 2px solid \$clr-gray;
+        border-radius: \$border-radius-s;
+        max-height: 10em;
+        overflow-y: scroll;
+        width: 100%;
+
+        &__item {
+            padding: \$pad-s;
+            &:hover {
+              cursor: pointer;
+              background-color: \$clr-gray;
+            }
+        }
     }
 }
 " > inputs/TextBox/TextBox.module.scss
