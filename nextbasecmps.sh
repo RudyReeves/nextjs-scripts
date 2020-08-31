@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Create component directories:
+# Create components directory:
 mkdir -p components
 
 # Make base components:
@@ -9,6 +9,7 @@ nextcmp.sh Main sections
 nextcmp.sh Footer sections
 nextcmp.sh List misc
 nextcmp.sh PrimaryNav misc
+nextcmp.sh TextBox inputs
 
 cd components
 
@@ -66,7 +67,6 @@ echo "@import 'styles/globals.scss';
   padding: \$pad 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
 
   &__title {
     font-weight: \$fw;
@@ -320,8 +320,123 @@ const createItems = (items, className = 'List') => {
 
 export default List;" > misc/List/List.tsx
 
+echo "import React, { useState } from 'react';
+import './TextBox.module.scss';
+
+type TextBoxProps = {
+  className?: string,
+  placeholder?: string,
+  type?: string,
+  required?: boolean,
+  name?: string,
+  label?: string,
+  errorMessage?: string,
+  validate?: (value: string) => boolean,
+  [attrs: string]: any,
+};
+
+const TextBox = ({
+  className = 'TextBox',
+  placeholder = '',
+  type = 'text',
+  required = false,
+  name = '',
+  label = '',
+  errorMessage = '',
+  validate = (value) => true,
+  ...attrs
+} : TextBoxProps) => {
+  const [isValid, setIsValid] = useState(true);
+  let inputClass = \`\${className}__input\`;
+  let labelClass = \`\${className}__label\`;
+  if (!isValid) {
+    inputClass += \` \${className}__input--error\`;
+    labelClass += \` \${className}__label--error\`;
+  }
+  return (
+    <div
+      className={className}
+    >
+      <label
+        className={labelClass}
+        htmlFor={name}
+      >
+        {label}
+      </label>
+      <input
+        className={inputClass}
+        type={type}
+        placeholder={placeholder}
+        required={required}
+        name={name}
+        id={name}
+        onBlur={(e) => {
+          setIsValid(validate(e.target.value));
+        }}
+        {...attrs}
+      />
+      {errorMessage && !isValid &&
+        <div className={\`\${className}__errorMessage\`}>
+          {errorMessage}
+        </div>
+      }
+    </div>
+  );
+};
+
+export default TextBox;
+" > inputs/TextBox/TextBox.tsx
+
 echo "@import 'styles/globals.scss';
 
-.Footer {
-  padding: \$pad 0;
-}" > sections/Footer/Footer.module.scss
+\$clr-hilight: \$clr-blue-d;
+\$clr-error: \$clr-red-d;
+\$font-size: 1.1em;
+
+.TextBox {
+    padding: \$pad-s 0;
+
+    &__label {
+        padding-right: \$pad-s;
+        display: inline;
+        font-weight: \$fw-sb;
+        color: \$clr-hilight;
+        font-size: \$font-size;
+    }
+
+    &__label:hover {
+        cursor: pointer;
+    }
+
+    &__label--error {
+        color: \$clr-error;
+    }
+    
+    &__input {
+        outline: none;
+        font-size: \$font-size;
+        max-width: 30em;
+        padding: \$pad-xs \$pad-s;
+        border: 2px solid \$clr-gray;
+        border-radius: \$border-radius;
+    }
+    
+    &__input:focus {
+        border: 2px solid \$clr-hilight;
+    }
+
+    &__input--error:focus {
+        border: 2px solid \$clr-error;
+    }
+
+    &__input--error {
+        border-color: \$clr-error;
+    }
+
+    &__errorMessage {
+        color: \$clr-red;
+        font-weight: \$fw-sb;
+        padding-top: \$pad-xs;
+    }
+}
+" > inputs/TextBox/TextBox.module.scss

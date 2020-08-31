@@ -14,7 +14,7 @@ const $1Schema = new mongoose.Schema({
 
 export default (mongoose.models.$1 || mongoose.model('$1', $1Schema));" > data/models/$1.ts
 
-echo "const $1 = ({ $COLL_NAME_LOWERCASE })=> <div>{$COLL_NAME_LOWERCASE.name}</div>;
+echo "const $1 = ({ $COLL_NAME_LOWERCASE }) => <div>{$COLL_NAME_LOWERCASE.name}</div>;
 
 $1.getInitialProps = async ({ query: { id } }, res) => {
   const response = await fetch(\`http://localhost:3000/api/$COLL_NAME_LOWERCASE/\${id}\`);

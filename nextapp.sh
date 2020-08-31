@@ -151,7 +151,7 @@ code {
     monospace;
 }" > styles/index.scss
 
-echo "@import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,700,700i&display=swap');
+echo "@import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap');
 @import './colors.scss';
 
 \$clr-bg: \$clr-gray-xl;
@@ -190,6 +190,8 @@ echo "@import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,4
 \$fs-xxl: 24px;
 
 \$fw: 400;
+\$fw-m: 500;
+\$fw-sb: 600;
 \$fw-b: 700;
 \$fw-xb: 800;
 \$fw-l: 300;
@@ -373,6 +375,7 @@ yarn add --dev typescript @types/react @types/react-dom @types/node @types/jest 
 yarn add @zeit/next-sass node-sass
 yarn add @fortawesome/fontawesome-free
 yarn add mongoose
+yard add bcrypt
  
 nextbasecmps.sh
 
