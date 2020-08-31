@@ -159,14 +159,16 @@ echo "@import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,4
 \$clr-accent-l: \$clr-blue-l;
 \$clr-accent-d: \$clr-blue-d;
 
-\$border-radius: 8px;
+\$border-radius-s: 10px;
+\$border-radius: 20px;
 
 \$pad-xs: 6px;
 \$pad-s: 8px;
-\$pad: 20px;
 \$pad-half: 10px;
-\$pad-dbl: 40px;
+\$pad-ms: 14px;
+\$pad: 20px;
 \$pad-l: 30px;
+\$pad-dbl: 40px;
 \$pad-xl: 60px;
 
 \$ff:

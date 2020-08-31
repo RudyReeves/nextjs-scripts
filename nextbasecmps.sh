@@ -346,36 +346,45 @@ const TextBox = ({
   validate = (value) => true,
   ...attrs
 } : TextBoxProps) => {
-  const [isValid, setIsValid] = useState(true);
+  const [isValid, setIsValid] = useState(null);
+  const isEmpty = (isValid === null);
   let inputClass = \`\${className}__input\`;
   let labelClass = \`\${className}__label\`;
-  if (!isValid) {
+
+  if (isEmpty) {
+    inputClass += \` \${className}__input--empty\`;
+  } else if (!isValid) {
     inputClass += \` \${className}__input--error\`;
     labelClass += \` \${className}__label--error\`;
   }
+
   return (
     <div
       className={className}
     >
-      <label
-        className={labelClass}
-        htmlFor={name}
+      <div
+        className={\`\${className}__container\`}
       >
-        {label}
-      </label>
-      <input
-        className={inputClass}
-        type={type}
-        placeholder={placeholder}
-        required={required}
-        name={name}
-        id={name}
-        onBlur={(e) => {
-          setIsValid(validate(e.target.value));
-        }}
-        {...attrs}
-      />
-      {errorMessage && !isValid &&
+        <label
+          className={labelClass}
+          htmlFor={name}
+        >
+          {label}
+        </label>
+        <input
+          className={inputClass}
+          type={type}
+          placeholder={placeholder}
+          required={required}
+          name={name}
+          id={name}
+          onBlur={(e) => {
+            setIsValid(validate(e.target.value));
+          }}
+          {...attrs}
+        />
+      </div>
+      {errorMessage && !isEmpty && !isValid &&
         <div className={\`\${className}__errorMessage\`}>
           {errorMessage}
         </div>
@@ -391,17 +400,24 @@ echo "@import 'styles/globals.scss';
 
 \$clr-hilight: \$clr-blue-d;
 \$clr-error: \$clr-red-d;
+\$clr-empty: \$clr-gray;
+\$clr-valid: \$clr-blue-d;
 \$font-size: 1.1em;
 
 .TextBox {
     padding: \$pad-s 0;
 
+    &__container {
+        display: flex;
+        align-items: center;
+    }
+
     &__label {
-        padding-right: \$pad-s;
         display: inline;
         font-weight: \$fw-sb;
         color: \$clr-hilight;
         font-size: \$font-size;
+        margin-right: \$pad-s;
     }
 
     &__label:hover {
@@ -416,8 +432,8 @@ echo "@import 'styles/globals.scss';
         outline: none;
         font-size: \$font-size;
         max-width: 30em;
-        padding: \$pad-xs \$pad-s;
-        border: 2px solid \$clr-gray;
+        padding: \$pad-s \$pad-ms;
+        border: 2px solid \$clr-valid;
         border-radius: \$border-radius;
     }
     
@@ -433,10 +449,13 @@ echo "@import 'styles/globals.scss';
         border-color: \$clr-error;
     }
 
+    &__input--empty {
+        border: 2px solid \$clr-empty;
+    }
+
     &__errorMessage {
         color: \$clr-red;
         font-weight: \$fw-sb;
-        padding-top: \$pad-xs;
     }
 }
 " > inputs/TextBox/TextBox.module.scss
