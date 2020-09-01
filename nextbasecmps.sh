@@ -301,7 +301,7 @@ const List = ({
   className,
   isOrdered = false,
   items = [],
-  handleItemClicked,
+  handleItemClicked = (item) => {},
   ...attrs
 } : ListProps) => {
   const content = createItems(items, className, handleItemClicked, attrs);
