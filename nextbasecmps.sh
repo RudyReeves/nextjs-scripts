@@ -454,7 +454,7 @@ echo "@import 'styles/globals.scss';
 \$clr-valid: \$clr-blue-d;
 \$font-size: 1.1em;
 
-.TextBox {
+@mixin TextBoxMixin {
     padding: \$pad-s 0;
     display: inline-block;
 
@@ -528,5 +528,9 @@ echo "@import 'styles/globals.scss';
             }
         }
     }
+}
+
+.TextBox {
+  @include TextBoxMixin;
 }
 " > inputs/TextBox/TextBox.module.scss

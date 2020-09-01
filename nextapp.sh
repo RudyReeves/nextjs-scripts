@@ -15,6 +15,7 @@ touch .env
 
 # Create a styles directory:
 mkdir -p styles
+rm styles/Home.module.css
 
 # Create default pages:
 rm pages/index.js
