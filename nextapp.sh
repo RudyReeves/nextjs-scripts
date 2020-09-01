@@ -20,86 +20,59 @@ rm styles/Home.module.css
 # Create default pages:
 rm pages/index.js
 
-echo "import Head from 'next/head';
-import Header from 'components/sections/Header';
-import Main from 'components/sections/Main';
-import Footer from 'components/sections/Footer';
+echo "import Layout from 'components/layouts/Layout';
 
 export default function Home() {
   return (
     <>
-      <Head>
-        <title>$1</title>
-      </Head>
-
-      <Header />
-
-      <Main>
+      <Layout
+        title=\"$1\"
+      >
         <h1 className=\"Main__title\">Welcome</h1>
         <p
           className=\"Main__paragraph\"
         >
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
         </p>
-      </Main>
-
-      <Footer />
+      </Layout>
     </>
   );
 };" > pages/index.tsx
 
-echo "import Head from 'next/head';
-import Header from 'components/sections/Header';
-import Main from 'components/sections/Main';
-import Footer from 'components/sections/Footer';
+echo "import Layout from 'components/layouts/Layout';
 
 export default function About() {
   return (
     <>
-      <Head>
-        <title>$1</title>
-      </Head>
-
-      <Header />
-
-      <Main>
+      <Layout
+        title=\"$1\"
+      >
         <h1 className=\"Main__title\">About</h1>
         <p
           className=\"Main__paragraph\"
         >
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
         </p>
-      </Main>
-
-      <Footer />
+      </Layout>
     </>
   );
 };" > pages/about.tsx
 
-echo "import Head from 'next/head';
-import Header from 'components/sections/Header';
-import Main from 'components/sections/Main';
-import Footer from 'components/sections/Footer';
+echo "import Layout from 'components/layouts/Layout';
 
 export default function ContactUs() {
   return (
     <>
-      <Head>
-        <title>$1</title>
-      </Head>
-
-      <Header />
-
-      <Main>
+      <Layout
+        title=\"$1\"
+      >
         <h1 className=\"Main__title\">Contact Us</h1>
         <p
           className=\"Main__paragraph\"
         >
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
         </p>
-      </Main>
-
-      <Footer />
+      </Layout>
     </>
   );
 };" > pages/contact.tsx

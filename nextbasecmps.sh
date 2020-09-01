@@ -10,10 +10,48 @@ nextcmp.sh Footer sections
 nextcmp.sh List misc
 nextcmp.sh PrimaryNav misc
 nextcmp.sh TextBox inputs
+nextcmp.sh Layout layouts
 
 cd components
 
 # Overwrite base component implementations:
+echo "import React from 'react';
+import './Layout.module.scss';
+import Head from 'next/head';
+import Header from 'components/sections/Header';
+import Main from 'components/sections/Main';
+import Footer from 'components/sections/Footer';
+
+type LayoutProps = {
+  className?: string,
+  children?: any,
+  title?: string
+};
+
+const Layout = ({
+  className = 'Layout',
+  children,
+  title = ''
+} : LayoutProps) => {
+  return (
+    <>
+      <Head>
+        <title>{title}</title>
+      </Head>
+
+      <Header />
+
+      <Main>
+        {children}
+      </Main>
+
+      <Footer />
+    </>
+  );
+};
+
+export default Layout;" > layouts/Layout/Layout.tsx
+
 echo "import React from 'react';
 import './Header.module.scss';
 import PrimaryNav from 'components/misc/PrimaryNav';
