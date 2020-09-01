@@ -340,6 +340,7 @@ type TextBoxProps = {
   type?: string,
   required?: boolean,
   name?: string,
+  id?: string,
   label?: string,
   errorMessage?: string,
   validate?: (value: string) => boolean,
@@ -349,10 +350,11 @@ type TextBoxProps = {
 
 const TextBox = ({
   className = 'TextBox',
-  placeholder = '',
+  placeholder = null,
   type = 'text',
   required = false,
-  name = '',
+  name = null,
+  id = null,
   label = '',
   errorMessage = '',
   validate = (value) => null,
@@ -386,7 +388,7 @@ const TextBox = ({
         {label &&
           <label
             className={labelClass}
-            htmlFor={name}
+            htmlFor={id}
           >
             {label}
           </label>
@@ -400,7 +402,7 @@ const TextBox = ({
             placeholder={placeholder}
             required={required}
             name={name}
-            id={name}
+            id={id}
             ref={inputRef}
             onBlur={(e) => {
               setIsValid(validate(e.target.value));
