@@ -9,13 +9,26 @@ cd $1
 rm README.md
 rm pages/api/*
 rm public/*
+mkdir -p styles
+rm styles/Home.module.css
 
 touch tsconfig.json
 touch .env
 
-# Create a styles directory:
-mkdir -p styles
-rm styles/Home.module.css
+# Create a Redux store directory:
+mkdir store
+echo "import { combineReducers, createStore } from 'redux';
+import { createWrapper } from 'next-redux-wrapper';
+
+const makeStore = (context) => {
+  return createStore(
+    combineReducers({
+      sampleReducer: (state = {}, action) => state
+    })
+  );
+};
+
+export default createWrapper(makeStore);" > store/index.ts
 
 # Create default pages:
 rm pages/index.js
@@ -181,10 +194,24 @@ echo "import '../styles/index.scss';
 import '../styles/globals.scss';
 import '@fortawesome/fontawesome-free/js/fontawesome';
 import '@fortawesome/fontawesome-free/js/solid';
+import wrapper from '../store';
 
-export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />
-}" > pages/_app.js
+const App = ({ Component, pageProps, store }) => {
+  return <Component {...pageProps} />;
+}
+
+App.getInitialProps = async ({Component, ctx}) => {
+  return {
+    pageProps: {
+      ...(Component.getInitialProps
+        ? await Component.getInitialProps(ctx)
+        : {}
+      )
+    }
+  };
+};
+
+export default wrapper.withRedux(App);" > pages/_app.js
 
 echo "@import './material.scss';
 
@@ -352,6 +379,7 @@ yarn add @zeit/next-sass node-sass
 yarn add @fortawesome/fontawesome-free
 yarn add mongoose
 yard add bcrypt
+yarn add redux react-redux next-redux-wrapper
  
 nextbasecmps.sh
 
