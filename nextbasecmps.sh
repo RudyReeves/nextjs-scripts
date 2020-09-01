@@ -423,8 +423,9 @@ const TextBox = ({
             <List
               className={\`\${className}__autocomplete-list\`}
               items={autocompleteOptions}
-              handleItemClicked={(value) => {\
+              handleItemClicked={(value) => {
                 inputRef.current.value = value;
+                inputRef.current.blur();
               }}
               onMouseDown={(e) => {
                 e.preventDefault();
