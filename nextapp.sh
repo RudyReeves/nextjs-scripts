@@ -34,61 +34,73 @@ export default createWrapper(makeStore);" > store/index.ts
 rm pages/index.js
 
 echo "import Layout from 'components/layouts/Layout';
+import { connect } from 'react-redux';
 
-export default function Home() {
-  return (
-    <>
-      <Layout
-        title=\"$1\"
+const Home = () => (
+  <>
+    <Layout
+      title=\"$1\"
+    >
+      <h1 className=\"Main__title\">Welcome</h1>
+      <p
+        className=\"Main__paragraph\"
       >
-        <h1 className=\"Main__title\">Welcome</h1>
-        <p
-          className=\"Main__paragraph\"
-        >
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
-        </p>
-      </Layout>
-    </>
-  );
-};" > pages/index.tsx
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
+      </p>
+    </Layout>
+  </>
+);
+
+Home.getInitialProps = ({store, pathname, query}) => {
+};
+
+export default connect(state => state)(Home);" > pages/index.tsx
 
 echo "import Layout from 'components/layouts/Layout';
+import { connect } from 'react-redux';
 
-export default function About() {
-  return (
-    <>
-      <Layout
-        title=\"$1\"
+const About = () => (
+  <>
+    <Layout
+      title=\"$1\"
+    >
+      <h1 className=\"Main__title\">About</h1>
+      <p
+        className=\"Main__paragraph\"
       >
-        <h1 className=\"Main__title\">About</h1>
-        <p
-          className=\"Main__paragraph\"
-        >
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
-        </p>
-      </Layout>
-    </>
-  );
-};" > pages/about.tsx
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
+      </p>
+    </Layout>
+  </>
+);
+
+About.getInitialProps = ({store, pathname, query}) => {
+};
+
+export default connect(state => state)(About);" > pages/about.tsx
 
 echo "import Layout from 'components/layouts/Layout';
+import { connect } from 'react-redux';
 
-export default function ContactUs() {
-  return (
-    <>
-      <Layout
-        title=\"$1\"
+const ContactUs = () => (
+  <>
+    <Layout
+      title=\"$1\"
+    >
+      <h1 className=\"Main__title\">Contact Us</h1>
+      <p
+        className=\"Main__paragraph\"
       >
-        <h1 className=\"Main__title\">Contact Us</h1>
-        <p
-          className=\"Main__paragraph\"
-        >
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
-        </p>
-      </Layout>
-    </>
-  );
-};" > pages/contact.tsx
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
+      </p>
+    </Layout>
+  </>
+);
+
+ContactUs.getInitialProps = ({store, pathname, query}) => {
+};
+
+export default connect(state => state)(ContactUs);" > pages/contact.tsx
 
 # Create index.scss:
 echo "@import './globals.scss';
