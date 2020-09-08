@@ -13,24 +13,38 @@ cd $1
 
 echo "import React from 'react';
 import './$1.module.scss';
+import { connect } from 'react-redux';
 
 type $1Props = {
-  className?: string
+  className?: string,
+  children?: any
 };
 
 const $1 = ({
-  className = '$1'
+  className = '$1',
+  children
 } : $1Props) => {
   return (
     <>
       <div className={className}>
-        $1
+        {children}
       </div>
     </>
   );
 };
 
-export default $1;" > "./$1.tsx"
+$1.getInitialProps = ({store, pathname, query}) => {
+};
+
+const mapStateToProps = (state) => {
+  return state;
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)($1);" > "./$1.tsx"
 
 echo "import $1 from './$1';
 export default $1;" > "./index.ts"

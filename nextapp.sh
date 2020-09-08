@@ -15,92 +15,220 @@ rm styles/Home.module.css
 touch tsconfig.json
 touch .env
 
-# Create a Redux store directory:
-mkdir store
-echo "import { combineReducers, createStore } from 'redux';
+# Setup redux directories:
+mkdir redux
+mkdir redux/actions
+mkdir redux/reducers
+
+echo "import { createStore } from 'redux';
 import { createWrapper } from 'next-redux-wrapper';
+import rootReducer from 'redux/reducers';
 
 const makeStore = (context) => {
+  const globalObject = (typeof window === 'undefined') ? globalThis : window;
+  const devToolsExtension = (globalObject as any).__REDUX_DEVTOOLS_EXTENSION__;
+  const preloadedState = {};
   return createStore(
-    combineReducers({
-      sampleReducer: (state = {}, action) => state
-    })
+    rootReducer,
+    preloadedState,
+    devToolsExtension && devToolsExtension()
   );
 };
 
-export default createWrapper(makeStore);" > store/index.ts
+export default createWrapper(makeStore);" > redux/store.ts
+
+echo "import counterReducer from './counterReducer';
+import { combineReducers } from 'redux';
+
+const rootReducer = combineReducers({
+    counter: counterReducer
+});
+
+export default rootReducer;" > redux/reducers/index.ts
+
+echo "import { COUNTER_ACTION } from 'redux/actions/counterAction';
+
+const initialState = {
+  count: 0
+};
+
+const counterReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case COUNTER_ACTION:
+      return {
+        ...state,
+        count: state.count + 1
+      };
+    default:
+      return {...state};
+  }
+};
+
+export default counterReducer;" > redux/reducers/counterReducer.ts
+
+echo "// Action Type
+export const COUNTER_ACTION = 'COUNTER_ACTION';
+
+// Action Creator
+export const counterAction = () => ({
+   type: COUNTER_ACTION
+});" > redux/actions/counterAction.ts
 
 # Create default pages:
 rm pages/index.js
+nextcmp.sh HomePage pages
+nextcmp.sh AboutPage pages
+nextcmp.sh ContactUsPage pages
 
 echo "import Layout from 'components/layouts/Layout';
+import HomePage from 'components/pages/HomePage';
 import { connect } from 'react-redux';
+import { COUNTER_ACTION } from 'redux/actions/counterAction';
 
-const Home = () => (
-  <>
-    <Layout
-      title=\"$1\"
-    >
-      <h1 className=\"Main__title\">Welcome</h1>
-      <p
-        className=\"Main__paragraph\"
+const Home = ({ counter, incrementCount }) => {
+  return (
+    <>
+      <Layout
+        title=\"$1\"
       >
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
-      </p>
-    </Layout>
-  </>
-);
+        <HomePage
+          className=\"HomePage\"
+        >
+          <h1 className=\"Main__title\">Welcome</h1>
+          <p
+            className=\"Main__paragraph\"
+          >
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
+          </p>
+          <button
+            className=\"HomePage__counter-button\"
+            onClick={(e) => {
+              incrementCount();
+            }}
+          >
+            Click me!
+          </button>
+          {counter.count}
+        </HomePage>
+      </Layout>
+    </>
+  );
+};
 
 Home.getInitialProps = ({store, pathname, query}) => {
 };
 
-export default connect(state => state)(Home);" > pages/index.tsx
+const mapStateToProps = (state) => {
+  return state;
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    incrementCount: () => {
+      dispatch({
+        type: COUNTER_ACTION
+      });
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);" > pages/index.tsx
+
+echo "@import 'styles/globals.scss';
+
+.HomePage {
+    &__counter-button {
+        display: block;
+        cursor: pointer;
+        margin-bottom: \$pad-half;
+        border-radius: \$border-radius;
+        background-color: \$clr-blue;
+        color: \$clr-white;
+        outline: none;
+        border: none;
+        padding: \$pad-xs;
+
+        &:hover {
+            background-color: \$clr-blue-xl;
+        }
+    }
+}" > components/pages/HomePage/HomePage.module.scss
 
 echo "import Layout from 'components/layouts/Layout';
+import AboutPage from 'components/pages/AboutPage';
 import { connect } from 'react-redux';
 
-const About = () => (
-  <>
-    <Layout
-      title=\"$1\"
-    >
-      <h1 className=\"Main__title\">About</h1>
-      <p
-        className=\"Main__paragraph\"
+const About = () => {
+  return (
+    <>
+      <Layout
+        title=\"$1\"
       >
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
-      </p>
-    </Layout>
-  </>
-);
+        <AboutPage
+          className=\"AboutPage\"
+        >
+          <h1 className=\"Main__title\">About</h1>
+          <p
+            className=\"Main__paragraph\"
+          >
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
+          </p>
+        </AboutPage>
+      </Layout>
+    </>
+  );
+};
 
 About.getInitialProps = ({store, pathname, query}) => {
 };
 
-export default connect(state => state)(About);" > pages/about.tsx
+const mapStateToProps = (state) => {
+  return state;
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(About);" > pages/about.tsx
 
 echo "import Layout from 'components/layouts/Layout';
+import ContactUsPage from 'components/pages/ContactUsPage';
 import { connect } from 'react-redux';
 
-const ContactUs = () => (
-  <>
-    <Layout
-      title=\"$1\"
-    >
-      <h1 className=\"Main__title\">Contact Us</h1>
-      <p
-        className=\"Main__paragraph\"
+const ContactUs = () => {
+  return (
+    <>
+      <Layout
+        title=\"$1\"
       >
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
-      </p>
-    </Layout>
-  </>
-);
+        <ContactUsPage
+          className=\"ContactUsPage\"
+        >
+          <h1 className=\"Main__title\">Contact Us</h1>
+          <p
+            className=\"Main__paragraph\"
+          >
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
+          </p>
+        </ContactUsPage>
+      </Layout>
+    </>
+  );
+};
 
 ContactUs.getInitialProps = ({store, pathname, query}) => {
 };
 
-export default connect(state => state)(ContactUs);" > pages/contact.tsx
+const mapStateToProps = (state) => {
+  return state;
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactUs);" > pages/contact.tsx
 
 # Create index.scss:
 echo "@import './globals.scss';
@@ -206,7 +334,7 @@ echo "import '../styles/index.scss';
 import '../styles/globals.scss';
 import '@fortawesome/fontawesome-free/js/fontawesome';
 import '@fortawesome/fontawesome-free/js/solid';
-import wrapper from '../store';
+import wrapper from '../redux/store';
 
 const App = ({ Component, pageProps, store }) => {
   return <Component {...pageProps} />;
