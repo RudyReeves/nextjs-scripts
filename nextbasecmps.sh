@@ -368,7 +368,7 @@ const createItems = (items, className = 'List', handleItemClicked, attrs) => {
 
 export default List;" > misc/List/List.tsx
 
-echo "import React, { useState, useRef } from 'react';
+echo "import React, { useReducer, useRef } from 'react';
 import './TextBox.module.scss';
 import List from 'components/misc/List';
 
@@ -386,6 +386,41 @@ type TextBoxProps = {
   [attrs: string]: any,
 };
 
+const TextBoxReducer = (state, action) => {
+  switch (action.type) {
+    case 'TextBox:change':
+      return {
+        ...state,
+        value: action.payload
+      };
+    case 'TextBox:focus':
+      return {
+        ...state,
+        hasFocus: true,
+        autocompleteOptions: action.payload
+      };
+    case 'TextBox:blur':
+      return {
+        ...state,
+        isValid: action.payload,
+        hasFocus: false
+      };
+    case 'TextBox:autocomplete-change':
+      return {
+        ...state,
+        autocompleteOptions: action.payload
+      };
+    case 'TextBox:autocomplete-clicked':
+      return {
+        ...state,
+        value: action.payload,
+        autocompleteOptions: []
+      };
+    default:
+      return state;
+  }
+};
+
 const TextBox = ({
   className = 'TextBox',
   placeholder = null,
@@ -395,21 +430,36 @@ const TextBox = ({
   id = null,
   label = '',
   errorMessage = '',
-  validate = (value) => null,
+  validate = (value) => true,
   autocomplete = null,
   ...attrs
 } : TextBoxProps) => {
-  const [isValid, setIsValid] = useState(null);
-  const [autocompleteOptions, setAutocompleteOptions] = useState(autocomplete);
-  const [hasFocus, setHasFocus] = useState(false);
-  const isEmpty = (isValid === null);
+  const [{
+    isValid,
+    autocompleteOptions,
+    hasFocus,
+    value
+  }, dispatch] = useReducer(TextBoxReducer, {
+    isValid: null,
+    hasFocus: false,
+    autocompleteOptions: [],
+    value: ''
+  });
+
   const isAutocomplete = Array.isArray(autocomplete);
   const inputRef = useRef(null);
+
+  const filterAutocomplete = (newValue) => {
+    if (!isAutocomplete) { return null; }
+    return autocomplete.filter((option) => {
+      return option.toLowerCase().startsWith(newValue.toLowerCase());
+    })
+  };
 
   let inputClass = \`\${className}__input\`;
   let labelClass = \`\${className}__label\`;
 
-  if (isEmpty) {
+  if (isValid === null) {
     inputClass += \` \${className}__input--empty\`;
   } else if (!isValid) {
     inputClass += \` \${className}__input--error\`;
@@ -442,28 +492,46 @@ const TextBox = ({
             name={name}
             id={id}
             ref={inputRef}
+            value={value}
             onBlur={(e) => {
-              setIsValid(validate(e.target.value));
-              setHasFocus(false);
+              dispatch({
+                type: 'TextBox:blur',
+                payload: validate(value) &&
+                (
+                  (!required && value.length === 0) ||
+                  !isAutocomplete ||
+                  autocomplete.includes(value)
+                )
+              });
             }}
             onFocus={(e) => {
-              setHasFocus(true);
+              dispatch({
+                type: 'TextBox:focus',
+                payload: filterAutocomplete(e.target.value)
+              });
             }}
             onChange={(e) => {
+              dispatch({
+                type: 'TextBox:change',
+                payload: e.target.value
+              });
               if (!isAutocomplete) { return; }
-              setAutocompleteOptions(autocomplete.filter((option) => {
-                return option.toLowerCase().startsWith(e.target.value.toLowerCase());
-              }));
+              dispatch({
+                type: 'TextBox:autocomplete-change',
+                payload: filterAutocomplete(e.target.value)
+              });
             }}
             {...attrs}
           />
-          {isAutocomplete && hasFocus &&
+          {isAutocomplete && (autocompleteOptions.length > 0) && hasFocus &&
             <List
               className={\`\${className}__autocomplete-list\`}
               items={autocompleteOptions}
-              handleItemClicked={(value) => {
-                inputRef.current.value = value;
-                inputRef.current.blur();
+              handleItemClicked={(item) => {
+                dispatch({
+                  type: 'TextBox:autocomplete-clicked',
+                  payload: item
+                });
               }}
               onMouseDown={(e) => {
                 e.preventDefault();
@@ -472,7 +540,7 @@ const TextBox = ({
           }
         </div>
       </div>
-      {errorMessage && !isEmpty && !isValid &&
+      {errorMessage && (isValid !== null) && !isValid &&
         <div className={\`\${className}__errorMessage\`}>
           {errorMessage}
         </div>
