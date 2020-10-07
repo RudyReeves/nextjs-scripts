@@ -389,6 +389,9 @@ type TextBoxProps = {
   errorMessage?: string,
   validate?: (value: string) => boolean,
   autocomplete?: string[],
+  onChange?: (v: string) => any,
+  onBlur?: (e: any) => any,
+  onFocus?: (e: any) => any,
   [attrs: string]: any,
 };
 
@@ -439,6 +442,9 @@ const TextBox = ({
   errorMessage = '',
   validate = (value) => true,
   autocomplete = null,
+  onChange = (v) => {},
+  onBlur = (e) => {},
+  onFocus = (e) => {},
   ...attrs
 } : TextBoxProps) => {
   const classList = ['TextBox', ...classNames];
@@ -503,6 +509,7 @@ const TextBox = ({
             ref={inputRef}
             value={value}
             onBlur={(e) => {
+              onBlur(e);
               dispatch({
                 type: 'TextBox:blur',
                 payload: validate(value) &&
@@ -514,12 +521,14 @@ const TextBox = ({
               });
             }}
             onFocus={(e) => {
+              onFocus(e);
               dispatch({
                 type: 'TextBox:focus',
                 payload: filterAutocomplete(e.target.value)
               });
             }}
             onChange={(e) => {
+              onChange(e.target.value);
               dispatch({
                 type: 'TextBox:change',
                 payload: e.target.value
@@ -537,6 +546,7 @@ const TextBox = ({
               classNames={classList.map((c) => \`\${c}__autocomplete-list\`)}
               items={autocompleteOptions}
               handleItemClicked={(item) => {
+                onChange(item);
                 dispatch({
                   type: 'TextBox:autocomplete-clicked',
                   payload: item

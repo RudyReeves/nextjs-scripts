@@ -38,15 +38,17 @@ const makeStore = (context) => {
 export default createWrapper(makeStore);" > redux/store.ts
 
 echo "import counterReducer from './counterReducer';
+import textBoxReducer from './textBoxReducer';
 import { combineReducers } from 'redux';
 
 const rootReducer = combineReducers({
-    counter: counterReducer
+    counter: counterReducer,
+    textbox: textBoxReducer
 });
 
 export default rootReducer;" > redux/reducers/index.ts
 
-echo "import { COUNTER_ACTION } from 'redux/actions/counterAction';
+echo "import { COUNTER_ACTION } from 'redux/actions/counterActions';
 
 const initialState = {
   count: 0
@@ -66,13 +68,41 @@ const counterReducer = (state = initialState, action) => {
 
 export default counterReducer;" > redux/reducers/counterReducer.ts
 
+echo "import { TEXTBOX_CHANGE_ACTION } from 'redux/actions/textBoxActions';
+
+const initialState = {
+  value: ''
+};
+
+const textBoxReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case TEXTBOX_CHANGE_ACTION:
+      return {
+        ...state,
+        value: action.payload
+      };
+    default:
+      return {...state};
+  }
+};
+
+export default textBoxReducer;" > redux/reducers/textBoxReducer.ts
+
 echo "// Action Type
 export const COUNTER_ACTION = 'COUNTER_ACTION';
 
 // Action Creator
-export const counterAction = () => ({
+export const counterActions = () => ({
    type: COUNTER_ACTION
-});" > redux/actions/counterAction.ts
+});" > redux/actions/counterActions.ts
+
+echo "// Action Type
+export const TEXTBOX_CHANGE_ACTION = 'TEXTBOX_CHANGE_ACTION';
+
+// Action Creator
+export const textBoxActions = () => ({
+   type: TEXTBOX_CHANGE_ACTION
+});" > redux/actions/textBoxActions.ts
 
 # Create default pages:
 rm pages/index.js
@@ -82,9 +112,10 @@ echo "import Layout from 'components/layouts/Layout';
 import Page from 'components/misc/Page';
 import TextBox from 'components/inputs/TextBox';
 import { connect } from 'react-redux';
-import { COUNTER_ACTION } from 'redux/actions/counterAction';
+import { COUNTER_ACTION } from 'redux/actions/counterActions';
+import { TEXTBOX_CHANGE_ACTION } from 'redux/actions/textBoxActions';
 
-const Home = ({ counter, incrementCount }) => {
+const Home = ({ counter, incrementCount, textbox, setTextboxValue }) => {
   return (
     <>
       <Layout
@@ -101,6 +132,7 @@ const Home = ({ counter, incrementCount }) => {
             autocomplete={['dog', 'dinosaur', 'cat', 'lion']}
             classNames={['Main__textbox']}
             id=\"Main__textbox\"
+            onChange={(value) => setTextboxValue(value)}
           />
           <p
             className=\"Main__paragraph\"
@@ -115,7 +147,8 @@ const Home = ({ counter, incrementCount }) => {
           >
             Click me!
           </button>
-          {counter.count}
+          <div>{counter.count}</div>
+          <div>{textbox.value}</div>
         </Page>
       </Layout>
     </>
@@ -134,6 +167,12 @@ const mapDispatchToProps = (dispatch) => {
     incrementCount: () => {
       dispatch({
         type: COUNTER_ACTION
+      });
+    },
+    setTextboxValue: (value) => {
+      dispatch({
+        type: TEXTBOX_CHANGE_ACTION,
+        payload: value
       });
     }
   };
