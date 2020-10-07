@@ -100,6 +100,7 @@ const Home = ({ counter, incrementCount }) => {
             errorMessage=\"Invalid\"
             autocomplete={['dog', 'dinosaur', 'cat', 'lion']}
             classNames={['Main__textbox']}
+            id=\"Main__textbox\"
           />
           <p
             className=\"Main__paragraph\"
