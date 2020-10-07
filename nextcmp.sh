@@ -16,17 +16,18 @@ import './$1.module.scss';
 import { connect } from 'react-redux';
 
 type $1Props = {
-  className?: string,
+  classNames?: string[],
   children?: any
 };
 
 const $1 = ({
-  className = '$1',
+  classNames = [],
   children
 } : $1Props) => {
+  const classList = ['$1', ...classNames];
   return (
     <>
-      <div className={className}>
+      <div className={classList.join(' ')}>
         {children}
       </div>
     </>

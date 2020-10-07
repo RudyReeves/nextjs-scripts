@@ -76,12 +76,11 @@ export const counterAction = () => ({
 
 # Create default pages:
 rm pages/index.js
-nextcmp.sh HomePage pages
-nextcmp.sh AboutPage pages
-nextcmp.sh ContactUsPage pages
+nextcmp.sh Page misc
 
 echo "import Layout from 'components/layouts/Layout';
-import HomePage from 'components/pages/HomePage';
+import Page from 'components/misc/Page';
+import TextBox from 'components/inputs/TextBox';
 import { connect } from 'react-redux';
 import { COUNTER_ACTION } from 'redux/actions/counterAction';
 
@@ -91,10 +90,17 @@ const Home = ({ counter, incrementCount }) => {
       <Layout
         title=\"$1\"
       >
-        <HomePage
-          className=\"HomePage\"
+        <Page
+          classNames={[\"HomePage\"]}
         >
           <h1 className=\"Main__title\">Welcome</h1>
+          <TextBox
+            label=\"Animals\"
+            placeholder=\"Select one\"
+            errorMessage=\"Invalid\"
+            autocomplete={['dog', 'dinosaur', 'cat', 'lion']}
+            classNames={['Main__textbox']}
+          />
           <p
             className=\"Main__paragraph\"
           >
@@ -109,7 +115,7 @@ const Home = ({ counter, incrementCount }) => {
             Click me!
           </button>
           {counter.count}
-        </HomePage>
+        </Page>
       </Layout>
     </>
   );
@@ -136,26 +142,30 @@ export default connect(mapStateToProps, mapDispatchToProps)(Home);" > pages/inde
 
 echo "@import 'styles/globals.scss';
 
-.HomePage {
-    &__counter-button {
-        display: block;
-        cursor: pointer;
-        margin-bottom: \$pad-half;
-        border-radius: \$border-radius;
-        background-color: \$clr-blue;
-        color: \$clr-white;
-        outline: none;
-        border: none;
-        padding: \$pad-xs;
+.Page {}
 
-        &:hover {
-            background-color: \$clr-blue-xl;
-        }
-    }
-}" > components/pages/HomePage/HomePage.module.scss
+.HomePage {
+  &__counter-button {
+      display: block;
+      cursor: pointer;
+      margin-bottom: \$pad-half;
+      border-radius: \$border-radius;
+      background-color: \$clr-blue-d;
+      color: \$clr-white;
+      outline: none;
+      border: none;
+      padding: \$pad-half;
+      font-size: 1em;
+      font-weight: \$fw-sb;
+
+      &:hover {
+          background-color: \$clr-blue-l;
+      }
+  }
+}" > components/misc/Page/Page.module.scss
 
 echo "import Layout from 'components/layouts/Layout';
-import AboutPage from 'components/pages/AboutPage';
+import Page from 'components/misc/Page';
 import { connect } from 'react-redux';
 
 const About = () => {
@@ -164,8 +174,8 @@ const About = () => {
       <Layout
         title=\"$1\"
       >
-        <AboutPage
-          className=\"AboutPage\"
+        <Page
+          classNames={[\"AboutPage\"]}
         >
           <h1 className=\"Main__title\">About</h1>
           <p
@@ -173,7 +183,7 @@ const About = () => {
           >
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
           </p>
-        </AboutPage>
+        </Page>
       </Layout>
     </>
   );
@@ -193,7 +203,7 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(mapStateToProps, mapDispatchToProps)(About);" > pages/about.tsx
 
 echo "import Layout from 'components/layouts/Layout';
-import ContactUsPage from 'components/pages/ContactUsPage';
+import Page from 'components/misc/Page';
 import { connect } from 'react-redux';
 
 const ContactUs = () => {
@@ -202,7 +212,7 @@ const ContactUs = () => {
       <Layout
         title=\"$1\"
       >
-        <ContactUsPage
+        <Page
           className=\"ContactUsPage\"
         >
           <h1 className=\"Main__title\">Contact Us</h1>
@@ -211,7 +221,7 @@ const ContactUs = () => {
           >
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
           </p>
-        </ContactUsPage>
+        </Page>
       </Layout>
     </>
   );

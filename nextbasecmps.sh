@@ -23,13 +23,13 @@ import Main from 'components/sections/Main';
 import Footer from 'components/sections/Footer';
 
 type LayoutProps = {
-  className?: string,
+  classNames?: string[],
   children?: any,
   title?: string
 };
 
 const Layout = ({
-  className = 'Layout',
+  classNames = [],
   children,
   title = ''
 } : LayoutProps) => {
@@ -57,15 +57,16 @@ import './Header.module.scss';
 import PrimaryNav from 'components/misc/PrimaryNav';
 
 type HeaderProps = {
-  className?: string
+  classNames?: string[]
 };
 
 const Header = ({
-  className = 'Header'
+  classNames = []
 } : HeaderProps) => {
+  const classList = ['Heaeder', ...classNames].join(' ');
   return (
     <>
-      <header className={className}>
+      <header className={classList}>
         <PrimaryNav />
       </header>
     </>
@@ -78,17 +79,18 @@ echo "import React from 'react';
 import './Main.module.scss';
 
 type MainProps = {
-  className?: string,
+  classNames?: string[],
   children: any
 };
 
 const Main = ({
-    className = 'Main',
+    classNames = [],
     children
   } : MainProps) => {
+  const classList = ['Main', ...classNames].join(' ');
   return (
     <>
-      <main className={className}>
+      <main className={classList}>
         {children}
       </main>
     </>
@@ -135,7 +137,7 @@ type LinkObject = {
 };
 
 type PrimaryNavProps = {
-  className?: string,
+  classNames?: string[],
   links?: LinkObject[]
 };
 
@@ -155,26 +157,29 @@ const defaultLinks: LinkObject[] = [
 ];
 
 const PrimaryNav = ({
-    className = 'PrimaryNav',
+    classNames = [],
     links = defaultLinks
   } : PrimaryNavProps) => {
   if (!links || !links.length) { return null; }
   const [isOpen, setIsOpen] = useState(false);
-  let classList = [\`\${className}\`];
+  let classList = ['PrimaryNav', ...classNames];
   if (isOpen) {
-    classList.push(\`\${className}--open\`);
+    classList = [
+      ...classList,
+      ...classList.map((c) => \`\${c}--open\`)
+    ];
   }
   return (
     <nav className={classList.join(' ')}>
       <div
-        className={\`\${className}__overlay\`}
-          onClick={() => {
-            setIsOpen(false);
-          }}
+        className={classList.map((c) => \`\${c}__overlay\`).join(' ')}
+        onClick={() => {
+          setIsOpen(false);
+        }}
       >
       </div>
       <div
-        className={\`\${className}__toggle-btn\`}
+        className={classList.map((c) => \`\${c}__toggle-btn\`).join(' ')}
         onClick={() => {
           setIsOpen(!isOpen);
         }}
@@ -182,21 +187,21 @@ const PrimaryNav = ({
         <i className=\"fas fa-bars\" />
       </div>
       <List
-        className={\`\${className}__list\`}
-        items={createLinks(links, className)}
+        classNames={classList.map((c) => \`\${c}__list\`)}
+        items={createLinks(links, classList)}
       />
     </nav>
   );
 };
 
-const createLinks = (links: LinkObject[], className: string = 'PrimaryNav') => {
+const createLinks = (links: LinkObject[], classList) => {
   return links.map((link, i) => {
     return (
       <Link
         href={link.path}
       >
         <a
-          className={\`\${className}__link\`}
+          className={classList.map((c) => \`\${c}__link\`).join(' ')}
           rel=\"noopener\"
         >
           {link.label}
@@ -328,7 +333,7 @@ echo "import React from 'react';
 import './List.module.scss';
 
 type ListProps = {
-  className?: string,
+  classNames?: string[],
   isOrdered?: boolean,
   items?: Array<any>,
   handleItemClicked?: Function,
@@ -336,24 +341,25 @@ type ListProps = {
 };
 
 const List = ({
-  className,
+  classNames = [],
   isOrdered = false,
   items = [],
   handleItemClicked = (item) => {},
   ...attrs
 } : ListProps) => {
-  const content = createItems(items, className, handleItemClicked, attrs);
+  const classList = ['List', ...classNames];
+  const content = createItems(items, classList, handleItemClicked, attrs);
   return (isOrdered
-    ? <ol className={className}>{content}</ol>
-    : <ul className={className}>{content}</ul>
+    ? <ol className={classList.join(' ')}>{content}</ol>
+    : <ul className={classList.join(' ')}>{content}</ul>
   );
 };
 
-const createItems = (items, className = 'List', handleItemClicked, attrs) => {
+const createItems = (items, classList, handleItemClicked, attrs) => {
   return items.map((item, i) => {
     return (
       <li
-        className={\`\${className}__item\`}
+        className={classList.map((c) => \`\${c}__item\`).join(' ')}
         key={i}
         onClick={(e) => {
           handleItemClicked(item);
@@ -373,7 +379,7 @@ import './TextBox.module.scss';
 import List from 'components/misc/List';
 
 type TextBoxProps = {
-  className?: string,
+  classNames?: string[],
   placeholder?: string,
   type?: string,
   required?: boolean,
@@ -414,7 +420,8 @@ const TextBoxReducer = (state, action) => {
       return {
         ...state,
         value: action.payload,
-        autocompleteOptions: []
+        autocompleteOptions: [],
+        isValid: true
       };
     default:
       return state;
@@ -422,7 +429,7 @@ const TextBoxReducer = (state, action) => {
 };
 
 const TextBox = ({
-  className = 'TextBox',
+  classNames = [],
   placeholder = null,
   type = 'text',
   required = false,
@@ -434,6 +441,8 @@ const TextBox = ({
   autocomplete = null,
   ...attrs
 } : TextBoxProps) => {
+  const classList = ['TextBox', ...classNames];
+
   const [{
     isValid,
     autocompleteOptions,
@@ -456,36 +465,36 @@ const TextBox = ({
     })
   };
 
-  let inputClass = \`\${className}__input\`;
-  let labelClass = \`\${className}__label\`;
+  const inputClassList = [...classList.map((c) => \`\${c}__input\`)];
+  const labelClassList = [...classList.map((c) => \`\${c}__label\`)];
 
   if (isValid === null) {
-    inputClass += \` \${className}__input--empty\`;
+    inputClassList.push(...classList.map((c) => \`\${c}__input--empty\`));
   } else if (!isValid) {
-    inputClass += \` \${className}__input--error\`;
-    labelClass += \` \${className}__label--error\`;
+    inputClassList.push(...classList.map((c) => \`\${c}__input--error\`));
+    labelClassList.push(...classList.map((c) => \`\${c}__label--error\`));
   }
 
   return (
     <div
-      className={className}
+      className={classList.join(' ')}
     >
       <div
-        className={\`\${className}__container\`}
+        className={classList.map((c) => \`\${c}__container\`).join(' ')}
       >
         {label &&
           <label
-            className={labelClass}
+            className={labelClassList.join(' ')}
             htmlFor={id}
           >
             {label}
           </label>
         }
         <div
-          className={\`\${className}__input-container\`}
+          className={classList.map((c) => \`\${c}__input-container\`).join(' ')}
         >
           <input
-            className={inputClass}
+            className={inputClassList.join(' ')}
             type={type}
             placeholder={placeholder}
             required={required}
@@ -525,7 +534,7 @@ const TextBox = ({
           />
           {isAutocomplete && (autocompleteOptions.length > 0) && hasFocus &&
             <List
-              className={\`\${className}__autocomplete-list\`}
+              classNames={classList.map((c) => \`\${c}__autocomplete-list\`)}
               items={autocompleteOptions}
               handleItemClicked={(item) => {
                 dispatch({
@@ -541,7 +550,7 @@ const TextBox = ({
         </div>
       </div>
       {errorMessage && (isValid !== null) && !isValid &&
-        <div className={\`\${className}__errorMessage\`}>
+        <div className={classList.map((c) => \`\${c}__errorMessage\`).join(' ')}>
           {errorMessage}
         </div>
       }
@@ -560,7 +569,7 @@ echo "@import 'styles/globals.scss';
 \$clr-valid: \$clr-blue-d;
 \$font-size: 1.1em;
 
-@mixin TextBoxMixin {
+.TextBox {
     padding: \$pad-s 0;
     display: inline-block;
 
@@ -634,9 +643,4 @@ echo "@import 'styles/globals.scss';
             }
         }
     }
-}
-
-.TextBox {
-  @include TextBoxMixin;
-}
-" > inputs/TextBox/TextBox.module.scss
+}" > inputs/TextBox/TextBox.module.scss
