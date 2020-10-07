@@ -576,6 +576,7 @@ echo "@import 'styles/globals.scss';
     &__container {
       width: max-content;
       display: flex;
+      align-items: center;
     }
 
     &__label {
@@ -583,8 +584,7 @@ echo "@import 'styles/globals.scss';
         font-weight: \$fw-sb;
         color: \$clr-hilight;
         font-size: \$font-size;
-        margin-right: \$pad-s;
-        margin-top: \$pad-half;
+        padding-right: \$pad-xs;
         &:hover {
           cursor: pointer;
         }
