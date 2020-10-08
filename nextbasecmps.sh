@@ -221,112 +221,110 @@ echo "@import 'styles/globals.scss';
 \$overlay-clr: \$clr-black;
 
 .PrimaryNav {
-    z-index: 100;
-
-    &--open {
-        .PrimaryNav__list {
-            left: 0;
-            box-shadow: 0 0 200px \$overlay-clr;
-        }
-
-        .PrimaryNav__overlay {
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            z-index: 200;
-            background-color: \$overlay-clr;
-            opacity: .5;
-            transition: all 400ms ease-in-out;
-            &:hover {
-              cursor: pointer;
-            }
-        }
+  z-index: 100;
+  &--open {
+    .PrimaryNav__list {
+      left: 0;
+      box-shadow: 0 0 200px \$overlay-clr;
     }
 
-    &__toggle-btn {
-        z-index: 400;
-        border-radius: 50%;
-        position: absolute;
-        top: \$pad-half;
-        left: \$pad-half;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: \$pad;
-        font-size: 1.35em;
-        color: \$font-clr;
-        width: 1em;
-        height: 1em;
-
-        &:hover {
-            cursor: pointer;
-            background-color: \$bg-clr-hilight;
+    .PrimaryNav__overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 200;
+      background-color: \$overlay-clr;
+      opacity: .5;
+      transition: all 400ms ease-in-out;
+      &:hover {
+        cursor: pointer;
       }
     }
+  }
 
-    &__list {
-        background-color: \$bg-clr;
-        z-index: 300;
-        margin: 0;
-        padding: 0;
-        padding-top: \$pad-xl;
-        list-style-type: none;
-        max-width: 33vw;
-        min-width: 240px;
-        position: absolute;
-        top: 0;
-        left: -100%;
-        bottom: 0;
-        transition: left 300ms ease-in-out;
+  &__toggle-btn {
+    z-index: 400;
+    border-radius: 50%;
+    position: absolute;
+    top: \$pad-half;
+    left: \$pad-half;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: \$pad;
+    font-size: 1.35em;
+    color: \$font-clr;
+    width: 1em;
+    height: 1em;
+    &:hover {
+      cursor: pointer;
+      background-color: \$bg-clr-hilight;
     }
+  }
 
-    &__link {
-        text-decoration: none;
-        color: \$font-clr;
-        display: inline-block;
-        padding: \$pad-half;
-        padding-left: \$pad;
-        width: 100%;
-        &:hover {
-            background-color: \$bg-clr-hilight;
-        }
+  &__list {
+    background-color: \$bg-clr;
+    z-index: 300;
+    margin: 0;
+    padding: 0;
+    padding-top: \$pad-xl;
+    list-style-type: none;
+    max-width: 33vw;
+    min-width: 240px;
+    position: absolute;
+    top: 0;
+    left: -100%;
+    bottom: 0;
+    transition: left 300ms ease-in-out;
+  }
+
+  &__link {
+    text-decoration: none;
+    color: \$font-clr;
+    display: inline-block;
+    padding: \$pad-half;
+    padding-left: \$pad;
+    width: 100%;
+    &:hover {
+      background-color: \$bg-clr-hilight;
     }
+  }
 }
 
 @media (min-width: \$tablet) {
-    .PrimaryNav {
-        &__toggle-btn,
-        &__overlay {
-            display: none;
-        }
-
-        &--open &__list,
-        &__list {
-            padding: 0;
-            box-shadow: none;
-            position: relative;
-            left: 0;
-            width: 100%;
-            max-width: 100%;
-            min-width: 100%;
-            display: flex;
-            
-            &__item:first-child,
-            &__item:last-child {
-              margin: 0;
-            }
-        }
-
-        &__link {
-            padding: \$pad-half;
-        }
-
-        &__list__item {
-          margin: 0 \$pad-half;
-        }
+  .PrimaryNav {
+    &__toggle-btn,
+    &__overlay {
+        display: none;
     }
+
+    &--open &__list,
+    &__list {
+      padding: 0;
+      box-shadow: none;
+      position: relative;
+      left: 0;
+      width: 100%;
+      max-width: 100%;
+      min-width: 100%;
+      display: flex;
+      
+      &__item:first-child,
+      &__item:last-child {
+        margin: 0;
+      }
+    }
+
+    &__link {
+      padding: \$pad-half;
+    }
+
+    &__list__item {
+      margin: 0 \$pad-half;
+    }
+  }
 }" > misc/PrimaryNav/PrimaryNav.module.scss
 
 echo "import React from 'react';
@@ -481,6 +479,10 @@ const TextBox = ({
     labelClassList.push(...classList.map((c) => \`\${c}__label--error\`));
   }
 
+  if (attrs.disabled) {
+    labelClassList.push(...classList.map((c) => \`\${c}__label--disabled\`));
+  }
+
   if (isAutocomplete && autocompleteOptions.length > 0) {
     inputClassList.push(...classList.map((c) => \`\${c}__input--autocomplete-open\`));
   }
@@ -584,96 +586,105 @@ echo "@import 'styles/globals.scss';
 \$font-size: 1.1em;
 
 .TextBox {
-    padding: \$pad-s 0;
+  padding: \$pad-s 0;
+  display: inline-block;
+
+  &__container {
+    width: max-content;
+    display: flex;
+    align-items: center;
+  }
+
+  &__label {
     display: inline-block;
-
-    &__container {
-      width: max-content;
-      display: flex;
-      align-items: center;
+    font-weight: \$fw-sb;
+    color: \$clr-hilight;
+    font-size: \$font-size;
+    padding-right: \$pad-xs;
+    &:hover {
+      cursor: pointer;
     }
-
-    &__label {
-        display: inline-block;
-        font-weight: \$fw-sb;
-        color: \$clr-hilight;
-        font-size: \$font-size;
-        padding-right: \$pad-xs;
-        &:hover {
-          cursor: pointer;
-        }
-        &--error {
-          color: \$clr-error;
-        }
+    &--error {
+      color: \$clr-error;
     }
+    &--disabled {
+      color: \$clr-gray-d;
+      &:hover {
+        cursor: default;
+      }
+    }
+  }
     
-    &__input {
-        outline: none;
-        font-size: \$font-size;
-        max-width: 30em;
-        padding: 0 \$pad-ms;
-        line-height: 2em;
-        border: 2px solid \$clr-valid;
-        border-radius: \$border-radius;
-        margin: 0;
-
-        &-container {
-          display: flex;
-          justify-content: center;
-          position: relative;
-        }
-        &:focus {
-            border: 2px solid \$clr-hilight;
-        }
-        &--error {
-            border-color: \$clr-error;
-        }
-        &--error:focus {
-            border: 2px solid \$clr-error;
-        }
-        &:focus.TextBox__input--autocomplete-open,
-        &--error:focus.TextBox__input--autocomplete-open {
-            border-bottom-color: \$clr-gray;
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-        }
-        &--error + .TextBox__autocomplete-list {
-            border-left-color: \$clr-error;
-            border-right-color: \$clr-error;
-            border-bottom-color: \$clr-error;
-        }
-        &--empty {
-            border: 2px solid \$clr-empty;
-        }
+  &__input {
+    outline: none;
+    font-size: \$font-size;
+    max-width: 30em;
+    padding: 0 \$pad-ms;
+    line-height: 2em;
+    border: 2px solid \$clr-valid;
+    border-radius: \$border-radius;
+    margin: 0;
+    &:disabled {
+      border-color: \$clr-gray;
     }
-
-    &__errorMessage {
-        color: \$clr-red;
-        font-weight: \$fw-sb;
+    &-container {
+      display: flex;
+      justify-content: center;
+      position: relative;
     }
-
-    &__autocomplete-list {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        position: absolute;
-        background-color: \$clr-white;
-        border: 2px solid \$clr-valid;
-        border-radius: \$border-radius;
-        border-top: none;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-        max-height: 10em;
-        overflow-y: scroll;
-        top: 100%;
-        width: 100%;
-
-        &__item {
-            padding: \$pad-s;
-            &:hover {
-              cursor: pointer;
-              background-color: \$clr-gray;
-            }
-        }
+    &:focus {
+      border: 2px solid \$clr-hilight;
     }
+    &--error {
+      border-color: \$clr-error;
+    }
+    &--error:focus {
+      border: 2px solid \$clr-error;
+    }
+    &:focus.TextBox__input--autocomplete-open,
+    &--error:focus.TextBox__input--autocomplete-open {
+      padding-bottom: 2px;
+      border-bottom: none;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    &--error + .TextBox__autocomplete-list {
+      border-left-color: \$clr-error;
+      border-right-color: \$clr-error;
+      border-bottom-color: \$clr-error;
+    }
+    &--empty {
+      border: 2px solid \$clr-empty;
+    }
+  }
+
+  &__errorMessage {
+    color: \$clr-red;
+    font-weight: \$fw-sb;
+  }
+
+  &__autocomplete-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    background-color: \$clr-white;
+    border: 2px solid \$clr-valid;
+    border-radius: \$border-radius;
+    border-top: none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    max-height: 10em;
+    overflow-y: scroll;
+    top: 100%;
+    width: 100%;
+
+    &__item {
+      padding: \$pad-s;
+      &:hover {
+        cursor: pointer;
+        background-color: \$clr-gray;
+      }
+    }
+  }
 }" > inputs/TextBox/TextBox.module.scss
