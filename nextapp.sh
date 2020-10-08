@@ -129,7 +129,7 @@ const Home = ({ counter, incrementCount, textbox, setTextboxValue }) => {
             label=\"Animals\"
             placeholder=\"Select one\"
             errorMessage=\"Invalid\"
-            autocomplete={['dog', 'dinosaur', 'cat', 'lion']}
+            autocomplete={['dog', 'dinosaur', 'cat', 'lion', 'chameleon']}
             classNames={['Main__textbox']}
             id=\"Main__textbox\"
             onChange={(value) => setTextboxValue(value)}

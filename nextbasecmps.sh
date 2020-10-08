@@ -645,10 +645,13 @@ echo "@import 'styles/globals.scss';
         background-color: \$clr-white;
         border: 2px solid \$clr-gray;
         border-radius: \$border-radius-s;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
         max-height: 10em;
         overflow-y: scroll;
-        width: 97%;
-        padding-top: \$pad-l;
+        width: 96%;
+        top: 75%;
+        padding-top: 1em;
 
         &__item {
             padding: \$pad-s;
