@@ -610,8 +610,11 @@ echo "@import 'styles/globals.scss';
         padding: \$pad-s \$pad-ms;
         border: 2px solid \$clr-valid;
         border-radius: \$border-radius;
+        z-index: 1;
+
         &-container {
-          display: inline-block;
+          display: flex;
+          justify-content: center;
           position: relative;
         }
         &:focus {
@@ -643,7 +646,8 @@ echo "@import 'styles/globals.scss';
         border-radius: \$border-radius-s;
         max-height: 10em;
         overflow-y: scroll;
-        width: 100%;
+        width: 97%;
+        padding-top: \$pad-l;
 
         &__item {
             padding: \$pad-s;

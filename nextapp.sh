@@ -344,8 +344,9 @@ echo "@import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,4
 \$pad-half: 10px;
 \$pad-ms: 14px;
 \$pad: 20px;
-\$pad-l: 30px;
+\$pad-ml: 30px;
 \$pad-dbl: 40px;
+\$pad-l: 48px;
 \$pad-xl: 60px;
 
 \$ff:
