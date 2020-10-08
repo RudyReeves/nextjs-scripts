@@ -587,7 +587,6 @@ echo "@import 'styles/globals.scss';
 
 .TextBox {
   padding: \$pad-s 0;
-  display: inline-block;
 
   &__container {
     width: max-content;
@@ -664,6 +663,7 @@ echo "@import 'styles/globals.scss';
   }
 
   &__autocomplete-list {
+    z-index: 10;
     list-style-type: none;
     margin: 0;
     padding: 0;
