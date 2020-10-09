@@ -574,10 +574,6 @@ yarn add redux react-redux next-redux-wrapper
  
 nextbasecmps.sh
 
-echo -e "\n** Creating initial git commit...\n"
-git add -A
-git commit -m "Initial commit"
-
 echo -e "\n** Finished installing. Starting server...\n"
 
 echo -e "{
@@ -594,6 +590,11 @@ module.exports = withSass({
     MONGO_URI: \"mongodb://username:password@localhost:27017/$1\",
   }
 });" > next.config.js
+
+# Commit to git:
+echo -e "\n** Creating initial git commit...\n"
+git add -A
+git commit -m "Initial commit"
 
 code .
 
