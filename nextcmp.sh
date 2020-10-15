@@ -3,38 +3,62 @@
 mkdir -p components
 cd components
 
+CMP_NAME=$1
+
 if [ -n "$2" ]; then
-  mkdir -p $2
-  cd $2
+  DIR="$2"
+  mkdir -p $DIR
+  cd $DIR
 fi
 
-mkdir -p $1
-cd $1
+TAG=${3-div}
 
-echo "import React from 'react';
-import './$1.module.scss';
+mkdir -p $CMP_NAME
+cd $CMP_NAME
+
+echo "import React, {
+  // useEffect,
+  // useReducer,
+  // useRef,
+  // useState,
+} from 'react';
+import './${CMP_NAME}.module.scss';
 import { connect } from 'react-redux';
 
-type $1Props = {
+type ${CMP_NAME}Props = {
   classNames?: string[],
-  children?: any
+  children?: any,
+  [props: string]: any
 };
 
-const $1 = ({
+// const ${CMP_NAME}Reducer = (state, action) => {
+//   switch (action.type) {
+//     default:
+//       return state;
+//   }
+// };
+
+// const initialState = {};
+
+const ${CMP_NAME} = ({
   classNames = [],
-  children
-} : $1Props) => {
-  const classList = ['$1', ...classNames];
+  children,
+  ...props
+} : ${CMP_NAME}Props) => {
+  const classList = ['${CMP_NAME}', ...classNames];
+
+  // const [state, dispatch] = useReducer(${CMP_NAME}Reducer, initialState);
+
   return (
     <>
-      <div className={classList.join(' ')}>
+      <${TAG} className={classList.join(' ')}>
         {children}
-      </div>
+      </${TAG}>
     </>
   );
 };
 
-$1.getInitialProps = ({store, pathname, query}) => {
+${CMP_NAME}.getInitialProps = ({store, pathname, query}) => {
 };
 
 const mapStateToProps = (state) => {
@@ -45,21 +69,21 @@ const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)($1);" > "./$1.tsx"
+export default connect(mapStateToProps, mapDispatchToProps)(${CMP_NAME});" > "./${CMP_NAME}.tsx"
 
-echo "import $1 from './$1';
-export default $1;" > "./index.ts"
+echo "import ${CMP_NAME} from './${CMP_NAME}';
+export default ${CMP_NAME};" > "./index.ts"
 
 echo "@import 'styles/globals.scss';
 
-.$1 {}" > "./$1.module.scss";
+.${CMP_NAME} {}" > "./${CMP_NAME}.module.scss";
 
 echo "import React from 'react';
 import ReactDOM from 'react-dom';
-import $1 from './$1';
+import ${CMP_NAME} from './${CMP_NAME}';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<$1 />, div);
+  ReactDOM.render(<${CMP_NAME} />, div);
   ReactDOM.unmountComponentAtNode(div);
-});" > "./$1.test.tsx"
+});" > "./${CMP_NAME}.test.tsx"

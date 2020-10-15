@@ -5,7 +5,7 @@ mkdir -p components
 
 # Make base components:
 nextcmp.sh Header sections
-nextcmp.sh Main sections
+nextcmp.sh Main sections main
 nextcmp.sh Footer sections
 nextcmp.sh List misc
 nextcmp.sh PrimaryNav misc
@@ -25,13 +25,15 @@ import Footer from 'components/sections/Footer';
 type LayoutProps = {
   classNames?: string[],
   children?: any,
-  title?: string
+  title?: string,
+  [props: string]: any
 };
 
 const Layout = ({
   classNames = [],
   children,
-  title = ''
+  title = '',
+  ...props
 } : LayoutProps) => {
   return (
     <>
@@ -57,11 +59,15 @@ import './Header.module.scss';
 import PrimaryNav from 'components/misc/PrimaryNav';
 
 type HeaderProps = {
-  classNames?: string[]
+  classNames?: string[],
+  children?: any,
+  [props: string]: any
 };
 
 const Header = ({
-  classNames = []
+  classNames = [],
+  children,
+  ...props
 } : HeaderProps) => {
   const classList = ['Heaeder', ...classNames].join(' ');
   return (
@@ -74,30 +80,6 @@ const Header = ({
 };
 
 export default Header;" > sections/Header/Header.tsx
-
-echo "import React from 'react';
-import './Main.module.scss';
-
-type MainProps = {
-  classNames?: string[],
-  children: any
-};
-
-const Main = ({
-    classNames = [],
-    children
-  } : MainProps) => {
-  const classList = ['Main', ...classNames].join(' ');
-  return (
-    <>
-      <main className={classList}>
-        {children}
-      </main>
-    </>
-  );
-};
-
-export default Main;" > sections/Main/Main.tsx
 
 echo "@import 'styles/globals.scss';
 
@@ -138,7 +120,8 @@ type LinkObject = {
 
 type PrimaryNavProps = {
   classNames?: string[],
-  links?: LinkObject[]
+  links?: LinkObject[],
+  [props: string]: any
 };
 
 const defaultLinks: LinkObject[] = [
@@ -158,7 +141,8 @@ const defaultLinks: LinkObject[] = [
 
 const PrimaryNav = ({
     classNames = [],
-    links = defaultLinks
+    links = defaultLinks,
+    ...props
   } : PrimaryNavProps) => {
   if (!links || !links.length) { return null; }
   const [isOpen, setIsOpen] = useState(false);
@@ -335,7 +319,7 @@ type ListProps = {
   isOrdered?: boolean,
   items?: Array<any>,
   handleItemClicked?: Function,
-  [attrs: string]: any
+  [props: string]: any
 };
 
 const List = ({
@@ -343,17 +327,17 @@ const List = ({
   isOrdered = false,
   items = [],
   handleItemClicked = (item) => {},
-  ...attrs
+  ...props
 } : ListProps) => {
   const classList = ['List', ...classNames];
-  const content = createItems(items, classList, handleItemClicked, attrs);
+  const content = createItems(items, classList, handleItemClicked, props);
   return (isOrdered
     ? <ol className={classList.join(' ')}>{content}</ol>
     : <ul className={classList.join(' ')}>{content}</ul>
   );
 };
 
-const createItems = (items, classList, handleItemClicked, attrs) => {
+const createItems = (items, classList, handleItemClicked, props) => {
   return items.map((item, i) => {
     return (
       <li
@@ -362,7 +346,7 @@ const createItems = (items, classList, handleItemClicked, attrs) => {
         onClick={(e) => {
           handleItemClicked(item);
         }}
-        {...attrs}
+        {...props}
       >
         {item}
       </li>
@@ -378,7 +362,6 @@ import List from 'components/misc/List';
 
 type TextBoxProps = {
   classNames?: string[],
-  placeholder?: string,
   type?: string,
   required?: boolean,
   name?: string,
@@ -390,7 +373,7 @@ type TextBoxProps = {
   onChange?: (v: string) => any,
   onBlur?: (e: any) => any,
   onFocus?: (e: any) => any,
-  [attrs: string]: any,
+  [props: string]: any
 };
 
 const TextBoxReducer = (state, action) => {
@@ -431,7 +414,6 @@ const TextBoxReducer = (state, action) => {
 
 const TextBox = ({
   classNames = [],
-  placeholder = null,
   type = 'text',
   required = false,
   name = null,
@@ -443,7 +425,7 @@ const TextBox = ({
   onChange = (v) => {},
   onBlur = (e) => {},
   onFocus = (e) => {},
-  ...attrs
+  ...props
 } : TextBoxProps) => {
   const classList = ['TextBox', ...classNames];
 
@@ -479,7 +461,7 @@ const TextBox = ({
     labelClassList.push(...classList.map((c) => \`\${c}__label--error\`));
   }
 
-  if (attrs.disabled) {
+  if (props.disabled) {
     labelClassList.push(...classList.map((c) => \`\${c}__label--disabled\`));
   }
 
@@ -508,7 +490,6 @@ const TextBox = ({
           <input
             className={inputClassList.join(' ')}
             type={type}
-            placeholder={placeholder}
             required={required}
             name={name}
             id={id}
@@ -545,7 +526,7 @@ const TextBox = ({
                 payload: filterAutocomplete(e.target.value)
               });
             }}
-            {...attrs}
+            {...props}
           />
           {isAutocomplete && (autocompleteOptions.length > 0) && hasFocus &&
             <List

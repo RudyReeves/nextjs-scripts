@@ -182,7 +182,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(Home);" > pages/inde
 
 echo "@import 'styles/globals.scss';
 
-.Page {}
+.Page {
+  height: 100%;
+}
 
 .HomePage {
   &__counter-button {
