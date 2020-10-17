@@ -594,12 +594,12 @@ echo "@import 'styles/globals.scss';
   &__input {
     outline: none;
     font-size: \$font-size;
-    max-width: 30em;
     padding: 0 \$pad-ms;
     margin: 0;
     line-height: 2em;
     border: 2px solid \$clr-valid;
     border-radius: \$border-radius;
+    position: relative;
     &:disabled {
       border-color: \$clr-gray;
     }
@@ -608,7 +608,7 @@ echo "@import 'styles/globals.scss';
       justify-content: center;
       position: relative;
       font-weight: \$fw;
-      color: \$clr-gray-d;
+      color: \$clr-black;
     }
     &:focus {
       border: 2px solid \$clr-hilight;
@@ -627,9 +627,7 @@ echo "@import 'styles/globals.scss';
       border-bottom-right-radius: 0;
     }
     &--error + .TextBox__autocomplete-list {
-      border-left-color: \$clr-error;
-      border-right-color: \$clr-error;
-      border-bottom-color: \$clr-error;
+      border-color: \$clr-error;
     }
     &--empty {
       border: 2px solid \$clr-empty;
@@ -646,6 +644,7 @@ echo "@import 'styles/globals.scss';
     list-style-type: none;
     margin: 0;
     padding: 0;
+    padding-top: \$pad-s;
     position: absolute;
     background-color: \$clr-white;
     border: 2px solid \$clr-valid;
@@ -657,6 +656,17 @@ echo "@import 'styles/globals.scss';
     overflow-y: scroll;
     top: 100%;
     width: 100%;
+
+    &::before {
+      content: ' ';
+      position: absolute;
+      top: 2px;
+      width: 90%;
+      left: 5%;
+      height: 1px;
+      border-bottom: 1px solid \$clr-gray-d;
+      z-index: 50;
+    }
 
     &__item {
       padding: \$pad-s;
