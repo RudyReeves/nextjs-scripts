@@ -282,7 +282,9 @@ const mapDispatchToProps = (dispatch) => {
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactUs);" > pages/contact.tsx
 
-# Create index.scss:
+# Create base styles:
+rm styles/globals.css
+
 echo "@import './globals.scss';
 
 *, *::before, *::after {

@@ -364,8 +364,6 @@ type TextBoxProps = {
   classNames?: string[],
   type?: string,
   required?: boolean,
-  name?: string,
-  id?: string,
   label?: string,
   errorMessage?: string,
   validate?: (value: string) => boolean,
@@ -416,8 +414,6 @@ const TextBox = ({
   classNames = [],
   type = 'text',
   required = false,
-  name = null,
-  id = null,
   label = '',
   errorMessage = '',
   validate = (value) => true,
@@ -476,75 +472,74 @@ const TextBox = ({
       <div
         className={classList.map((c) => \`\${c}__container\`).join(' ')}
       >
-        {label &&
-          <label
-            className={labelClassList.join(' ')}
-            htmlFor={id}
+        <label
+          className={labelClassList.join(' ')}
+        >
+          <div
+            className={classList.map((c) => \`\${c}__label__text\`).join(' ')}
           >
             {label}
-          </label>
-        }
-        <div
-          className={classList.map((c) => \`\${c}__input-container\`).join(' ')}
-        >
-          <input
-            className={inputClassList.join(' ')}
-            type={type}
-            required={required}
-            name={name}
-            id={id}
-            ref={inputRef}
-            value={value}
-            onBlur={(e) => {
-              onBlur(e);
-              dispatch({
-                type: 'TextBox:blur',
-                payload: validate(value) &&
-                (
-                  (!required && value.length === 0) ||
-                  !isAutocomplete ||
-                  autocomplete.includes(value)
-                )
-              });
-            }}
-            onFocus={(e) => {
-              onFocus(e);
-              dispatch({
-                type: 'TextBox:focus',
-                payload: filterAutocomplete(e.target.value)
-              });
-            }}
-            onChange={(e) => {
-              onChange(e.target.value);
-              dispatch({
-                type: 'TextBox:change',
-                payload: e.target.value
-              });
-              if (!isAutocomplete) { return; }
-              dispatch({
-                type: 'TextBox:autocomplete-change',
-                payload: filterAutocomplete(e.target.value)
-              });
-            }}
-            {...props}
-          />
-          {isAutocomplete && (autocompleteOptions.length > 0) && hasFocus &&
-            <List
-              classNames={classList.map((c) => \`\${c}__autocomplete-list\`)}
-              items={autocompleteOptions}
-              handleItemClicked={(item) => {
-                onChange(item);
+          </div>
+          <div
+            className={classList.map((c) => \`\${c}__input-container\`).join(' ')}
+          >
+            <input
+              className={inputClassList.join(' ')}
+              type={type}
+              required={required}
+              ref={inputRef}
+              value={value}
+              onBlur={(e) => {
+                onBlur(e);
                 dispatch({
-                  type: 'TextBox:autocomplete-clicked',
-                  payload: item
+                  type: 'TextBox:blur',
+                  payload: validate(value) &&
+                  (
+                    (!required && value.length === 0) ||
+                    !isAutocomplete ||
+                    autocomplete.includes(value)
+                  )
                 });
               }}
-              onMouseDown={(e) => {
-                e.preventDefault();
+              onFocus={(e) => {
+                onFocus(e);
+                dispatch({
+                  type: 'TextBox:focus',
+                  payload: filterAutocomplete(e.target.value)
+                });
               }}
+              onChange={(e) => {
+                onChange(e.target.value);
+                dispatch({
+                  type: 'TextBox:change',
+                  payload: e.target.value
+                });
+                if (!isAutocomplete) { return; }
+                dispatch({
+                  type: 'TextBox:autocomplete-change',
+                  payload: filterAutocomplete(e.target.value)
+                });
+              }}
+              {...props}
             />
-          }
-        </div>
+            {isAutocomplete && (autocompleteOptions.length > 0) && hasFocus &&
+              <List
+                classNames={classList.map((c) => \`\${c}__autocomplete-list\`)}
+                items={autocompleteOptions}
+                handleItemClicked={(item) => {
+                  onChange(item);
+                  dispatch({
+                    type: 'TextBox:autocomplete-clicked',
+                    payload: item
+                  });
+                }}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                }}
+              />
+            }
+          </div>
+        </label>
       </div>
       {errorMessage && (isValid !== null) && !isValid &&
         <div className={classList.map((c) => \`\${c}__errorMessage\`).join(' ')}>
@@ -571,16 +566,17 @@ echo "@import 'styles/globals.scss';
 
   &__container {
     width: max-content;
-    display: flex;
-    align-items: center;
   }
 
   &__label {
-    display: inline-block;
+    display: flex;
+    align-items: center;
     font-weight: \$fw-sb;
     color: \$clr-hilight;
     font-size: \$font-size;
-    padding-right: \$pad-xs;
+    &__text {
+      padding-right: \$pad-xs;
+    }
     &:hover {
       cursor: pointer;
     }
@@ -600,10 +596,10 @@ echo "@import 'styles/globals.scss';
     font-size: \$font-size;
     max-width: 30em;
     padding: 0 \$pad-ms;
+    margin: 0;
     line-height: 2em;
     border: 2px solid \$clr-valid;
     border-radius: \$border-radius;
-    margin: 0;
     &:disabled {
       border-color: \$clr-gray;
     }
@@ -611,6 +607,8 @@ echo "@import 'styles/globals.scss';
       display: flex;
       justify-content: center;
       position: relative;
+      font-weight: \$fw;
+      color: \$clr-gray-d;
     }
     &:focus {
       border: 2px solid \$clr-hilight;
