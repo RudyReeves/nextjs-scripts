@@ -298,15 +298,16 @@ html {
 
 html, body {
   height: 100%;
-}
-
-body {
   margin: 0;
+  font-size: \$fs;
   font-size: \$fs;
   font-weight: \$fw;
   font-family: \$ff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
   padding: 0 \$pad-dbl;
 }
 
@@ -339,6 +340,7 @@ echo "@import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,4
 \$clr-accent: \$clr-blue;
 \$clr-accent-l: \$clr-blue-l;
 \$clr-accent-d: \$clr-blue-d;
+\$clr-accent-xd: \$clr-blue-xd;
 
 \$border-radius-s: 10px;
 \$border-radius: 20px;
@@ -398,9 +400,10 @@ const App = ({ Component, pageProps, store }) => {
 App.getInitialProps = async ({Component, ctx}) => {
   return {
     pageProps: {
-      ...(Component.getInitialProps
-        ? await Component.getInitialProps(ctx)
-        : {}
+      ...(
+        Component.getInitialProps ?
+        await Component.getInitialProps(ctx) :
+        {}
       )
     }
   };
@@ -576,7 +579,33 @@ yarn add mongoose
 yard add bcrypt
 yarn add redux react-redux next-redux-wrapper
  
-nextbasecmps.sh
+nextbasecmps.sh $1
+
+echo -e "import Document, { Html, Head, Main, NextScript } from 'next/document';
+
+class CustomDocument extends Document {
+  static async getInitialProps(ctx) {
+    const initialProps = await Document.getInitialProps(ctx);
+    return { ...initialProps };
+  }
+
+  render() {
+    return (
+      <Html
+        lang={'en'}
+      >
+        <Head />
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    );
+  }
+}
+
+export default CustomDocument;
+" > pages/_document.js
 
 echo -e "\n** Finished installing. Starting server...\n"
 

@@ -39,6 +39,7 @@ const Layout = ({
     <>
       <Head>
         <title>{title}</title>
+        <meta name=\"description\" content=\"$1\" />
       </Head>
 
       <Header />
@@ -555,7 +556,6 @@ export default TextBox;
 
 echo "@import 'styles/globals.scss';
 
-\$clr-hilight: \$clr-blue-d;
 \$clr-error: \$clr-red-d;
 \$clr-empty: \$clr-gray;
 \$clr-valid: \$clr-blue-d;
@@ -572,7 +572,7 @@ echo "@import 'styles/globals.scss';
     display: flex;
     align-items: center;
     font-weight: \$fw-sb;
-    color: \$clr-hilight;
+    color: \$clr-accent-xd;
     font-size: \$font-size;
     &__text {
       padding-right: \$pad-xs;
@@ -594,9 +594,9 @@ echo "@import 'styles/globals.scss';
   &__input {
     outline: none;
     font-size: \$font-size;
-    padding: 0 \$pad-ms;
+    padding: 0 0.6em;
     margin: 0;
-    line-height: 2em;
+    line-height: 1.8em;
     border: 2px solid \$clr-valid;
     border-radius: \$border-radius;
     position: relative;
@@ -611,7 +611,7 @@ echo "@import 'styles/globals.scss';
       color: \$clr-black;
     }
     &:focus {
-      border: 2px solid \$clr-hilight;
+      border: 2px solid \$clr-accent-d;
     }
     &--error {
       border-color: \$clr-error;
