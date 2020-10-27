@@ -37,8 +37,8 @@ const makeStore = (context) => {
 
 export default createWrapper(makeStore);" > redux/store.ts
 
-echo "import counterReducer from './counterReducer';
-import textBoxReducer from './textBoxReducer';
+echo "import counterReducer from './Counter';
+import textBoxReducer from './TextBox';
 import { combineReducers } from 'redux';
 
 const rootReducer = combineReducers({
@@ -48,7 +48,7 @@ const rootReducer = combineReducers({
 
 export default rootReducer;" > redux/reducers/index.ts
 
-echo "import { COUNTER_ACTION } from 'redux/actions/counterActions';
+echo "import { COUNTER_INCREMENT } from 'redux/actions/Counter';
 
 const initialState = {
   count: 0
@@ -56,7 +56,7 @@ const initialState = {
 
 const counterReducer = (state = initialState, action) => {
   switch (action.type) {
-    case COUNTER_ACTION:
+    case COUNTER_INCREMENT:
       return {
         ...state,
         count: state.count + 1
@@ -66,9 +66,9 @@ const counterReducer = (state = initialState, action) => {
   }
 };
 
-export default counterReducer;" > redux/reducers/counterReducer.ts
+export default counterReducer;" > redux/reducers/Counter.ts
 
-echo "import { TEXTBOX_CHANGE_ACTION } from 'redux/actions/textBoxActions';
+echo "import { TEXTBOX_CHANGE } from 'redux/actions/TextBox';
 
 const initialState = {
   value: ''
@@ -76,7 +76,7 @@ const initialState = {
 
 const textBoxReducer = (state = initialState, action) => {
   switch (action.type) {
-    case TEXTBOX_CHANGE_ACTION:
+    case TEXTBOX_CHANGE:
       return {
         ...state,
         value: action.payload
@@ -86,23 +86,20 @@ const textBoxReducer = (state = initialState, action) => {
   }
 };
 
-export default textBoxReducer;" > redux/reducers/textBoxReducer.ts
+export default textBoxReducer;" > redux/reducers/TextBox.ts
 
-echo "// Action Type
-export const COUNTER_ACTION = 'COUNTER_ACTION';
+echo "export const COUNTER_INCREMENT = 'counter:increment';
 
-// Action Creator
-export const counterActions = () => ({
-   type: COUNTER_ACTION
-});" > redux/actions/counterActions.ts
+export const counterIncrementAction = () => ({
+   type: COUNTER_INCREMENT
+});" > redux/actions/Counter.ts
 
-echo "// Action Type
-export const TEXTBOX_CHANGE_ACTION = 'TEXTBOX_CHANGE_ACTION';
+echo "export const TEXTBOX_CHANGE = 'TextBox:change';
 
-// Action Creator
-export const textBoxActions = () => ({
-   type: TEXTBOX_CHANGE_ACTION
-});" > redux/actions/textBoxActions.ts
+export const textBoxChangeAction = (value) => ({
+   type: TEXTBOX_CHANGE,
+   payload: value
+});" > redux/actions/TextBox.ts
 
 # Create default pages:
 rm pages/index.js
@@ -112,10 +109,10 @@ echo "import Layout from 'components/layouts/Layout';
 import Page from 'components/misc/Page';
 import TextBox from 'components/inputs/TextBox';
 import { connect } from 'react-redux';
-import { COUNTER_ACTION } from 'redux/actions/counterActions';
-import { TEXTBOX_CHANGE_ACTION } from 'redux/actions/textBoxActions';
+import { counterIncrementAction } from 'redux/actions/Counter';
+import { textBoxChangeAction } from 'redux/actions/TextBox';
 
-const Home = ({ counter, incrementCount, textbox, setTextboxValue }) => {
+const Home = ({ counter, textbox, incrementCounter, updateTextBoxValue }) => {
   return (
     <>
       <Layout
@@ -132,7 +129,7 @@ const Home = ({ counter, incrementCount, textbox, setTextboxValue }) => {
             autocomplete={['dog', 'dinosaur', 'cat', 'lion', 'chameleon']}
             classNames={['Main__textbox']}
             id=\"Main__textbox\"
-            onChange={(value) => setTextboxValue(value)}
+            onChange={updateTextBoxValue}
           />
           <p
             className=\"Main__paragraph\"
@@ -141,9 +138,7 @@ const Home = ({ counter, incrementCount, textbox, setTextboxValue }) => {
           </p>
           <button
             className=\"HomePage__counter-button\"
-            onClick={(e) => {
-              incrementCount();
-            }}
+            onClick={incrementCounter}
           >
             Click me!
           </button>
@@ -164,16 +159,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    incrementCount: () => {
-      dispatch({
-        type: COUNTER_ACTION
-      });
+    incrementCounter: (e) => {
+      dispatch(counterIncrementAction());
     },
-    setTextboxValue: (value) => {
-      dispatch({
-        type: TEXTBOX_CHANGE_ACTION,
-        payload: value
-      });
+    updateTextBoxValue: (value) => {
+      dispatch(textBoxChangeAction(value));
     }
   };
 };
@@ -188,13 +178,13 @@ echo "@import 'styles/globals.scss';
 
 .HomePage {
   &__counter-button {
+      outline: none;
       display: block;
       cursor: pointer;
       margin-bottom: \$pad-half;
       border-radius: \$border-radius;
       background-color: \$clr-blue-d;
       color: \$clr-white;
-      outline: none;
       border: none;
       padding: \$pad-half;
       font-size: 1em;
@@ -581,32 +571,6 @@ yarn add redux react-redux next-redux-wrapper
  
 nextbasecmps.sh $1
 
-echo -e "import Document, { Html, Head, Main, NextScript } from 'next/document';
-
-class CustomDocument extends Document {
-  static async getInitialProps(ctx) {
-    const initialProps = await Document.getInitialProps(ctx);
-    return { ...initialProps };
-  }
-
-  render() {
-    return (
-      <Html
-        lang={'en'}
-      >
-        <Head />
-        <body>
-          <Main />
-          <NextScript />
-        </body>
-      </Html>
-    );
-  }
-}
-
-export default CustomDocument;
-" > pages/_document.js
-
 echo -e "\n** Finished installing. Starting server...\n"
 
 echo -e "{
@@ -621,6 +585,10 @@ module.exports = withSass({
   env: {
     MONGO_URI_DEV: \"mongodb://localhost:27017/$1_dev\",
     MONGO_URI: \"mongodb://username:password@localhost:27017/$1\",
+  },
+  i18n: {
+    locales: ['en'],
+    defaultLocale: 'en'
   }
 });" > next.config.js
 

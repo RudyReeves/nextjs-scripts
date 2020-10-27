@@ -590,7 +590,7 @@ echo "@import 'styles/globals.scss';
       }
     }
   }
-    
+  
   &__input {
     outline: none;
     font-size: \$font-size;
