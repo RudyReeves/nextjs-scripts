@@ -10,6 +10,8 @@ nextcmp.sh Footer sections
 nextcmp.sh List misc
 nextcmp.sh PrimaryNav misc
 nextcmp.sh TextBox inputs
+nextcmp.sh Label inputs
+nextcmp.sh Autocomplete inputs
 nextcmp.sh Layout layouts
 
 cd components
@@ -359,7 +361,8 @@ export default List;" > misc/List/List.tsx
 
 echo "import React, { useReducer, useRef } from 'react';
 import './TextBox.module.scss';
-import List from 'components/misc/List';
+import Label from 'components/inputs/Label';
+import Autocomplete from 'components/inputs/Autocomplete';
 
 type TextBoxProps = {
   classNames?: string[],
@@ -386,13 +389,15 @@ const TextBoxReducer = (state, action) => {
       return {
         ...state,
         hasFocus: true,
+        isValid: true,
         autocompleteOptions: action.payload
       };
     case 'TextBox:blur':
       return {
         ...state,
         isValid: action.payload,
-        hasFocus: false
+        hasFocus: false,
+        autocompleteOptions: []
       };
     case 'TextBox:autocomplete-change':
       return {
@@ -453,7 +458,8 @@ const TextBox = ({
 
   if (isValid === null) {
     inputClassList.push(...classList.map((c) => \`\${c}__input--empty\`));
-  } else if (!isValid) {
+  }
+  if (isValid === false) {
     inputClassList.push(...classList.map((c) => \`\${c}__input--error\`));
     labelClassList.push(...classList.map((c) => \`\${c}__label--error\`));
   }
@@ -470,78 +476,62 @@ const TextBox = ({
     <div
       className={classList.join(' ')}
     >
-      <div
-        className={classList.map((c) => \`\${c}__container\`).join(' ')}
+      <Label
+        classNames={labelClassList}
+        label={label}
       >
-        <label
-          className={labelClassList.join(' ')}
+        <Autocomplete
+          classNames={classList.map((c) => \`\${c}__autocomplete\`)}
+          options={autocompleteOptions}
+          onSelect={(item) => {
+            onChange(item);
+            dispatch({
+              type: 'TextBox:autocomplete-clicked',
+              payload: item
+            });
+          }}
         >
-          <div
-            className={classList.map((c) => \`\${c}__label__text\`).join(' ')}
-          >
-            {label}
-          </div>
-          <div
-            className={classList.map((c) => \`\${c}__input-container\`).join(' ')}
-          >
-            <input
-              className={inputClassList.join(' ')}
-              type={type}
-              required={required}
-              ref={inputRef}
-              value={value}
-              onBlur={(e) => {
-                onBlur(e);
-                dispatch({
-                  type: 'TextBox:blur',
-                  payload: validate(value) &&
-                  (
-                    (!required && value.length === 0) ||
-                    !isAutocomplete ||
-                    autocomplete.includes(value)
-                  )
-                });
-              }}
-              onFocus={(e) => {
-                onFocus(e);
-                dispatch({
-                  type: 'TextBox:focus',
-                  payload: filterAutocomplete(e.target.value)
-                });
-              }}
-              onChange={(e) => {
-                onChange(e.target.value);
-                dispatch({
-                  type: 'TextBox:change',
-                  payload: e.target.value
-                });
-                if (!isAutocomplete) { return; }
-                dispatch({
-                  type: 'TextBox:autocomplete-change',
-                  payload: filterAutocomplete(e.target.value)
-                });
-              }}
-              {...props}
-            />
-            {isAutocomplete && (autocompleteOptions.length > 0) && hasFocus &&
-              <List
-                classNames={classList.map((c) => \`\${c}__autocomplete-list\`)}
-                items={autocompleteOptions}
-                handleItemClicked={(item) => {
-                  onChange(item);
-                  dispatch({
-                    type: 'TextBox:autocomplete-clicked',
-                    payload: item
-                  });
-                }}
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                }}
-              />
-            }
-          </div>
-        </label>
-      </div>
+          <input
+            className={inputClassList.join(' ')}
+            type={type}
+            required={required}
+            ref={inputRef}
+            value={value}
+            onFocus={(e) => {
+              onFocus(e);
+              dispatch({
+                type: 'TextBox:focus',
+                payload: filterAutocomplete(e.target.value)
+              });
+            }}
+            onBlur={(e) => {
+              onBlur(e);
+              dispatch({
+                type: 'TextBox:blur',
+                payload: validate(value) &&
+                (
+                  (!required && value.length === 0) ||
+                  !isAutocomplete ||
+                  autocomplete.includes(value)
+                )
+              });
+            }}
+            onChange={(e) => {
+              onChange(e.target.value);
+              dispatch({
+                type: 'TextBox:change',
+                payload: e.target.value
+              });
+              if (!isAutocomplete) { return; }
+              dispatch({
+                type: 'TextBox:autocomplete-change',
+                payload: filterAutocomplete(e.target.value)
+              });
+            }}
+            {...props}
+          />
+        </Autocomplete>
+      </Label>
       {errorMessage && (isValid !== null) && !isValid &&
         <div className={classList.map((c) => \`\${c}__errorMessage\`).join(' ')}>
           {errorMessage}
@@ -563,10 +553,7 @@ echo "@import 'styles/globals.scss';
 
 .TextBox {
   padding: \$pad-s 0;
-
-  &__container {
-    width: max-content;
-  }
+  width: max-content;
 
   &__label {
     display: flex;
@@ -590,6 +577,52 @@ echo "@import 'styles/globals.scss';
       }
     }
   }
+
+  &__autocomplete {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    font-weight: \$fw;
+    color: \$clr-black;
+
+    &__list {
+      z-index: 10;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      padding-top: \$pad-s;
+      position: absolute;
+      background-color: \$clr-white;
+      border: 2px solid \$clr-valid;
+      border-radius: \$border-radius;
+      border-top: none;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      max-height: 10em;
+      overflow-y: scroll;
+      top: 100%;
+      width: 100%;
+  
+      &::before {
+        content: ' ';
+        position: absolute;
+        top: 2px;
+        width: 90%;
+        left: 5%;
+        height: 1px;
+        border-bottom: 1px solid \$clr-gray-d;
+        z-index: 50;
+      }
+  
+      &__item {
+        padding: \$pad-s;
+        &:hover {
+          cursor: pointer;
+          background-color: \$clr-gray;
+        }
+      }
+    }
+  }
   
   &__input {
     outline: none;
@@ -602,13 +635,6 @@ echo "@import 'styles/globals.scss';
     position: relative;
     &:disabled {
       border-color: \$clr-gray;
-    }
-    &-container {
-      display: flex;
-      justify-content: center;
-      position: relative;
-      font-weight: \$fw;
-      color: \$clr-black;
     }
     &:focus {
       border: 2px solid \$clr-accent-d;
@@ -638,42 +664,122 @@ echo "@import 'styles/globals.scss';
     color: \$clr-red;
     font-weight: \$fw-sb;
   }
-
-  &__autocomplete-list {
-    z-index: 10;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    padding-top: \$pad-s;
-    position: absolute;
-    background-color: \$clr-white;
-    border: 2px solid \$clr-valid;
-    border-radius: \$border-radius;
-    border-top: none;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    max-height: 10em;
-    overflow-y: scroll;
-    top: 100%;
-    width: 100%;
-
-    &::before {
-      content: ' ';
-      position: absolute;
-      top: 2px;
-      width: 90%;
-      left: 5%;
-      height: 1px;
-      border-bottom: 1px solid \$clr-gray-d;
-      z-index: 50;
-    }
-
-    &__item {
-      padding: \$pad-s;
-      &:hover {
-        cursor: pointer;
-        background-color: \$clr-gray;
-      }
-    }
-  }
 }" > inputs/TextBox/TextBox.module.scss
+
+echo "import React from 'react';
+import './Label.module.scss';
+import { connect } from 'react-redux';
+
+type LabelProps = {
+  classNames?: string[],
+  label?: string,
+  children?: any,
+  [props: string]: any
+};
+
+const Label = ({
+  classNames = [],
+  label = null,
+  children,
+  ...props
+} : LabelProps) => {
+  const classList = ['Label', ...classNames];
+
+  if (!label) {
+    return (
+      <>
+        {children}
+      </>
+    );
+  }
+
+  return (
+    <>
+      <label className={classList.join(' ')}>
+        <span
+            className={classList.map((c) => \`\${c}__text\`).join(' ')}
+          >
+            {label}
+        </span>
+        {children}
+      </label>
+    </>
+  );
+};
+
+Label.getInitialProps = ({store, pathname, query}) => {
+};
+
+const mapStateToProps = (state) => {
+  return state;
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Label);" > inputs/Label/Label.tsx
+
+echo "@import 'styles/globals.scss';
+
+.Label {
+    &__text {
+        padding-right: \$pad-xs;
+    }
+}" > inputs/Label/Label.module.scss
+
+echo "import React from 'react';
+import './Autocomplete.module.scss';
+import { connect } from 'react-redux';
+import List from 'components/misc/List';
+
+type AutocompleteProps = {
+  classNames?: string[],
+  options?: string[],
+  onSelect: (v: string) => any,
+  children?: any,
+  [props: string]: any
+};
+
+const Autocomplete = ({
+  classNames = [],
+  options = [],
+  onSelect = (v) => {},
+  children,
+  ...props
+} : AutocompleteProps) => {
+  const classList = ['Autocomplete', ...classNames];
+
+  return (
+    <>
+      <div
+        className={classList.join(' ')}
+      >
+        {children}
+        {options && options.length > 0 && (
+          <List
+            classNames={classList.map((c) => \`\${c}__list\`)}
+            items={options}
+            handleItemClicked={onSelect}
+            onMouseDown={(e) => {
+              e.preventDefault();
+            }}
+          />
+        )}
+      </div>
+    </>
+  );
+};
+
+Autocomplete.getInitialProps = ({store, pathname, query}) => {
+};
+
+const mapStateToProps = (state) => {
+  return state;
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Autocomplete);" > inputs/Autocomplete/Autocomplete.tsx

@@ -128,7 +128,6 @@ const Home = ({ counter, textbox, incrementCounter, updateTextBoxValue }) => {
             errorMessage=\"Invalid\"
             autocomplete={['dog', 'dinosaur', 'cat', 'lion', 'chameleon']}
             classNames={['Main__textbox']}
-            id=\"Main__textbox\"
             onChange={updateTextBoxValue}
           />
           <p
@@ -563,7 +562,7 @@ nextmongocoll.sh Item
 # Install dependencies:
 echo -e "\n++ Installing dependencies...\n"
 yarn add --dev typescript @types/react @types/react-dom @types/node @types/jest @types/mongoose
-yarn add @zeit/next-sass node-sass
+yarn add @zeit/next-sass sass
 yarn add @fortawesome/fontawesome-free
 yarn add mongoose
 yard add bcrypt
