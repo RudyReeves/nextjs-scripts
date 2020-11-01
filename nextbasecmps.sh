@@ -389,14 +389,14 @@ const TextBoxReducer = (state, action) => {
       return {
         ...state,
         hasFocus: true,
-        isValid: true,
+        isValid: null,
         autocompleteOptions: action.payload
       };
     case 'TextBox:blur':
       return {
         ...state,
-        isValid: action.payload,
         hasFocus: false,
+        isValid: action.payload,
         autocompleteOptions: []
       };
     case 'TextBox:autocomplete-change':
@@ -422,7 +422,15 @@ const TextBox = ({
   required = false,
   label = '',
   errorMessage = '',
-  validate = (value) => true,
+  validate = (value) => {
+    if (required && (!value || !value.length)) {
+      return false;
+    }
+    if (!value || !autocomplete || !autocomplete.length) {
+      return null;
+    }
+    return autocomplete.includes(value);
+  },
   autocomplete = null,
   onChange = (v) => {},
   onBlur = (e) => {},
@@ -506,9 +514,16 @@ const TextBox = ({
             }}
             onBlur={(e) => {
               onBlur(e);
+              const validation = validate(value);
+              if(validation === null) {
+                dispatch({
+                  type: 'TextBox:blur',
+                  payload: null
+                });
+              }
               dispatch({
                 type: 'TextBox:blur',
-                payload: validate(value) &&
+                payload: validation &&
                 (
                   (!required && value.length === 0) ||
                   !isAutocomplete ||
@@ -630,7 +645,7 @@ echo "@import 'styles/globals.scss';
     padding: 0 0.6em;
     margin: 0;
     line-height: 1.8em;
-    border: 2px solid \$clr-valid;
+    border: 2px solid \$clr-empty;
     border-radius: \$border-radius;
     position: relative;
     &:disabled {
