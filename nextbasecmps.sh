@@ -359,7 +359,7 @@ const createItems = (items, classList, handleItemClicked, props) => {
 
 export default List;" > misc/List/List.tsx
 
-echo "import React, { useReducer, useRef } from 'react';
+echo "import React, { useReducer } from 'react';
 import './TextBox.module.scss';
 import Label from 'components/inputs/Label';
 import Autocomplete from 'components/inputs/Autocomplete';
@@ -388,14 +388,12 @@ const TextBoxReducer = (state, action) => {
     case 'TextBox:focus':
       return {
         ...state,
-        hasFocus: true,
         isValid: null,
         autocompleteOptions: action.payload
       };
     case 'TextBox:blur':
       return {
         ...state,
-        hasFocus: false,
         isValid: action.payload,
         autocompleteOptions: []
       };
@@ -442,17 +440,14 @@ const TextBox = ({
   const [{
     isValid,
     autocompleteOptions,
-    hasFocus,
     value
   }, dispatch] = useReducer(TextBoxReducer, {
     isValid: null,
-    hasFocus: false,
     autocompleteOptions: [],
     value: ''
   });
 
   const isAutocomplete = Array.isArray(autocomplete);
-  const inputRef = useRef(null);
 
   const filterAutocomplete = (newValue) => {
     if (!isAutocomplete) { return null; }
@@ -467,6 +462,7 @@ const TextBox = ({
   if (isValid === null) {
     inputClassList.push(...classList.map((c) => \`\${c}__input--empty\`));
   }
+
   if (isValid === false) {
     inputClassList.push(...classList.map((c) => \`\${c}__input--error\`));
     labelClassList.push(...classList.map((c) => \`\${c}__label--error\`));
@@ -503,7 +499,6 @@ const TextBox = ({
             className={inputClassList.join(' ')}
             type={type}
             required={required}
-            ref={inputRef}
             value={value}
             onFocus={(e) => {
               onFocus(e);
