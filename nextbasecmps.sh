@@ -72,7 +72,7 @@ const Header = ({
   children,
   ...props
 } : HeaderProps) => {
-  const classList = ['Heaeder', ...classNames].join(' ');
+  const classList = ['Header', ...classNames].join(' ');
   return (
     <>
       <header className={classList}>
@@ -551,8 +551,7 @@ const TextBox = ({
   );
 };
 
-export default TextBox;
-" > inputs/TextBox/TextBox.tsx
+export default TextBox;" > inputs/TextBox/TextBox.tsx
 
 echo "@import 'styles/globals.scss';
 
@@ -564,6 +563,7 @@ echo "@import 'styles/globals.scss';
 .TextBox {
   padding: \$pad-s 0;
   width: max-content;
+  position: relative;
 
   &__label {
     display: flex;
@@ -672,7 +672,7 @@ echo "@import 'styles/globals.scss';
 
   &__errorMessage {
     color: \$clr-red;
-    font-weight: \$fw-sb;
+    position: absolute;
   }
 }" > inputs/TextBox/TextBox.module.scss
 

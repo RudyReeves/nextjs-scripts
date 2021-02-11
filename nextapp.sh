@@ -2,106 +2,47 @@
 
 # Create a React app:
 echo -e "\n++ Running create-next-app...\n"
-npx create-next-app $1
+npx create-next-app@latest $1
 cd $1
 
 # Remove default built-in files:
 rm README.md
 rm pages/api/*
 rm public/*
-mkdir -p styles
-rm styles/Home.module.css
+rm styles/*
 
 touch tsconfig.json
 touch .env
 
-# Setup redux directories:
-mkdir redux
-mkdir redux/actions
-mkdir redux/reducers
-
-echo "import { createStore } from 'redux';
-import { createWrapper } from 'next-redux-wrapper';
-import rootReducer from 'redux/reducers';
-
-const makeStore = (context) => {
-  const globalObject = (typeof window === 'undefined') ? globalThis : window;
-  const devToolsExtension = (globalObject as any).__REDUX_DEVTOOLS_EXTENSION__;
-  const preloadedState = {};
-  return createStore(
-    rootReducer,
-    preloadedState,
-    devToolsExtension && devToolsExtension()
-  );
-};
-
-export default createWrapper(makeStore);" > redux/store.ts
-
-echo "import counterReducer from './Counter';
-import textBoxReducer from './TextBox';
-import { combineReducers } from 'redux';
-
-const rootReducer = combineReducers({
-    counter: counterReducer,
-    textbox: textBoxReducer
-});
-
-export default rootReducer;" > redux/reducers/index.ts
-
-echo "import { COUNTER_INCREMENT } from 'redux/actions/Counter';
-
-const initialState = {
-  count: 0
-};
-
-const counterReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case COUNTER_INCREMENT:
-      return {
-        ...state,
-        count: state.count + 1
-      };
-    default:
-      return {...state};
+# Configure next.js and TypeScript:
+echo -e "{
+  \"compilerOptions\": {
+    \"baseUrl\": \".\"
   }
-};
+}" > tsconfig.json
 
-export default counterReducer;" > redux/reducers/Counter.ts
-
-echo "import { TEXTBOX_CHANGE } from 'redux/actions/TextBox';
-
-const initialState = {
-  value: ''
-};
-
-const textBoxReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case TEXTBOX_CHANGE:
-      return {
-        ...state,
-        value: action.payload
-      };
-    default:
-      return {...state};
+echo -e "module.exports = {
+  env: {
+    MONGO_URI_DEV: \"mongodb://localhost:27017/$1_dev\",
+    MONGO_URI: \"mongodb://username:password@localhost:27017/$1\",
+  },
+  i18n: {
+    locales: ['en'],
+    defaultLocale: 'en'
   }
-};
+};" > next.config.js
 
-export default textBoxReducer;" > redux/reducers/TextBox.ts
+# Install dependencies:
+echo -e "\n++ Installing dependencies...\n"
+yarn add --dev typescript @types/react @types/react-dom @types/node @types/jest @types/mongoose
+yarn add redux react-redux next-redux-wrapper sass
+yarn add mongoose bcrypt @fortawesome/fontawesome-free
 
-echo "export const COUNTER_INCREMENT = 'counter:increment';
+echo -e "\n++ Finished installing. Adding finishing touches...\n"
+ # Create default components:
+nextbasecmps.sh $1
 
-export const counterIncrementAction = () => ({
-   type: COUNTER_INCREMENT
-});" > redux/actions/Counter.ts
-
-echo "export const TEXTBOX_CHANGE = 'TextBox:change';
-
-export const textBoxChangeAction = (value) => ({
-   type: TEXTBOX_CHANGE,
-   payload: value
-});" > redux/actions/TextBox.ts
-
-# Create default pages:
+# Replace default pages:
 rm pages/index.js
 nextcmp.sh Page misc
 
@@ -272,8 +213,6 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(mapStateToProps, mapDispatchToProps)(ContactUs);" > pages/contact.tsx
 
 # Create base styles:
-rm styles/globals.css
-
 echo "@import './globals.scss';
 
 *, *::before, *::after {
@@ -524,6 +463,93 @@ echo "\$clr-material-gray-50: rgba(250, 250, 250, 1);
 \$clr-material-brown-800: rgba(78, 52, 46, 1);
 \$clr-material-brown-900: rgba(62, 39, 35, 1);" > styles/material.scss
 
+# Setup redux directory:
+mkdir redux
+mkdir redux/actions
+mkdir redux/reducers
+mkdir hooks
+
+echo "import { createStore } from 'redux';
+import { createWrapper } from 'next-redux-wrapper';
+import rootReducer from 'redux/reducers';
+
+const makeStore = (context) => {
+  const globalObject = (typeof window === 'undefined') ? globalThis : window;
+  const devToolsExtension = (globalObject as any).__REDUX_DEVTOOLS_EXTENSION__;
+  const preloadedState = {};
+  return createStore(
+    rootReducer,
+    preloadedState,
+    devToolsExtension && devToolsExtension()
+  );
+};
+
+export default createWrapper(makeStore);" > redux/store.ts
+
+echo "import counterReducer from './Counter';
+import textBoxReducer from './TextBox';
+import { combineReducers } from 'redux';
+
+const rootReducer = combineReducers({
+    counter: counterReducer,
+    textbox: textBoxReducer
+});
+
+export default rootReducer;" > redux/reducers/index.ts
+
+echo "import { COUNTER_INCREMENT } from 'redux/actions/Counter';
+
+const initialState = {
+  count: 0
+};
+
+const counterReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case COUNTER_INCREMENT:
+      return {
+        ...state,
+        count: state.count + 1
+      };
+    default:
+      return {...state};
+  }
+};
+
+export default counterReducer;" > redux/reducers/Counter.ts
+
+echo "import { TEXTBOX_CHANGE } from 'redux/actions/TextBox';
+
+const initialState = {
+  value: ''
+};
+
+const textBoxReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case TEXTBOX_CHANGE:
+      return {
+        ...state,
+        value: action.payload
+      };
+    default:
+      return {...state};
+  }
+};
+
+export default textBoxReducer;" > redux/reducers/TextBox.ts
+
+echo "export const COUNTER_INCREMENT = 'counter:increment';
+
+export const counterIncrementAction = () => ({
+   type: COUNTER_INCREMENT
+});" > redux/actions/Counter.ts
+
+echo "export const TEXTBOX_CHANGE = 'TextBox:change';
+
+export const textBoxChangeAction = (value) => ({
+   type: TEXTBOX_CHANGE,
+   payload: value
+});" > redux/actions/TextBox.ts
+
 # Setup MongoDB:
 mkdir data
 mkdir data/models
@@ -559,37 +585,6 @@ export default connect;" > data/connect.ts
 
 nextmongocoll.sh Item
 
-# Install dependencies:
-echo -e "\n++ Installing dependencies...\n"
-yarn add --dev typescript @types/react @types/react-dom @types/node @types/jest @types/mongoose
-yarn add @zeit/next-sass sass
-yarn add @fortawesome/fontawesome-free
-yarn add mongoose
-yard add bcrypt
-yarn add redux react-redux next-redux-wrapper
- 
-nextbasecmps.sh $1
-
-echo -e "\n** Finished installing. Starting server...\n"
-
-echo -e "{
-  \"compilerOptions\": {
-    \"baseUrl\": \".\"
-  }
-}" > tsconfig.json
-
-echo -e "const withSass = require('@zeit/next-sass');
-
-module.exports = withSass({
-  env: {
-    MONGO_URI_DEV: \"mongodb://localhost:27017/$1_dev\",
-    MONGO_URI: \"mongodb://username:password@localhost:27017/$1\",
-  },
-  i18n: {
-    locales: ['en'],
-    defaultLocale: 'en'
-  }
-});" > next.config.js
 
 # Commit to git:
 echo -e "\n** Creating initial git commit...\n"
@@ -599,4 +594,5 @@ git commit -m "Initial commit"
 code .
 
 # Start a dev server:
+echo -e "\n** Starting server...\n"
 npx next dev
