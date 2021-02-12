@@ -23,17 +23,15 @@ import { connect } from 'react-redux';
 type ${CMP_NAME}Props = {
   classNames?: string[],
   children?: any,
-  [props: string]: any
+  //[props: string]: any
 };
 
 const ${CMP_NAME} = ({
   classNames = [],
   children,
-  ...props
+  //...props
 } : ${CMP_NAME}Props) => {
   const classList = ['${CMP_NAME}', ...classNames];
-
-  // const [state, dispatch] = useReducer(${CMP_NAME}Reducer, initialState);
 
   return (
     <>
