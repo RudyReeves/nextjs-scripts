@@ -1,18 +1,29 @@
 #!/bin/bash
 
 # Create a React app:
-echo -e "\n++ Running create-next-app...\n"
+echo -e "\n\n++ Running create-next-app...\n\n"
 npx create-next-app@latest $1
 cd $1
 
 # Remove default built-in files:
 rm README.md
+touch README.md
 rm pages/api/*
 rm public/*
 rm styles/*
+mkdir hooks
+mkdir redux
+mkdir components
 
+# Add base components
+nextbasecmps.sh
+
+# Install dependencies:
+echo -e "\n\n++ Installing dependencies...\n\n"
+yarn add --dev typescript @types/react @types/node
 touch tsconfig.json
-touch .env
+yarn add sass redux react-redux next-redux-wrapper
+yarn add @fortawesome/fontawesome-free
 
 # Configure next.js and TypeScript:
 echo -e "{
@@ -22,198 +33,34 @@ echo -e "{
 }" > tsconfig.json
 
 echo -e "module.exports = {
-  env: {
-    MONGO_URI_DEV: \"mongodb://localhost:27017/$1_dev\",
-    MONGO_URI: \"mongodb://username:password@localhost:27017/$1\",
-  },
   i18n: {
     locales: ['en'],
     defaultLocale: 'en'
   }
 };" > next.config.js
 
-# Install dependencies:
-echo -e "\n++ Installing dependencies...\n"
-yarn add --dev typescript @types/react @types/react-dom @types/node @types/jest @types/mongoose
-yarn add redux react-redux next-redux-wrapper sass
-yarn add mongoose bcrypt @fortawesome/fontawesome-free
-
-echo -e "\n++ Finished installing. Adding finishing touches...\n"
- # Create default components:
-nextbasecmps.sh $1
+echo -e "\n++ Finished installing. Adding finishing touches..."
 
 # Replace default pages:
-rm pages/index.js
-nextcmp.sh Page misc
+rm -f pages/index.js
 
-echo "import Layout from 'components/layouts/Layout';
-import Page from 'components/misc/Page';
+echo "import React from 'react';
 import TextBox from 'components/inputs/TextBox';
-import { connect } from 'react-redux';
-import { counterIncrementAction } from 'redux/actions/Counter';
-import { textBoxChangeAction } from 'redux/actions/TextBox';
+import Layout from 'components/layouts/Layout';
 
-const Home = ({ counter, textbox, incrementCounter, updateTextBoxValue }) => {
-  return (
-    <>
-      <Layout
-        title=\"$1\"
-      >
-        <Page
-          classNames={[\"HomePage\"]}
-        >
-          <h1 className=\"Main__title\">Welcome</h1>
-          <TextBox
-            label=\"Animals\"
-            placeholder=\"Select one\"
-            errorMessage=\"Invalid\"
-            autocomplete={['dog', 'dinosaur', 'cat', 'lion', 'chameleon']}
-            classNames={['Main__textbox']}
-            onChange={updateTextBoxValue}
-          />
-          <p
-            className=\"Main__paragraph\"
-          >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
-          </p>
-          <button
-            className=\"HomePage__counter-button\"
-            onClick={incrementCounter}
-          >
-            Click me!
-          </button>
-          <div>{counter.count}</div>
-          <div>{textbox.value}</div>
-        </Page>
-      </Layout>
-    </>
-  );
-};
+const Home = () => (
+  <Layout>
+    <TextBox
+      label=\"Label\"
+      autocomplete={['Dog', 'Cat', 'Dragon', 'Lion']}
+    />
+  </Layout>
+);
 
-Home.getInitialProps = ({store, pathname, query}) => {
-};
-
-const mapStateToProps = (state) => {
-  return state;
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    incrementCounter: (e) => {
-      dispatch(counterIncrementAction());
-    },
-    updateTextBoxValue: (value) => {
-      dispatch(textBoxChangeAction(value));
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);" > pages/index.tsx
-
-echo "@import 'styles/globals.scss';
-
-.Page {
-  height: 100%;
-}
-
-.HomePage {
-  &__counter-button {
-      outline: none;
-      display: block;
-      cursor: pointer;
-      margin-bottom: \$pad-half;
-      border-radius: \$border-radius;
-      background-color: \$clr-blue-d;
-      color: \$clr-white;
-      border: none;
-      padding: \$pad-half;
-      font-size: 1em;
-      font-weight: \$fw-sb;
-
-      &:hover {
-          background-color: \$clr-blue-l;
-      }
-  }
-}" > components/misc/Page/Page.module.scss
-
-echo "import Layout from 'components/layouts/Layout';
-import Page from 'components/misc/Page';
-import { connect } from 'react-redux';
-
-const About = () => {
-  return (
-    <>
-      <Layout
-        title=\"$1\"
-      >
-        <Page
-          classNames={[\"AboutPage\"]}
-        >
-          <h1 className=\"Main__title\">About</h1>
-          <p
-            className=\"Main__paragraph\"
-          >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
-          </p>
-        </Page>
-      </Layout>
-    </>
-  );
-};
-
-About.getInitialProps = ({store, pathname, query}) => {
-};
-
-const mapStateToProps = (state) => {
-  return state;
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(About);" > pages/about.tsx
-
-echo "import Layout from 'components/layouts/Layout';
-import Page from 'components/misc/Page';
-import { connect } from 'react-redux';
-
-const ContactUs = () => {
-  return (
-    <>
-      <Layout
-        title=\"$1\"
-      >
-        <Page
-          className=\"ContactUsPage\"
-        >
-          <h1 className=\"Main__title\">Contact Us</h1>
-          <p
-            className=\"Main__paragraph\"
-          >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, totam reiciendis vitae saepe dolorem necessitatibus similique deserunt nostrum minus eligendi labore in ipsam eveniet delectus fugit distinctio voluptatem soluta esse.
-          </p>
-        </Page>
-      </Layout>
-    </>
-  );
-};
-
-ContactUs.getInitialProps = ({store, pathname, query}) => {
-};
-
-const mapStateToProps = (state) => {
-  return state;
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContactUs);" > pages/contact.tsx
+export default Home;" > pages/index.tsx
 
 # Create base styles:
-echo "@import './globals.scss';
+echo "@import './global.scss';
 
 *, *::before, *::after {
   box-sizing: inherit;
@@ -313,10 +160,10 @@ echo "@import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,4
 \$fw-thin: 100;
 
 \$tablet: 720px;
-\$desktop: 1080px;" > styles/globals.scss
+\$desktop: 1080px;" > styles/global.scss
 
 echo "import '../styles/index.scss';
-import '../styles/globals.scss';
+import '../styles/global.scss';
 import '@fortawesome/fontawesome-free/js/fontawesome';
 import '@fortawesome/fontawesome-free/js/solid';
 import wrapper from '../redux/store';
@@ -464,10 +311,8 @@ echo "\$clr-material-gray-50: rgba(250, 250, 250, 1);
 \$clr-material-brown-900: rgba(62, 39, 35, 1);" > styles/material.scss
 
 # Setup redux directory:
-mkdir redux
 mkdir redux/actions
 mkdir redux/reducers
-mkdir hooks
 
 echo "import { createStore } from 'redux';
 import { createWrapper } from 'next-redux-wrapper';
@@ -486,113 +331,16 @@ const makeStore = (context) => {
 
 export default createWrapper(makeStore);" > redux/store.ts
 
-echo "import counterReducer from './Counter';
-import textBoxReducer from './TextBox';
-import { combineReducers } from 'redux';
+echo "import { combineReducers } from 'redux';
 
-const rootReducer = combineReducers({
-    counter: counterReducer,
-    textbox: textBoxReducer
-});
+const rootReducer = combineReducers({});
 
 export default rootReducer;" > redux/reducers/index.ts
 
-echo "import { COUNTER_INCREMENT } from 'redux/actions/Counter';
-
-const initialState = {
-  count: 0
-};
-
-const counterReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case COUNTER_INCREMENT:
-      return {
-        ...state,
-        count: state.count + 1
-      };
-    default:
-      return {...state};
-  }
-};
-
-export default counterReducer;" > redux/reducers/Counter.ts
-
-echo "import { TEXTBOX_CHANGE } from 'redux/actions/TextBox';
-
-const initialState = {
-  value: ''
-};
-
-const textBoxReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case TEXTBOX_CHANGE:
-      return {
-        ...state,
-        value: action.payload
-      };
-    default:
-      return {...state};
-  }
-};
-
-export default textBoxReducer;" > redux/reducers/TextBox.ts
-
-echo "export const COUNTER_INCREMENT = 'counter:increment';
-
-export const counterIncrementAction = () => ({
-   type: COUNTER_INCREMENT
-});" > redux/actions/Counter.ts
-
-echo "export const TEXTBOX_CHANGE = 'TextBox:change';
-
-export const textBoxChangeAction = (value) => ({
-   type: TEXTBOX_CHANGE,
-   payload: value
-});" > redux/actions/TextBox.ts
-
-# Setup MongoDB:
-mkdir data
-mkdir data/models
-touch data/connect.ts
-
-echo "import mongoose from 'mongoose';
-
-const connection = {
-  isConnected: false,
-  readyState: null
-};
-
-const connect = async () => {
-  if (connection.isConnected || mongoose.connection.readyState !== 0) { return; }
-  try {
-    const db = await mongoose.connect(
-      process.env.MONGO_URI_DEV,
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-      }
-    );
-    connection.isConnected = true;
-    connection.readyState = db.connections[0].readyState;
-  } catch (err) {
-    console.error(err);
-    connection.isConnected = false;
-    connection.readyState = null;
-  }
-};
-
-export default connect;" > data/connect.ts
-
-nextmongocoll.sh Item
-
-
 # Commit to git:
-echo -e "\n** Creating initial git commit...\n"
+echo -e "** Creating initial git commit...\n"
 git add -A
 git commit -m "Initial commit"
 
+echo -e "\n** Run \`npx next dev\` to start a dev server.\n"
 code .
-
-# Start a dev server:
-echo -e "\n** Starting server...\n"
-npx next dev

@@ -6,7 +6,7 @@ mkdir -p components
 # Make base components:
 nextcmp.sh Header sections
 nextcmp.sh Main sections main
-nextcmp.sh Footer sections
+nextcmp.sh Footer sections footer
 nextcmp.sh List misc
 nextcmp.sh PrimaryNav misc
 nextcmp.sh TextBox inputs
@@ -25,17 +25,13 @@ import Main from 'components/sections/Main';
 import Footer from 'components/sections/Footer';
 
 type LayoutProps = {
-  classNames?: string[],
-  children?: any,
   title?: string,
-  [props: string]: any
+  children?: any
 };
 
 const Layout = ({
-  classNames = [],
-  children,
   title = '',
-  ...props
+  children
 } : LayoutProps) => {
   return (
     <>
@@ -63,14 +59,12 @@ import PrimaryNav from 'components/misc/PrimaryNav';
 
 type HeaderProps = {
   classNames?: string[],
-  children?: any,
-  [props: string]: any
+  children?: any
 };
 
 const Header = ({
   classNames = [],
-  children,
-  ...props
+  children
 } : HeaderProps) => {
   const classList = ['Header', ...classNames].join(' ');
   return (
@@ -84,7 +78,7 @@ const Header = ({
 
 export default Header;" > sections/Header/Header.tsx
 
-echo "@import 'styles/globals.scss';
+echo "@import 'styles/global.scss';
 
 .Main {
   margin-top: \$pad;
@@ -123,8 +117,7 @@ type LinkObject = {
 
 type PrimaryNavProps = {
   classNames?: string[],
-  links?: LinkObject[],
-  [props: string]: any
+  links?: LinkObject[]
 };
 
 const defaultLinks: LinkObject[] = [
@@ -144,8 +137,7 @@ const defaultLinks: LinkObject[] = [
 
 const PrimaryNav = ({
     classNames = [],
-    links = defaultLinks,
-    ...props
+    links = defaultLinks
   } : PrimaryNavProps) => {
   if (!links || !links.length) { return null; }
   const [isOpen, setIsOpen] = useState(false);
@@ -200,7 +192,7 @@ const createLinks = (links: LinkObject[], classList) => {
 
 export default PrimaryNav;" > misc/PrimaryNav/PrimaryNav.tsx
 
-echo "@import 'styles/globals.scss';
+echo "@import 'styles/global.scss';
 
 \$bg-clr: \$clr-gray-xl;
 \$bg-clr-hilight: \$clr-gray;
@@ -553,7 +545,7 @@ const TextBox = ({
 
 export default TextBox;" > inputs/TextBox/TextBox.tsx
 
-echo "@import 'styles/globals.scss';
+echo "@import 'styles/global.scss';
 
 \$clr-error: \$clr-red-d;
 \$clr-empty: \$clr-gray;
@@ -678,20 +670,17 @@ echo "@import 'styles/globals.scss';
 
 echo "import React from 'react';
 import './Label.module.scss';
-import { connect } from 'react-redux';
 
 type LabelProps = {
   classNames?: string[],
   label?: string,
-  children?: any,
-  [props: string]: any
+  children?: any
 };
 
 const Label = ({
   classNames = [],
   label = null,
-  children,
-  ...props
+  children
 } : LabelProps) => {
   const classList = ['Label', ...classNames];
 
@@ -717,20 +706,9 @@ const Label = ({
   );
 };
 
-Label.getInitialProps = ({store, pathname, query}) => {
-};
+export default Label;" > inputs/Label/Label.tsx
 
-const mapStateToProps = (state) => {
-  return state;
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Label);" > inputs/Label/Label.tsx
-
-echo "@import 'styles/globals.scss';
+echo "@import 'styles/global.scss';
 
 .Label {
     &__text {
@@ -740,23 +718,20 @@ echo "@import 'styles/globals.scss';
 
 echo "import React from 'react';
 import './Autocomplete.module.scss';
-import { connect } from 'react-redux';
 import List from 'components/misc/List';
 
 type AutocompleteProps = {
   classNames?: string[],
   options?: string[],
   onSelect: (v: string) => any,
-  children?: any,
-  [props: string]: any
+  children?: any
 };
 
 const Autocomplete = ({
   classNames = [],
   options = [],
   onSelect = (v) => {},
-  children,
-  ...props
+  children
 } : AutocompleteProps) => {
   const classList = ['Autocomplete', ...classNames];
 
@@ -781,15 +756,4 @@ const Autocomplete = ({
   );
 };
 
-Autocomplete.getInitialProps = ({store, pathname, query}) => {
-};
-
-const mapStateToProps = (state) => {
-  return state;
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Autocomplete);" > inputs/Autocomplete/Autocomplete.tsx
+export default Autocomplete;" > inputs/Autocomplete/Autocomplete.tsx

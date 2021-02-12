@@ -16,12 +16,7 @@ TAG=${3-div}
 mkdir -p $CMP_NAME
 cd $CMP_NAME
 
-echo "import React, {
-  // useEffect,
-  // useReducer,
-  // useRef,
-  // useState,
-} from 'react';
+echo "import React from 'react';
 import './${CMP_NAME}.module.scss';
 import { connect } from 'react-redux';
 
@@ -30,15 +25,6 @@ type ${CMP_NAME}Props = {
   children?: any,
   [props: string]: any
 };
-
-// const ${CMP_NAME}Reducer = (state, action) => {
-//   switch (action.type) {
-//     default:
-//       return state;
-//   }
-// };
-
-// const initialState = {};
 
 const ${CMP_NAME} = ({
   classNames = [],
@@ -58,23 +44,12 @@ const ${CMP_NAME} = ({
   );
 };
 
-${CMP_NAME}.getInitialProps = ({store, pathname, query}) => {
-};
-
-const mapStateToProps = (state) => {
-  return state;
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(${CMP_NAME});" > "./${CMP_NAME}.tsx"
+export default connect(state => state)(${CMP_NAME});" > "./${CMP_NAME}.tsx"
 
 echo "import ${CMP_NAME} from './${CMP_NAME}';
 export default ${CMP_NAME};" > "./index.ts"
 
-echo "@import 'styles/globals.scss';
+echo "@import 'styles/global.scss';
 
 .${CMP_NAME} {}" > "./${CMP_NAME}.module.scss";
 
